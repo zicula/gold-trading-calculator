@@ -92,6 +92,8 @@
 
 ### 🌐 Live Demo
 - **Production**: https://gold-trading-calculator.vercel.app
+- **V4 Calculator**: https://gold-trading-calculator.vercel.app/calculator
+- **Direct V4 Link**: https://gold-trading-calculator.vercel.app/all_in_calculator_v4.html
 - **Repository**: https://github.com/zicula/gold-trading-calculator
 - **Author**: Zic Trading
 

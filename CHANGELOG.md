@@ -4,6 +4,31 @@
 
 ---
 
+## 🚀 [V4.6] - 2025-07-17 (V4 as Main Index)
+
+### 🏠 **V4 Calculator as Main Landing Page**
+- **🎯 Primary URL**: https://gold-trading-calculator.vercel.app → Auto-redirects to V4
+- **⚡ Route Aliases**: 
+  - `/calculator` → V4 Calculator
+  - `/v4` → V4 Calculator  
+  - `/latest` → V4 Calculator
+- **🔄 Auto-Redirect**: index.html automatically redirects to all_in_calculator_v4.html
+- **📱 Seamless UX**: Users land directly on the latest V4 calculator
+
+### 🌐 **Enhanced Deployment Configuration**
+- **✅ Vercel Routing**: Updated vercel.json with proper V4 routes
+- **✅ Netlify Routing**: Updated netlify.toml with V4 redirects
+- **✅ Security Headers**: Added security headers for production
+- **✅ SEO Optimization**: Enhanced meta tags and Open Graph tags
+
+### 📊 **URL Structure**
+- **Main**: https://gold-trading-calculator.vercel.app (→ V4)
+- **Calculator**: https://gold-trading-calculator.vercel.app/calculator (→ V4)
+- **Direct**: https://gold-trading-calculator.vercel.app/all_in_calculator_v4.html
+- **Legacy**: V3, V2, V1 still accessible via direct URLs
+
+---
+
 ## 🚀 [V4.5.1] - 2025-07-17 (Deployment Verified & Live)
 
 ### 🌐 Production Deployment Status
