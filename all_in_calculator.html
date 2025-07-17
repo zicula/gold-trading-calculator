@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🏆 All In Gold Trading Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 430px; /* iPhone 14 Pro Max width */
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            border-radius: 20px 20px 0 0;
+            padding: 25px 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .calculator-body {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Kanit', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: white;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .sl-type-buttons, .tp-type-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .sl-type-btn, .tp-type-btn {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .sl-type-btn:hover, .tp-type-btn:hover {
+            border-color: #ffd700;
+        }
+
+        .sl-type-btn input, .tp-type-btn input {
+            display: none;
+        }
+
+        .sl-type-btn input:checked + span,
+        .tp-type-btn input:checked + span {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .sl-type-btn input:checked,
+        .tp-type-btn input:checked {
+            border-color: #ffd700;
+        }
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Kanit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .rr-section {
+            margin-bottom: 20px;
+        }
+
+        .rr-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .rr-btn {
+            position: relative;
+            padding: 10px 8px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .rr-btn.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-color: #28a745;
+        }
+
+        .rr-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .rr-checkbox {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 12px;
+            height: 12px;
+            accent-color: #007bff;
+        }
+
+        .rr-delete-btn {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.6rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .rr-btn:hover .rr-delete-btn {
+            display: flex;
+        }
+
+        .rr-delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .rr-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .custom-rr-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .add-rr-btn {
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-rr-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .results-section {
+            margin-top: 25px;
+        }
+
+        .trade-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .trade-card.buy { border-left-color: #28a745; }
+        .trade-card.sell { border-left-color: #dc3545; }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .signal-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .signal-type.buy { color: #28a745; }
+        .signal-type.sell { color: #dc3545; }
+
+        .rr-display {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #007bff;
+            font-size: 0.9rem;
+        }
+
+        .trade-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .profit-loss {
+            grid-column: span 2;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .profit {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .loss {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .warning-box i {
+            color: #856404;
+            margin-right: 8px;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 430px) {
+            .container {
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .calculator-body {
+                padding: 20px 15px;
+            }
+            
+            .trade-details {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .profit-loss {
+                grid-column: span 1;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-coins"></i> All In Gold Calculator</h1>
+            <p>คำนวณ Lot Size สำหรับการเทรดทองแบบ All In</p>
+        </div>
+
+        <!-- Calculator Body -->
+        <div class="calculator-body">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-wallet" style="color: #28a745;"></i>
+                        เงินทุน (Capital)
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="capital" placeholder="100" value="100" min="1" step="1">
+                        <span class="input-unit">USD</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-chart-line" style="color: #007bff;"></i>
+                        ราคาเข้า (Entry Price)
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="entryPrice" placeholder="2560.5" value="2560.5" min="1000" step="0.1">
+                        <span class="input-unit">USD</span>
+                    </div>
+                </div>
+
+                <!-- Stop Loss Section -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-shield-alt" style="color: #dc3545;"></i>
+                        Stop Loss
+                    </div>
+                    
+                    <!-- SL Type Selection -->
+                    <div class="sl-type-buttons" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <label class="sl-type-btn">
+                            <input type="radio" name="slType" value="pips" checked>
+                            <span>Pips</span>
+                        </label>
+                        <label class="sl-type-btn">
+                            <input type="radio" name="slType" value="price">
+                            <span>ราคา</span>
+                        </label>
+                    </div>
+                    
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="stopLossValue" placeholder="200" value="200" min="1" step="0.1">
+                        <span class="input-unit" id="slUnit">Pips</span>
+                    </div>
+                </div>
+
+                <!-- Take Profit Section -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-bullseye" style="color: #28a745;"></i>
+                        Take Profit
+                    </div>
+                    
+                    <!-- TP Type Selection -->
+                    <div class="tp-type-buttons" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <label class="tp-type-btn">
+                            <input type="radio" name="tpType" value="rr" checked>
+                            <span>RR</span>
+                        </label>
+                        <label class="tp-type-btn">
+                            <input type="radio" name="tpType" value="price">
+                            <span>ราคา</span>
+                        </label>
+                        <label class="tp-type-btn">
+                            <input type="radio" name="tpType" value="pips">
+                            <span>Pips</span>
+                        </label>
+                    </div>
+                    
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="takeProfitValue" placeholder="2" value="2" min="0.1" step="0.1">
+                        <span class="input-unit" id="tpUnit">Ratio</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-exchange-alt" style="color: #6f42c1;"></i>
+                        ทิศทางการเทรด
+                    </div>
+                    <select class="input-field" id="tradeDirection">
+                        <option value="buy">🔼 BUY (ซื้อ)</option>
+                        <option value="sell">🔽 SELL (ขาย)</option>
+                    </select>
+                </div>
+
+                <!-- Risk:Reward Ratio Section -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-balance-scale" style="color: #fd7e14;"></i>
+                        Risk:Reward Ratio
+                    </div>
+                    
+                    <div class="rr-section">
+                        <div class="rr-controls">
+                            <input type="number" class="custom-rr-input" id="customRR" placeholder="เช่น 1.5" min="0.1" step="0.1">
+                            <button class="add-rr-btn" id="addRRBtn">
+                                <i class="fas fa-plus"></i> เพิ่ม RR
+                            </button>
+                        </div>
+                        
+                        <div class="rr-buttons" id="rrButtons">
+                            <div class="rr-btn" data-rr="1">
+                                <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                                <input type="checkbox" class="rr-checkbox" checked>
+                                1:1
+                            </div>
+                            <div class="rr-btn" data-rr="2">
+                                <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                                <input type="checkbox" class="rr-checkbox" checked>
+                                1:2
+                            </div>
+                            <div class="rr-btn" data-rr="3">
+                                <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                                <input type="checkbox" class="rr-checkbox" checked>
+                                1:3
+                            </div>
+                            <div class="rr-btn" data-rr="10">
+                                <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                                <input type="checkbox" class="rr-checkbox" checked>
+                                1:10
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <button class="calculate-btn" id="calculateBtn">
+                <i class="fas fa-calculator"></i> คำนวณ All In
+            </button>
+
+            <!-- Warning Box -->
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>คำเตือน:</strong> การเทรดแบบ All In มีความเสี่ยงสูงมาก
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message hidden" id="errorMessage"></div>
+
+            <!-- Results Section -->
+            <div class="results-section hidden" id="resultsSection">
+                <!-- Trade Card will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AllInGoldCalculator {
+            constructor() {
+                this.pipValue = 0.01; // For Gold XAUUSD, 1 pip = $0.01 (แก้ไขแล้ว: 200 pips = $2)
+                this.contractSize = 100; // 1 lot = 100 oz
+                this.availableRRs = [1, 2, 3, 10]; // Default RR ratios
+                this.storageKey = 'goldCalculatorSettings';
+                this.init();
+            }
+
+            init() {
+                this.loadFromStorage();
+                this.bindEvents();
+                this.updateLabels();
+                this.calculateAndDisplay();
+            }
+
+            bindEvents() {
+                // Calculate button
+                document.getElementById('calculateBtn').addEventListener('click', () => {
+                    this.calculateAndDisplay();
+                });
+
+                // Add custom RR button
+                document.getElementById('addRRBtn').addEventListener('click', () => {
+                    this.addCustomRR();
+                });
+
+                // Custom RR input enter key
+                document.getElementById('customRR').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.addCustomRR();
+                    }
+                });
+
+                // SL and TP type radio buttons
+                document.querySelectorAll('input[name="slType"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        this.updateLabels();
+                        this.calculateAndDisplay();
+                    });
+                });
+
+                document.querySelectorAll('input[name="tpType"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        this.updateLabels();
+                        this.calculateAndDisplay();
+                    });
+                });
+
+                // RR checkboxes and buttons
+                this.bindRREvents();
+
+                // Real-time calculation on input change
+                ['capital', 'entryPrice', 'stopLossValue', 'takeProfitValue', 'tradeDirection'].forEach(id => {
+                    const element = document.getElementById(id);
+                    element.addEventListener('input', () => {
+                        this.saveToStorage();
+                        this.calculateAndDisplay();
+                    });
+                });
+            }
+
+            updateLabels() {
+                const slType = document.querySelector('input[name="slType"]:checked').value;
+                const tpType = document.querySelector('input[name="tpType"]:checked').value;
+                
+                const slUnit = document.getElementById('slUnit');
+                const tpUnit = document.getElementById('tpUnit');
+                const slInput = document.getElementById('stopLossValue');
+                const tpInput = document.getElementById('takeProfitValue');
+
+                // Update SL unit and placeholder
+                if (slType === 'pips') {
+                    slUnit.textContent = 'Pips';
+                    slInput.placeholder = '200';
+                    slInput.step = '1';
+                } else {
+                    slUnit.textContent = 'USD';
+                    slInput.placeholder = '2500.5';
+                    slInput.step = '0.1';
+                }
+
+                // Update TP unit and placeholder
+                if (tpType === 'rr') {
+                    tpUnit.textContent = 'Ratio';
+                    tpInput.placeholder = '2';
+                    tpInput.step = '0.1';
+                } else if (tpType === 'price') {
+                    tpUnit.textContent = 'USD';
+                    tpInput.placeholder = '2600.5';
+                    tpInput.step = '0.1';
+                } else {
+                    tpUnit.textContent = 'Pips';
+                    tpInput.placeholder = '400';
+                    tpInput.step = '1';
+                }
+            }
+
+            getSelectedRRs() {
+                const selectedRRs = [];
+                document.querySelectorAll('.rr-checkbox:checked').forEach(checkbox => {
+                    const rrBtn = checkbox.closest('.rr-btn');
+                    const rrValue = parseFloat(rrBtn.dataset.rr);
+                    selectedRRs.push(rrValue);
+                });
+                return selectedRRs;
+            }
+
+            deleteRR(rrValue) {
+                if (this.availableRRs.length <= 1) {
+                    alert('ต้องมี RR อย่างน้อย 1 ตัว');
+                    return;
+                }
+
+                // Remove from availableRRs array
+                this.availableRRs = this.availableRRs.filter(rr => rr !== rrValue);
+
+                // Remove from DOM
+                const btnToRemove = document.querySelector(`.rr-btn[data-rr="${rrValue}"]`);
+                if (btnToRemove) {
+                    btnToRemove.remove();
+                }
+
+                // Save to storage
+                this.saveToStorage();
+
+                // Recalculate
+                this.calculateAndDisplay();
+            }
+
+            saveToStorage() {
+                const settings = {
+                    capital: document.getElementById('capital').value,
+                    entryPrice: document.getElementById('entryPrice').value,
+                    stopLossPips: document.getElementById('stopLossPips').value,
+                    tradeDirection: document.getElementById('tradeDirection').value,
+                    availableRRs: this.availableRRs,
+                    selectedRRs: this.getSelectedRRs()
+                };
+                
+                localStorage.setItem(this.storageKey, JSON.stringify(settings));
+            }
+
+            loadFromStorage() {
+                try {
+                    const savedSettings = localStorage.getItem(this.storageKey);
+                    if (savedSettings) {
+                        const settings = JSON.parse(savedSettings);
+                        
+                        // Load input values
+                        if (settings.capital) document.getElementById('capital').value = settings.capital;
+                        if (settings.entryPrice) document.getElementById('entryPrice').value = settings.entryPrice;
+                        if (settings.stopLossPips) document.getElementById('stopLossPips').value = settings.stopLossPips;
+                        if (settings.tradeDirection) document.getElementById('tradeDirection').value = settings.tradeDirection;
+                        
+                        // Load RR settings
+                        if (settings.availableRRs && Array.isArray(settings.availableRRs)) {
+                            this.availableRRs = settings.availableRRs;
+                            this.updateRRButtons(settings.selectedRRs || []);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                }
+            }
+
+            updateRRButtons(selectedRRs) {
+                const rrButtonsContainer = document.getElementById('rrButtons');
+                rrButtonsContainer.innerHTML = '';
+
+                this.availableRRs.forEach(rr => {
+                    const isSelected = selectedRRs.includes(rr);
+                    const btn = document.createElement('div');
+                    btn.className = 'rr-btn';
+                    btn.dataset.rr = rr;
+                    btn.innerHTML = `
+                        <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                        <input type="checkbox" class="rr-checkbox" ${isSelected ? 'checked' : ''}>
+                        1:${rr}
+                    `;
+                    rrButtonsContainer.appendChild(btn);
+                });
+
+                // Rebind events
+                this.bindRREvents();
+            }
+
+            bindRREvents() {
+                const rrButtons = document.querySelectorAll('.rr-btn');
+                rrButtons.forEach(btn => {
+                    const checkbox = btn.querySelector('.rr-checkbox');
+                    const deleteBtn = btn.querySelector('.rr-delete-btn');
+                    
+                    // Remove existing event listeners to prevent duplication
+                    btn.onclick = null;
+                    checkbox.onchange = null;
+                    if (deleteBtn) deleteBtn.onclick = null;
+                    
+                    // Checkbox change event
+                    checkbox.addEventListener('change', () => {
+                        this.saveToStorage();
+                        this.calculateAndDisplay();
+                    });
+
+                    // Button click event (toggle checkbox)
+                    btn.addEventListener('click', (e) => {
+                        if (e.target !== checkbox && e.target !== deleteBtn && !e.target.closest('.rr-delete-btn')) {
+                            checkbox.checked = !checkbox.checked;
+                            this.saveToStorage();
+                            this.calculateAndDisplay();
+                        }
+                    });
+
+                    // Delete button event
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.deleteRR(parseFloat(btn.dataset.rr));
+                        });
+                    }
+                });
+            }
+
+            addCustomRR() {
+                const customInput = document.getElementById('customRR');
+                const value = parseFloat(customInput.value);
+
+                if (!value || value <= 0) {
+                    alert('กรุณาใส่ค่า RR ที่ถูกต้อง (เช่น 1.5)');
+                    return;
+                }
+
+                if (this.availableRRs.includes(value)) {
+                    alert('RR นี้มีอยู่แล้ว');
+                    return;
+                }
+
+                // Add to available RRs
+                this.availableRRs.push(value);
+                this.availableRRs.sort((a, b) => a - b);
+
+                // Create new RR button
+                const rrButtonsContainer = document.getElementById('rrButtons');
+                const newBtn = document.createElement('div');
+                newBtn.className = 'rr-btn';
+                newBtn.dataset.rr = value;
+                newBtn.innerHTML = `
+                    <button class="rr-delete-btn" onclick="event.stopPropagation();"><i class="fas fa-times"></i></button>
+                    <input type="checkbox" class="rr-checkbox" checked>
+                    1:${value}
+                `;
+
+                rrButtonsContainer.appendChild(newBtn);
+
+                // Bind events for new button
+                this.bindRREvents();
+
+                // Clear input
+                customInput.value = '';
+
+                // Save to storage
+                this.saveToStorage();
+
+                // Recalculate
+                this.calculateAndDisplay();
+            }
+
+            getSelectedRRs() {
+                const selectedRRs = [];
+                document.querySelectorAll('.rr-checkbox:checked').forEach(checkbox => {
+                    const rrBtn = checkbox.closest('.rr-btn');
+                    const rrValue = parseFloat(rrBtn.dataset.rr);
+                    selectedRRs.push(rrValue);
+                });
+                return selectedRRs;
+            }
+
+            calculateAndDisplay() {
+                try {
+                    const capital = parseFloat(document.getElementById('capital').value) || 0;
+                    const entryPrice = parseFloat(document.getElementById('entryPrice').value) || 0;
+                    const stopLossValue = parseFloat(document.getElementById('stopLossValue').value) || 0;
+                    const takeProfitValue = parseFloat(document.getElementById('takeProfitValue').value) || 0;
+                    const direction = document.getElementById('tradeDirection').value;
+                    const slType = document.querySelector('input[name="slType"]:checked').value;
+                    const tpType = document.querySelector('input[name="tpType"]:checked').value;
+
+                    // Calculate Stop Loss Price and Pips
+                    let stopLossPrice;
+                    let stopLossPips;
+                    
+                    if (slType === 'pips') {
+                        stopLossPips = stopLossValue;
+                        if (direction === 'buy') {
+                            stopLossPrice = entryPrice - (stopLossPips / 100); // 100 pips = $1
+                        } else {
+                            stopLossPrice = entryPrice + (stopLossPips / 100);
+                        }
+                    } else { // price
+                        stopLossPrice = stopLossValue;
+                        if (direction === 'buy') {
+                            stopLossPips = (entryPrice - stopLossPrice) * 100;
+                        } else {
+                            stopLossPips = (stopLossPrice - entryPrice) * 100;
+                        }
+                    }
+
+                    // Validation
+                    if (!this.validateInputs(capital, entryPrice, stopLossPips, stopLossPrice, direction)) {
+                        return;
+                    }
+
+                    // Calculate lot size (All In = use all capital for SL)
+                    const stopDistanceUSD = Math.abs(entryPrice - stopLossPrice);
+                    const lotSize = capital / (this.contractSize * stopDistanceUSD);
+
+                    // Prepare calculation data
+                    const calculationData = {
+                        capital: capital,
+                        entryPrice: entryPrice,
+                        stopLossPrice: stopLossPrice,
+                        stopLossPips: Math.abs(stopLossPips),
+                        lotSize: lotSize,
+                        direction: direction,
+                        tpType: tpType,
+                        takeProfitValue: takeProfitValue
+                    };
+
+                    // Handle TP calculations and RR display
+                    if (tpType === 'rr') {
+                        // Show RR buttons and calculate based on selected RRs
+                        const selectedRRs = this.getSelectedRRs();
+                        if (selectedRRs.length === 0) {
+                            this.showError('กรุณาเลือก RR อย่างน้อย 1 ตัว');
+                            return;
+                        }
+                        this.displayTradeCards(calculationData, selectedRRs);
+                    } else {
+                        // Calculate RR from TP value and show single card
+                        let takeProfitPrice;
+                        let takeProfitPips;
+                        
+                        if (tpType === 'price') {
+                            takeProfitPrice = takeProfitValue;
+                            if (direction === 'buy') {
+                                takeProfitPips = (takeProfitPrice - entryPrice) * 100;
+                            } else {
+                                takeProfitPips = (entryPrice - takeProfitPrice) * 100;
+                            }
+                        } else { // pips
+                            takeProfitPips = takeProfitValue;
+                            if (direction === 'buy') {
+                                takeProfitPrice = entryPrice + (takeProfitPips / 100);
+                            } else {
+                                takeProfitPrice = entryPrice - (takeProfitPips / 100);
+                            }
+                        }
+                        
+                        const calculatedRR = Math.abs(takeProfitPips) / Math.abs(stopLossPips);
+                        this.displaySingleTradeCard(calculationData, takeProfitPrice, takeProfitPips, calculatedRR);
+                    }
+
+                    this.hideError();
+
+                } catch (error) {
+                    console.error('Calculation error:', error);
+                    this.showError('เกิดข้อผิดพลาดในการคำนวณ');
+                }
+            }
+
+                    // Calculate lot size for All In
+                    const stopLossDistance = stopLossPips * this.pipValue; // แก้ไขแล้ว: 200 pips = $2
+                    const lotSize = capital / (stopLossDistance * this.contractSize);
+                    
+                    // Round lot size to appropriate decimal places
+                    const roundedLotSize = Math.round(lotSize * 100) / 100;
+
+                    // Calculate stop loss price
+                    const stopLossPrice = direction === 'buy' ? 
+                        entryPrice - (stopLossPips * this.pipValue) : 
+                        entryPrice + (stopLossPips * this.pipValue);
+
+                    // Display multiple cards for each selected RR
+                    this.displayMultipleTradeCards({
+                        capital: capital,
+                        lotSize: roundedLotSize,
+                        entryPrice: entryPrice,
+                        stopLossPrice: stopLossPrice,
+                        stopLossPips: stopLossPips,
+                        direction: direction,
+                        selectedRRs: selectedRRs
+                    });
+
+                    this.hideError();
+
+                } catch (error) {
+                    this.showError('เกิดข้อผิดพลาดในการคำนวณ');
+                }
+            }
+
+            displayMultipleTradeCards(data) {
+                const resultsSection = document.getElementById('resultsSection');
+                let cardsHTML = '';
+
+                data.selectedRRs.forEach(rr => {
+                    const takeProfitPips = data.stopLossPips * rr;
+                    const takeProfitPrice = data.direction === 'buy' ? 
+                        data.entryPrice + (takeProfitPips * this.pipValue) : 
+                        data.entryPrice - (takeProfitPips * this.pipValue);
+
+                    const expectedProfit = data.capital * rr;
+                    const cardClass = data.direction === 'buy' ? 'buy' : 'sell';
+                    const signalIcon = data.direction === 'buy' ? 'fa-arrow-up' : 'fa-arrow-down';
+
+                    cardsHTML += `
+                        <div class="trade-card ${cardClass}">
+                            <div class="signal-header">
+                                <div class="signal-type ${data.direction}">
+                                    <i class="fas ${signalIcon}"></i>
+                                    Signal: ${data.direction.toUpperCase()}
+                                </div>
+                                <div class="rr-display">
+                                    RR 1:${rr}
+                                </div>
+                            </div>
+                            
+                            <div class="trade-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">ทุน</div>
+                                    <div class="detail-value">$${data.capital.toFixed(2)}</div>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <div class="detail-label">Lots</div>
+                                    <div class="detail-value">${data.lotSize.toFixed(2)}</div>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <div class="detail-label">Entry</div>
+                                    <div class="detail-value">${data.entryPrice.toFixed(1)}</div>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <div class="detail-label">SL</div>
+                                    <div class="detail-value">${data.stopLossPrice.toFixed(1)} (${data.stopLossPips} pips)</div>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <div class="detail-label">TP</div>
+                                    <div class="detail-value">${takeProfitPrice.toFixed(1)} (${takeProfitPips} pips)</div>
+                                </div>
+                                
+                                <div class="detail-item">
+                                    <div class="detail-label">Max Loss</div>
+                                    <div class="detail-value" style="color: #dc3545;">-$${data.capital.toFixed(2)}</div>
+                                </div>
+                                
+                                <div class="profit-loss profit">
+                                    <i class="fas fa-plus"></i>
+                                    Expected Profit: +$${expectedProfit.toFixed(2)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                resultsSection.innerHTML = cardsHTML;
+                resultsSection.classList.remove('hidden');
+            }
+
+            validateInputs(capital, entryPrice, stopLossPips) {
+                if (capital <= 0) {
+                    this.showError('กรุณาใส่จำนวนเงินทุนที่ถูกต้อง');
+                    return false;
+                }
+
+                if (entryPrice <= 0) {
+                    this.showError('กรุณาใส่ราคาเข้าที่ถูกต้อง');
+                    return false;
+                }
+
+                if (stopLossPips <= 0) {
+                    this.showError('กรุณาใส่จำนวน Stop Loss Pips ที่ถูกต้อง');
+                    return false;
+                }
+
+                if (capital < 10) {
+                    this.showError('เงินทุนต้องมากกว่า $10');
+                    return false;
+                }
+
+                if (stopLossPips > 1000) {
+                    this.showError('Stop Loss Pips ไม่ควรเกิน 1000 pips');
+                    return false;
+                }
+
+                return true;
+            }
+
+            showError(message) {
+                const errorElement = document.getElementById('errorMessage');
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
+                document.getElementById('resultsSection').classList.add('hidden');
+            }
+
+            hideError() {
+                document.getElementById('errorMessage').classList.add('hidden');
+            }
+
+            formatNumber(num, decimals = 2) {
+                return new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                }).format(num);
+            }
+        }
+
+        // Initialize calculator when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new AllInGoldCalculator();
+        });
+
+        // Add loading animation to calculate button
+        document.addEventListener('DOMContentLoaded', () => {
+            const calculateBtn = document.getElementById('calculateBtn');
+            calculateBtn.addEventListener('click', function() {
+                this.classList.add('loading');
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
+                this.classList.add('loading');
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

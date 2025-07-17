@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🥇 All In Gold Trading Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold-primary: #FFD700;
+            --gold-secondary: #FFA500;
+            --gold-dark: #B8860B;
+            --dark-bg: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --success-color: #00C851;
+            --danger-color: #FF4444;
+            --warning-color: #ffbb33;
+            --info-color: #33b5e5;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea {
+            -webkit-user-select: auto;
+            -khtml-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #2c3e50 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .mobile-container {
+            max-width: 430px; /* iPhone 14 Pro Max width */
+            margin: 0 auto;
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+            color: #333;
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .header-section h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-section p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .calculator-body {
+            padding: 20px;
+        }
+
+        .input-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            background: white;
+        }
+
+        .input-group-text {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 15px 0 0 15px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+            padding: 15px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, var(--success-color) 0%, #00A041 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(0, 200, 81, 0.3);
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 200, 81, 0.4);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #CC0000 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 68, 68, 0.4);
+            color: white;
+        }
+
+        .lot-result {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .lot-size {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .lot-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rr-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .rr-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .rr-1-1 { border-left-color: var(--info-color); }
+        .rr-1-2 { border-left-color: var(--success-color); }
+        .rr-1-3 { border-left-color: var(--warning-color); }
+        .rr-1-10 { border-left-color: var(--danger-color); }
+
+        .rr-ratio {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .rr-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .rr-profit {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin: 8px 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .pip-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--info-color);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--warning-color);
+            color: #e65100;
+            font-weight: 500;
+        }
+
+        .example-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold-dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid var(--gold-primary);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* iPhone 14 Pro Max specific optimizations */
+        @media screen and (max-width: 430px) {
+            .mobile-container {
+                max-width: 100%;
+            }
+            
+            .calculator-body {
+                padding: 15px;
+            }
+            
+            .lot-size {
+                font-size: 2.5rem;
+            }
+            
+            .rr-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .rr-card {
+                padding: 15px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .form-control, .form-select {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+            
+            .form-control:focus, .form-select:focus {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1>🏆 Gold All-In Calculator</h1>
+            <p>คำนวณ Lot Size สำหรับการเทรดทอง All-In</p>
+        </div>
+
+        <!-- Calculator Body -->
+        <div class="calculator-body">
+            <!-- Input Form -->
+            <div class="input-card">
+                <form id="calculatorForm">
+                    <div class="mb-3">
+                        <div class="form-label">💰 ทุน (Capital)</div>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="capital" placeholder="เช่น 100" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-label">📈 ราคาเข้า (Entry Price)</div>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="entryPrice" step="0.01" placeholder="เช่น 2650.50" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-label">🛡️ Stop Loss (Pips)</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="slPips" placeholder="เช่น 200" required>
+                            <span class="input-group-text">Pips</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-label">⚡ Risk % ของทุน</div>
+                        <select class="form-select" id="riskPercent">
+                            <option value="100">💀 100% (All-In)</option>
+                            <option value="50">🔥 50%</option>
+                            <option value="25">⚖️ 25%</option>
+                            <option value="10">🛡️ 10%</option>
+                            <option value="5">🐢 5%</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-calculate">
+                        🚀 คำนวณ Lot Size
+                    </button>
+                    <button type="button" class="btn-reset" onclick="resetForm()">
+                        🔄 รีเซ็ต
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" style="display: none;">
+                <!-- Lot Size Result -->
+                <div class="lot-result pulse">
+                    <div class="lot-label">🎯 Lot Size</div>
+                    <div class="lot-size" id="lotSizeResult">0.00</div>
+                    <small>lots</small>
+                </div>
+
+                <!-- Risk:Reward Grid -->
+                <div class="rr-grid">
+                    <div class="rr-card rr-1-1">
+                        <div class="rr-ratio" style="color: #33b5e5;">1:1</div>
+                        <div class="rr-price" id="tp11">$0.00</div>
+                        <div class="rr-profit" id="profit11">+$0.00</div>
+                    </div>
+                    
+                    <div class="rr-card rr-1-2">
+                        <div class="rr-ratio" style="color: #00C851;">1:2</div>
+                        <div class="rr-price" id="tp12">$0.00</div>
+                        <div class="rr-profit" id="profit12">+$0.00</div>
+                    </div>
+                    
+                    <div class="rr-card rr-1-3">
+                        <div class="rr-ratio" style="color: #ffbb33;">1:3</div>
+                        <div class="rr-price" id="tp13">$0.00</div>
+                        <div class="rr-profit" id="profit13">+$0.00</div>
+                    </div>
+                    
+                    <div class="rr-card rr-1-10">
+                        <div class="rr-ratio" style="color: #FF4444;">1:10</div>
+                        <div class="rr-price" id="tp110">$0.00</div>
+                        <div class="rr-profit" id="profit110">+$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="info-section">
+                    <div class="info-title">📊 รายละเอียดการเทรด</div>
+                    <div class="info-item">
+                        <strong>💰 ความเสี่ยง:</strong> $<span id="riskAmount">0.00</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>📊 มูลค่า Position:</strong> $<span id="positionValue">0.00</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>🛡️ Stop Loss Price:</strong> $<span id="slPrice">0.00</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>💎 Pip Value:</strong> $<span id="pipValue">0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warning Section -->
+            <div class="warning-box">
+                <strong>⚠️ คำเตือน:</strong> การเทรด All-In มีความเสี่ยงสูงมาก อาจสูญเสียเงินทุนทั้งหมด กรุณาจัดการความเสี่ยงและใช้เงินที่เสียแล้วไม่เสียใจเท่านั้น
+            </div>
+
+            <!-- Calculation Info -->
+            <div class="pip-info">
+                <strong>💡 ข้อมูลการคำนวณ:</strong><br>
+                • 1 Lot ทองคำ = 100 ออนซ์<br>
+                • 1 Pip = $0.01 ต่อออนซ์<br>
+                • สูตร: Lot Size = (ทุน × Risk%) ÷ (SL Pips × $10)
+            </div>
+
+            <!-- Example Section -->
+            <div class="example-section">
+                <div class="example-title">🎯 ตัวอย่างการใช้งาน</div>
+                <div class="example-item">
+                    <strong>ทุน:</strong> $100 | <strong>Entry:</strong> $2650 | <strong>SL:</strong> 200 pips<br>
+                    <strong>Lot Size:</strong> 0.05 lots | <strong>TP 1:2:</strong> $2670
+                </div>
+            </div>
+        </div>
+    </div>
+                                <span class="input-group-text">USD</span>
+                            </div>
+                        </div>
+
+                        <!-- Stop Loss -->
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold fs-5">
+                                <i class="fas fa-stop-circle text-danger"></i> Stop Loss
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">🛡️</span>
+                                <input type="number" class="form-control" id="stopLoss" 
+                                       placeholder="เช่น 1990.00" min="1000" step="0.01" value="1990.00" required>
+                                <span class="input-group-text">USD</span>
+                            </div>
+                        </div>
+
+                        <!-- Take Profit -->
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold fs-5">
+                                <i class="fas fa-target text-success"></i> Take Profit (ไม่บังคับ)
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">🎯</span>
+                                <input type="number" class="form-control" id="takeProfit" 
+                                       placeholder="เช่น 2020.00" min="1000" step="0.01" value="2020.00">
+                                <span class="input-group-text">USD</span>
+                            </div>
+                        </div>
+
+                        <!-- ทิศทาง -->
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold fs-5">
+                                <i class="fas fa-exchange-alt text-info"></i> ทิศทางการเทรด
+                            </label>
+                            <select class="form-select form-select-lg" id="tradeDirection" required>
+                                <option value="long">🔼 Long (ซื้อ)</option>
+                                <option value="short">🔽 Short (ขาย)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <button type="submit" class="btn btn-calculate w-100">
+                                <i class="fas fa-calculator"></i> คำนวณ Lot Size
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button type="button" class="btn btn-reset w-100" onclick="resetForm()">
+                                <i class="fas fa-refresh"></i> รีเซ็ต
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Warning -->
+                <div class="alert risk-warning alert-section">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>คำเตือน:</strong> การเทรดทองคำมีความเสี่ยงสูง ควรใช้เงินเฉพาะส่วนที่สามารถสูญเสียได้เท่านั้น
+                </div>
+
+                <!-- Results -->
+                <div id="resultsSection" style="display: none;">
+                    <div class="result-card">
+                        <h4 class="mb-4 text-center">
+                            <i class="fas fa-chart-pie text-primary"></i> ผลการคำนวณ Lot Size
+                        </h4>
+                        
+                        <!-- Main Lot Size Result -->
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="result-item lot-size text-center">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-weight text-warning"></i> ขนาด Lot ที่แนะนำ
+                                    </h5>
+                                    <div class="result-value lot-size-highlight text-warning" id="calculatedLot">0.0000</div>
+                                    <small class="text-muted">Lot Size สำหรับความเสี่ยง <span id="displayRisk">2%</span></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Results -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="result-item neutral">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-dollar-sign text-secondary"></i> มูลค่าการเทรด
+                                    </h6>
+                                    <div class="result-value text-secondary" id="tradeValue">$0.00</div>
+                                    <small class="text-muted">มูลค่ารวมของตำแหน่ง</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="result-item loss">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-minus-circle text-danger"></i> ความเสี่ยงสูงสุด
+                                    </h6>
+                                    <div class="result-value text-danger" id="maxRisk">$0.00</div>
+                                    <small class="text-muted">จำนวนเงินที่อาจขาดทุน</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+        <script>
+        // Gold trading specifications
+        const GOLD_PIP_VALUE = 1; // $1 per pip for 0.01 lot
+        const GOLD_LOT_SIZE = 100; // 100 oz per lot
+        
+        // Form submission
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateLotSize();
+        });
+
+        function calculateLotSize() {
+            // Get input values
+            const capital = parseFloat(document.getElementById('capital').value);
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+            const slPips = parseFloat(document.getElementById('slPips').value);
+            const riskPercent = parseFloat(document.getElementById('riskPercent').value);
+
+            // Validate inputs
+            if (!capital || !entryPrice || !slPips || capital <= 0 || entryPrice <= 0 || slPips <= 0) {
+                alert('❌ กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง');
+                return;
+            }
+
+            // Calculate risk amount
+            const riskAmount = (capital * riskPercent) / 100;
+            
+            // Calculate lot size
+            const pipValue = GOLD_PIP_VALUE * 10; // $10 per pip for 0.1 lot
+            const lotSize = riskAmount / (slPips * pipValue);
+            
+            // Calculate SL price
+            const slPrice = entryPrice - (slPips * 0.1); // Assuming long position
+            
+            // Calculate position value
+            const positionValue = lotSize * entryPrice * GOLD_LOT_SIZE;
+            
+            // Calculate TP prices for different RR ratios
+            const tp11 = entryPrice + (slPips * 0.1 * 1); // 1:1
+            const tp12 = entryPrice + (slPips * 0.1 * 2); // 1:2
+            const tp13 = entryPrice + (slPips * 0.1 * 3); // 1:3
+            const tp110 = entryPrice + (slPips * 0.1 * 10); // 1:10
+            
+            // Calculate profits
+            const profit11 = riskAmount * 1;
+            const profit12 = riskAmount * 2;
+            const profit13 = riskAmount * 3;
+            const profit110 = riskAmount * 10;
+
+            // Display results
+            document.getElementById('lotSizeResult').textContent = lotSize.toFixed(4);
+            document.getElementById('riskAmount').textContent = riskAmount.toFixed(2);
+            document.getElementById('positionValue').textContent = positionValue.toFixed(2);
+            document.getElementById('slPrice').textContent = slPrice.toFixed(2);
+            document.getElementById('pipValue').textContent = (lotSize * 10).toFixed(2);
+            
+            // Update TP and profit displays
+            document.getElementById('tp11').textContent = `$${tp11.toFixed(2)}`;
+            document.getElementById('tp12').textContent = `$${tp12.toFixed(2)}`;
+            document.getElementById('tp13').textContent = `$${tp13.toFixed(2)}`;
+            document.getElementById('tp110').textContent = `$${tp110.toFixed(2)}`;
+            
+            document.getElementById('profit11').textContent = `+$${profit11.toFixed(2)}`;
+            document.getElementById('profit12').textContent = `+$${profit12.toFixed(2)}`;
+            document.getElementById('profit13').textContent = `+$${profit13.toFixed(2)}`;
+            document.getElementById('profit110').textContent = `+$${profit110.toFixed(2)}`;
+            
+            // Show results with animation
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.classList.add('fade-in');
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function resetForm() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('results').style.display = 'none';
+        }
+
+        // Auto-calculate on input change (debounced)
+        let timeoutId;
+        const inputs = ['capital', 'entryPrice', 'slPips', 'riskPercent'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    const capital = document.getElementById('capital').value;
+                    const entryPrice = document.getElementById('entryPrice').value;
+                    const slPips = document.getElementById('slPips').value;
+                    
+                    if (capital && entryPrice && slPips) {
+                        calculateLotSize();
+                    }
+                }, 500);
+            });
+        });
+
+        // Format number inputs on blur
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('blur', function() {
+                if (this.value) {
+                    if (id === 'capital' || id === 'entryPrice') {
+                        this.value = parseFloat(this.value).toFixed(2);
+                    } else if (id === 'slPips') {
+                        this.value = parseInt(this.value);
+                    }
+                }
+            });
+        });
+
+        // Initialize with example values
+        window.addEventListener('load', () => {
+            document.getElementById('capital').value = '100';
+            document.getElementById('entryPrice').value = '2650.50';
+            document.getElementById('slPips').value = '200';
+            document.getElementById('riskPercent').value = '100';
+        });
+    </script>
+</body>
+</html>
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-plus-circle text-success"></i> กำไรที่คาดหวัง
+                                    </h6>
+                                    <div class="result-value text-success" id="expectedProfit">$0.00</div>
+                                    <small class="text-muted">หาก Take Profit ถูกต้อง</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="result-item neutral">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-arrows-alt-h text-info"></i> ระยะทาง Stop Loss
+                                    </h6>
+                                    <div class="result-value text-info" id="stopDistance">0.00</div>
+                                    <small class="text-muted">USD ต่อ oz</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="result-item neutral">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-balance-scale text-info"></i> Risk:Reward
+                                    </h6>
+                                    <div class="result-value text-info" id="rrRatio">1:0</div>
+                                    <small class="text-muted">อัตราส่วนความเสี่ยง:ผลตอบแทน</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="result-item neutral">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-chart-line text-info"></i> Pip Value
+                                    </h6>
+                                    <div class="result-value text-info" id="pipValue">$0.00</div>
+                                    <small class="text-muted">ต่อ 1 pip</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="alert alert-info mt-4">
+                            <h6><i class="fas fa-info-circle"></i> สรุปการเทรด</h6>
+                            <div id="tradingSummary"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="alert alert-light">
+                            <h6><i class="fas fa-info-circle text-primary"></i> ข้อมูลการเทรดทอง</h6>
+                            <ul class="mb-0">
+                                <li><strong>Contract Size:</strong> 100 troy ounces/lot</li>
+                                <li><strong>Minimum Lot:</strong> 0.01 lot</li>
+                                <li><strong>Pip Value:</strong> $10/pip สำหรับ 1 lot</li>
+                                <li><strong>Spread:</strong> โดยทั่วไป 0.3-0.5 USD</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-lightbulb"></i> เคล็ดลับ Money Management</h6>
+                            <ul class="mb-0">
+                                <li>ไม่เสี่ยงเกิน 2-3% ต่อการเทรด</li>
+                                <li>ใช้ Risk:Reward อย่างน้อย 1:2</li>
+                                <li>มี Stop Loss ทุกการเทรด</li>
+                                <li>วางแผนก่อนเข้าตลาด</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lot-calculator.js"></script>
+</body>
+</html>

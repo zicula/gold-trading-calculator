@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Trading Calculator - Simple Server</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .method {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .method h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .command {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .note {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        .center {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Gold Trading Calculator - Server Setup</h1>
+        
+        <div class="success">
+            <strong>✅ การติดตั้งสำเร็จ!</strong><br>
+            Web App ของคุณพร้อมใช้งานแล้ว
+        </div>
+
+        <div class="method">
+            <h3>🌐 วิธีที่ 1: ใช้งานโดยตรง (แนะนำ)</h3>
+            <p>เปิดไฟล์ <strong>index.html</strong> ในเว็บเบราว์เซอร์</p>
+            <div class="center">
+                <a href="index.html" class="btn">เปิด Gold Calculator</a>
+            </div>
+        </div>
+
+        <div class="method">
+            <h3>🐍 วิธีที่ 2: Python Server</h3>
+            <p>รันคำสั่งนี้ใน Terminal/Command Prompt:</p>
+            <div class="command">python -m http.server 8000</div>
+            <p>จากนั้นเปิด: <a href="http://localhost:8000">http://localhost:8000</a></p>
+        </div>
+
+        <div class="method">
+            <h3>📦 วิธีที่ 3: Node.js Server</h3>
+            <p>ติดตั้ง serve package และรัน:</p>
+            <div class="command">npm install -g serve</div>
+            <div class="command">serve .</div>
+            <p>หรือใช้ npx โดยตรง:</p>
+            <div class="command">npx serve .</div>
+        </div>
+
+        <div class="method">
+            <h3>🔴 วิธีที่ 4: Live Server (สำหรับการพัฒนา)</h3>
+            <p>ติดตั้ง live-server และรัน:</p>
+            <div class="command">npm install -g live-server</div>
+            <div class="command">live-server .</div>
+            <p>จะเปิดเบราว์เซอร์อัตโนมัติที่ port 8080</p>
+        </div>
+
+        <div class="method">
+            <h3>🌍 วิธีที่ 5: Deploy บน Internet</h3>
+            <p>อัปโหลดไฟล์ทั้งหมดไปยัง:</p>
+            <ul>
+                <li><strong>GitHub Pages</strong> (ฟรี)</li>
+                <li><strong>Netlify</strong> (ฟรี)</li>
+                <li><strong>Vercel</strong> (ฟรี)</li>
+                <li><strong>Web Hosting</strong> ทั่วไป</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <strong>💡 หมายเหตุ:</strong><br>
+            - เว็บแอปนี้ใช้งานได้โดยไม่ต้องการ Backend<br>
+            - ไฟล์ทั้งหมดรันบน Client-side<br>
+            - รองรับการใช้งานบนมือถือและเดสก์ท็อป<br>
+            - ไม่เก็บข้อมูลส่วนตัวในเซิร์ฟเวอร์
+        </div>
+
+        <div class="method">
+            <h3>📱 คุณสมบัติของ Web App</h3>
+            <ul>
+                <li>คำนวณ Position Size สำหรับการเทรดทอง</li>
+                <li>รองรับการตั้ง Stop Loss แบบต่างๆ (ราคา, Pips, %)</li>
+                <li>รองรับการตั้ง Take Profit แบบต่างๆ</li>
+                <li>คำนวณ Risk:Reward Ratio อัตโนมัติ</li>
+                <li>แสดงผลกำไร/ขาดทุนคาดหวัง</li>
+                <li>รองรับทั้ง Long และ Short Position</li>
+                <li>ส่วนติดต่อผู้ใช้ภาษาไทย</li>
+                <li>Responsive Design สำหรับทุกอุปกรณ์</li>
+            </ul>
+        </div>
+
+        <div class="center">
+            <a href="index.html" class="btn">🚀 เริ่มใช้งาน Gold Calculator</a>
+            <a href="README.md" class="btn">📖 อ่านคู่มือฉบับเต็ม</a>
+        </div>
+
+        <div class="center" style="margin-top: 50px; opacity: 0.8;">
+            <p>Created for <strong>Zic Trading Strategy</strong></p>
+            <p>© 2025 Professional Trading Tools</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-detect and display current URL
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.location.protocol === 'file:') {
+                console.log('Running from file system');
+            } else {
+                console.log('Running from web server at:', window.location.origin);
+            }
+        });
+    </script>
+</body>
+</html>
