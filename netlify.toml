@@ -1,14 +1,35 @@
-# Netlify Settings
+# Netlify Settings for Gold Trading Calculator V4
 [build]
   publish = "."
-  command = "echo 'Build completed'"
+  command = "echo 'Gold Trading Calculator V4 build completed'"
+
+# Redirect rules
+[[redirects]]
+  from = "/calculator"
+  to = "/all_in_calculator_v4.html"
+  status = 301
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+  from = "/v4"
+  to = "/all_in_calculator_v4.html"
+  status = 301
 
+[[redirects]]
+  from = "/latest"
+  to = "/all_in_calculator_v4.html"
+  status = 301
+
+# Main redirect - all other paths to index (which redirects to V4)
 [[redirects]]
   from = "/*"
-  to = "/lot-calculator.html"
+  to = "/index.html"
   status = 200
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

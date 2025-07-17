@@ -2,52 +2,105 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>🏆 All In Gold Trading Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>🟡 Gold Trading Calculator V4 - Binance Style (by Zic)</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="เครื่องคำนวณการเทรดทอง All In Calculator สไตล์ Binance พร้อมระบบ RR Management และ Responsive Design">
+    <meta name="keywords" content="gold trading, calculator, binance, all in, RR management, เทรดทอง, คำนวณ">
+    <meta name="author" content="Zic Trading">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="🟡 Gold Trading Calculator V4 - Binance Style">
+    <meta property="og:description" content="เครื่องคำนวณการเทรดทอง All In Calculator สไตล์ Binance">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gold-trading-calculator.vercel.app">
+    
+    <!-- Auto-redirect to V4 calculator -->
+    <script>
+        // Redirect to V4 calculator immediately
+        window.location.href = './all_in_calculator_v4.html';
+    </script>
+    
+    <!-- Fallback for users with JavaScript disabled -->
+    <meta http-equiv="refresh" content="0; url=./all_in_calculator_v4.html">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* Fallback loading screen style */
         body {
-            font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0B0E11;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 10px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 430px; /* iPhone 14 Pro Max width */
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
-            border-radius: 20px 20px 0 0;
-            padding: 25px 20px;
+            margin: 0;
             text-align: center;
-            color: #333;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.8;
         }
         
-        .by-zic {
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #2B3139;
+            border-top: 3px solid #F0B90B;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #F0B90B;
+        }
+        
+        .loading-subtext {
+            font-size: 0.9rem;
+            color: #848E9C;
+        }
+        
+        .manual-link {
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #F0B90B;
+            color: #0B0E11;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .manual-link:hover {
+            background: #FFC107;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">🟡 Gold Trading Calculator V4</div>
+        <div class="loading-subtext">Loading Binance Style Calculator...</div>
+        <div class="loading-subtext">by Zic Trading</div>
+        
+        <!-- Manual link if redirect fails -->
+        <a href="./all_in_calculator_v4.html" class="manual-link">
+            <i class="fas fa-calculator"></i> เข้าสู่เครื่องคำนวณ
+        </a>
+    </div>
+</body>
             font-size: 0.75rem;
             margin-top: 5px;
             color: #666;

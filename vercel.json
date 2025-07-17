@@ -1,39 +1,78 @@
 {
   "version": 2,
-  "name": "gold-trading-lot-calculator",
+  "name": "gold-trading-calculator",
   "builds": [
     {
-      "src": "server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "lot-calculator.html",
+      "src": "*.html",
       "use": "@vercel/static"
     },
     {
-      "src": "lot-calculator.js",
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "/server.js"
-    },
-    {
       "src": "/",
-      "dest": "/lot-calculator.html"
+      "dest": "/index.html"
+    },
+    {
+      "src": "/calculator",
+      "dest": "/all_in_calculator_v4.html"
+    },
+    {
+      "src": "/v4",
+      "dest": "/all_in_calculator_v4.html"
+    },
+    {
+      "src": "/latest",
+      "dest": "/all_in_calculator_v4.html"
+    },
+    {
+      "src": "/all_in_calculator_v4.html",
+      "dest": "/all_in_calculator_v4.html"
+    },
+    {
+      "src": "/all_in_calculator_v3.html",
+      "dest": "/all_in_calculator_v3.html"
+    },
+    {
+      "src": "/all_in_calculator_v2.html",
+      "dest": "/all_in_calculator_v2.html"
+    },
+    {
+      "src": "/all_in_calculator.html",
+      "dest": "/all_in_calculator.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/server.js"
+      "dest": "/index.html"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
 }
