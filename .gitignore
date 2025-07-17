@@ -105,3 +105,6 @@ server.log
 # Deployment
 dist/
 build/
+
+# Local Netlify folder
+.netlify
