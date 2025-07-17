@@ -4,6 +4,31 @@
 
 ---
 
+## 🚀 [V4.6.1] - 2025-07-17 (Statistics Tracking Feature)
+
+### 📊 **New Statistics Feature**
+- **👁️ Page View Counter**: Tracks total page visits (ยอดวิว)
+- **👥 Unique User Counter**: Tracks unique users with daily increment system (ผู้ใช้งาน)
+- **🔢 Calculation Tracking**: Internal counter for calculation events
+- **📈 Smart Number Formatting**: Display as K/M format for large numbers
+- **🎨 Non-intrusive Design**: Small section at bottom that doesn't interfere with main content
+- **📱 Mobile Responsive**: Optimized display for all screen sizes
+
+### 🔧 **Technical Implementation**
+- **💾 localStorage Storage**: Persistent data across browser sessions
+- **🆔 Unique User ID**: Generated unique identifier for each user
+- **📅 Daily Tracking**: User count increments once per day
+- **🌙 Binance Theme**: Integrated with existing dark theme design
+- **⚡ Auto-initialization**: Statistics start tracking on page load
+
+### 🎯 **Features**
+- **🔄 Real-time Updates**: Statistics update automatically during use
+- **🔒 Privacy-focused**: All data stored locally, no external tracking
+- **⚡ Performance**: Lightweight implementation with minimal impact
+- **🎨 Visual Integration**: Seamlessly integrated with V4 calculator design
+
+---
+
 ## 🚀 [V4.6] - 2025-07-17 (V4 as Main Index)
 
 ### 🏠 **V4 Calculator as Main Landing Page**
