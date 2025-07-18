@@ -256,6 +256,39 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 2px 8px rgba(240, 185, 11, 0.3);
+            position: relative;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            display: flex;
+            gap: 4px;
+            z-index: 101;
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            background: rgba(11, 14, 17, 0.1);
+            border: 1px solid rgba(11, 14, 17, 0.2);
+            border-radius: 6px;
+            color: var(--binance-dark);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(11, 14, 17, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: var(--binance-dark);
+            color: var(--binance-yellow);
+            border-color: var(--binance-dark);
         }
 
         .header h1 {
@@ -1362,6 +1395,39 @@
             border-top: 1px solid var(--binance-border);
         }
 
+        /* Language Switcher */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .language-btn {
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            color: var(--binance-white);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 4px;
+        }
+
+        .language-btn:hover {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        .language-btn.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
         /* Mobile responsive for statistics */
         @media (max-width: 430px) {
             .statistics-section {
@@ -1384,22 +1450,36 @@
             .stats-footer {
                 font-size: 0.55rem;
             }
+
+            .language-switcher {
+                right: 12px;
+                top: 12px;
+            }
+
+            .language-btn {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="th">TH</button>
+                <button class="language-btn" data-lang="en">EN</button>
+            </div>
             <h1>
                 <i class="fab fa-bitcoin" style="color: #F0B90B;"></i>
-                Gold Trading Calculator V4
+                <span data-key="header-title">Gold Trading Calculator V4</span>
             </h1>
-            <p>Binance Style - Auto Calculate <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
+            <p><span data-key="header-subtitle">Binance Style - Auto Calculate</span> <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
         </div>
 
         <!-- Manual Calculate Status -->
         <div class="auto-status" id="autoStatus">
-            <i class="fas fa-calculator"></i> กรอกข้อมูลแล้วกดปุ่ม "คำนวณ" เพื่อเริ่มต้น
+            <i class="fas fa-calculator"></i> <span data-key="status-initial">กรอกข้อมูลแล้วกดปุ่ม "คำนวณ" เพื่อเริ่มต้น</span>
         </div>
 
         <div class="calculator-body">
@@ -1411,16 +1491,16 @@
                 <div class="input-group">
                     <div class="input-label">
                         <i class="fas fa-exchange-alt" style="color: var(--binance-blue);"></i>
-                        ทิศทางการเทรด
+                        <span data-key="direction-label">ทิศทางการเทรด</span>
                     </div>
                     <div class="type-buttons">
                         <label class="type-btn">
                             <input type="radio" name="direction" value="buy" checked>
-                            <span>🔼 BUY</span>
+                            <span data-key="direction-buy">🔼 BUY</span>
                         </label>
                         <label class="type-btn">
                             <input type="radio" name="direction" value="sell">
-                            <span>🔽 SELL</span>
+                            <span data-key="direction-sell">🔽 SELL</span>
                         </label>
                     </div>
                 </div>
@@ -1429,7 +1509,7 @@
                 <div class="input-group">
                     <div class="input-label">
                         <i class="fas fa-dollar-sign" style="color: var(--binance-green);"></i>
-                        ทุน (Capital)
+                        <span data-key="capital-label">ทุน (Capital)</span>
                     </div>
                     <div class="input-with-unit">
                         <input type="number" class="input-field" id="capital" placeholder="100" value="100" min="1" step="0.01">
@@ -1441,7 +1521,7 @@
                 <div class="input-group">
                     <div class="input-label">
                         <i class="fas fa-chart-line" style="color: var(--binance-blue);"></i>
-                        ราคา Entry
+                        <span data-key="entry-price-label">ราคา Entry</span>
                     </div>
                     <div class="input-with-unit">
                         <input type="number" class="input-field" id="entryPrice" placeholder="2000.00" min="0" step="0.01">
@@ -1453,16 +1533,16 @@
                 <div class="input-group">
                     <div class="input-label">
                         <i class="fas fa-shield-alt" style="color: var(--binance-red);"></i>
-                        Stop Loss
+                        <span data-key="stop-loss-label">Stop Loss</span>
                     </div>
                     <div class="type-buttons">
                         <label class="type-btn">
                             <input type="radio" name="slType" value="pips" checked>
-                            <span>Pips</span>
+                            <span data-key="sl-type-pips">Pips</span>
                         </label>
                         <label class="type-btn">
                             <input type="radio" name="slType" value="price">
-                            <span>ราคา</span>
+                            <span data-key="sl-type-price">ราคา</span>
                         </label>
                     </div>
                     <div class="input-with-unit">
@@ -1475,20 +1555,20 @@
                 <div class="input-group">
                     <div class="input-label">
                         <i class="fas fa-bullseye" style="color: var(--binance-green);"></i>
-                        Take Profit (Optional)
+                        <span data-key="take-profit-label">Take Profit (Optional)</span>
                     </div>
                     <div class="type-buttons">
                         <label class="type-btn">
                             <input type="radio" name="tpType" value="pips" checked>
-                            <span>Pips</span>
+                            <span data-key="tp-type-pips">Pips</span>
                         </label>
                         <label class="type-btn">
                             <input type="radio" name="tpType" value="price">
-                            <span>ราคา</span>
+                            <span data-key="tp-type-price">ราคา</span>
                         </label>
                         <label class="type-btn">
                             <input type="radio" name="tpType" value="rr">
-                            <span>RR</span>
+                            <span data-key="tp-type-rr">RR</span>
                         </label>
                     </div>
                     <div class="input-with-unit">
@@ -1502,11 +1582,11 @@
                     <div class="calculate-buttons">
                         <button class="calculate-btn" id="calculateBtn">
                             <i class="fas fa-calculator"></i>
-                            คำนวณ
+                            <span data-key="calculate-btn">คำนวณ</span>
                         </button>
                         <button class="add-card-btn" id="addCardBtn">
                             <i class="fas fa-plus"></i>
-                            เพิ่มการ์ด
+                            <span data-key="add-card-btn">เพิ่มการ์ด</span>
                         </button>
                     </div>
                 </div>
@@ -1516,13 +1596,13 @@
             <div class="rr-section">
                 <div class="input-label">
                     <i class="fas fa-balance-scale" style="color: var(--binance-yellow);"></i>
-                    Risk:Reward Ratios
+                    <span data-key="rr-label">Risk:Reward Ratios</span>
                 </div>
                 
                 <div class="rr-controls">
                     <input type="number" class="custom-rr-input" id="customRR" placeholder="เพิ่ม RR" min="0.1" step="0.1">
                     <button class="add-rr-btn" id="addRRBtn">
-                        <i class="fas fa-plus"></i> เพิ่ม
+                        <i class="fas fa-plus"></i> <span data-key="add-rr-btn">เพิ่ม</span>
                     </button>
                 </div>
                 
@@ -1568,17 +1648,17 @@
                         <i class="fas fa-eye stat-icon"></i>
                         <span id="viewCountValue">0</span>
                     </div>
-                    <div class="stat-label">ยอดวิว</div>
+                    <div class="stat-label" data-key="view-count-label">ยอดวิว</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" id="userCount">
                         <i class="fas fa-users stat-icon"></i>
                         <span id="userCountValue">0</span>
                     </div>
-                    <div class="stat-label">ผู้ใช้งาน</div>
+                    <div class="stat-label" data-key="user-count-label">ผู้ใช้งาน</div>
                 </div>
             </div>
-            <div class="stats-footer">
+            <div class="stats-footer" data-key="stats-footer">
                 สถิติการใช้งาน Gold Trading Calculator V4
             </div>
         </div>
@@ -1591,8 +1671,131 @@
                 this.attachEventListeners();
                 this.loadFromStorage();
                 this.initializeStatistics();
+                this.initializeLanguage();
                 // Remove auto-calculation on startup
             }
+
+            // Translation dictionary
+            translations = {
+                'th': {
+                    'header-title': 'Gold Trading Calculator V4',
+                    'header-subtitle': 'Binance Style - Auto Calculate',
+                    'initial-capital': 'เงินต้นเริ่มต้น (USD)',
+                    'risk-percentage': 'ความเสี่ยงต่อการเทรด (%)',
+                    'entry-price': 'ราคาเข้า (USD)',
+                    'stop-loss': 'ราคาตัดขาดทุน (USD)',
+                    'take-profit': 'ราคาเป้าหมาย (USD)',
+                    'position-type': 'ประเภทการซื้อขาย',
+                    'buy-long': 'ซื้อ (Long)',
+                    'sell-short': 'ขาย (Short)',
+                    'calculate': 'คำนวณ',
+                    'calculate-manual': 'คำนวณด้วยตนเอง',
+                    'results-title': 'ผลการคำนวณ',
+                    'position-size': 'ขนาดการซื้อขาย',
+                    'risk-amount': 'จำนวนเงินเสี่ยง',
+                    'potential-profit': 'กำไรที่คาดหวัง',
+                    'risk-reward': 'อัตราส่วนความเสี่ยงต่อผลตอบแทน',
+                    'add-card': 'เพิ่มการคำนวณ',
+                    'statistics-title': 'สถิติการใช้งาน',
+                    'page-views': 'จำนวนการเข้าชม',
+                    'unique-users': 'ผู้ใช้งานเฉพาะ',
+                    'calculations': 'จำนวนการคำนวณ',
+                    'updated-realtime': 'อัปเดตแบบเรียลไทม์',
+                    'auto-calculate': 'คำนวณอัตโนมัติ',
+                    'manual-calculate': 'คำนวณด้วยตนเอง',
+                    'auto-status': 'เปิดใช้งานการคำนวณอัตโนมัติ',
+                    'manual-status': 'เปิดใช้งานการคำนวณด้วยตนเอง',
+                    'cards': 'การ์ด',
+                    'usd': 'USD',
+                    'oz': 'oz',
+                    'clear': 'ล้าง',
+                    'close': 'ปิด',
+                    'remove': 'ลบ',
+                    'recommended-rr': 'แนะนำ RR ≥ 1:2',
+                    'excellent-rr': 'ดีเยี่ยม!',
+                    'good-rr': 'ดี',
+                    'poor-rr': 'ต่ำ',
+                    'very-poor-rr': 'ต่ำมาก',
+                    'status-initial': 'กรอกข้อมูลแล้วกดปุ่ม "คำนวณ" เพื่อเริ่มต้น',
+                    'direction-label': 'ทิศทางการเทรด',
+                    'direction-buy': '🔼 BUY',
+                    'direction-sell': '🔽 SELL',
+                    'capital-label': 'ทุน (Capital)',
+                    'entry-price-label': 'ราคา Entry',
+                    'stop-loss-label': 'Stop Loss',
+                    'sl-type-pips': 'Pips',
+                    'sl-type-price': 'ราคา',
+                    'take-profit-label': 'Take Profit (Optional)',
+                    'tp-type-pips': 'Pips',
+                    'tp-type-price': 'ราคา',
+                    'tp-type-rr': 'RR',
+                    'calculate-btn': 'คำนวณ',
+                    'add-card-btn': 'เพิ่มการ์ด',
+                    'rr-label': 'Risk:Reward Ratios',
+                    'add-rr-btn': 'เพิ่ม',
+                    'view-count-label': 'ยอดวิว',
+                    'user-count-label': 'ผู้ใช้งาน'
+                },
+                'en': {
+                    'header-title': 'Gold Trading Calculator V4',
+                    'header-subtitle': 'Binance Style - Auto Calculate',
+                    'initial-capital': 'Initial Capital (USD)',
+                    'risk-percentage': 'Risk Percentage (%)',
+                    'entry-price': 'Entry Price (USD)',
+                    'stop-loss': 'Stop Loss (USD)',
+                    'take-profit': 'Take Profit (USD)',
+                    'position-type': 'Position Type',
+                    'buy-long': 'Buy (Long)',
+                    'sell-short': 'Sell (Short)',
+                    'calculate': 'Calculate',
+                    'calculate-manual': 'Calculate Manually',
+                    'results-title': 'Calculation Results',
+                    'position-size': 'Position Size',
+                    'risk-amount': 'Risk Amount',
+                    'potential-profit': 'Potential Profit',
+                    'risk-reward': 'Risk/Reward Ratio',
+                    'add-card': 'Add Calculation',
+                    'statistics-title': 'Usage Statistics',
+                    'page-views': 'Page Views',
+                    'unique-users': 'Unique Users',
+                    'calculations': 'Calculations',
+                    'updated-realtime': 'Updated in Real-time',
+                    'auto-calculate': 'Auto Calculate',
+                    'manual-calculate': 'Manual Calculate',
+                    'auto-status': 'Auto calculation enabled',
+                    'manual-status': 'Manual calculation enabled',
+                    'cards': 'Cards',
+                    'usd': 'USD',
+                    'oz': 'oz',
+                    'clear': 'Clear',
+                    'close': 'Close',
+                    'remove': 'Remove',
+                    'recommended-rr': 'Recommended RR ≥ 1:2',
+                    'excellent-rr': 'Excellent!',
+                    'good-rr': 'Good',
+                    'poor-rr': 'Poor',
+                    'very-poor-rr': 'Very Poor',
+                    'status-initial': 'Enter data and click "Calculate" to begin',
+                    'direction-label': 'Trade Direction',
+                    'direction-buy': '🔼 BUY',
+                    'direction-sell': '🔽 SELL',
+                    'capital-label': 'Capital (USD)',
+                    'entry-price-label': 'Entry Price',
+                    'stop-loss-label': 'Stop Loss',
+                    'sl-type-pips': 'Pips',
+                    'sl-type-price': 'Price',
+                    'take-profit-label': 'Take Profit (Optional)',
+                    'tp-type-pips': 'Pips',
+                    'tp-type-price': 'Price',
+                    'tp-type-rr': 'RR',
+                    'calculate-btn': 'Calculate',
+                    'add-card-btn': 'Add Card',
+                    'rr-label': 'Risk:Reward Ratios',
+                    'add-rr-btn': 'Add',
+                    'view-count-label': 'Page Views',
+                    'user-count-label': 'Users'
+                }
+            };
 
             initializeElements() {
                 this.elements = {
@@ -1669,7 +1872,10 @@
             }
 
             manualCalculate() {
-                this.elements.autoStatus.innerHTML = '<i class="fas fa-cog fa-spin"></i> กำลังคำนวณ...';
+                const translations = this.getTranslations();
+                const lang = this.currentLanguage;
+                
+                this.elements.autoStatus.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${translations[lang]['status-calculating']}`;
                 this.elements.autoStatus.className = 'auto-status calculating';
                 
                 // Track calculation event
@@ -1680,7 +1886,7 @@
                 
                 setTimeout(() => {
                     this.calculate();
-                    this.elements.autoStatus.innerHTML = '<i class="fas fa-check-circle"></i> คำนวณเสร็จสิ้น';
+                    this.elements.autoStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${translations[lang]['status-complete']}`;
                     this.elements.autoStatus.className = 'auto-status';
                 }, 300);
             }
@@ -2331,6 +2537,71 @@
                 let calcCount = parseInt(localStorage.getItem('goldCalculatorCalcCount') || '0');
                 calcCount += 1;
                 localStorage.setItem('goldCalculatorCalcCount', calcCount.toString());
+            }
+
+            // Language system
+            initializeLanguage() {
+                // Get saved language or default to Thai
+                this.currentLanguage = localStorage.getItem('goldCalculatorLanguage') || 'th';
+                
+                // Set up language switcher
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.switchLanguage(e.target.dataset.lang);
+                    });
+                });
+                
+                // Apply initial language
+                this.applyLanguage(this.currentLanguage);
+            }
+
+            switchLanguage(lang) {
+                this.currentLanguage = lang;
+                localStorage.setItem('goldCalculatorLanguage', lang);
+                
+                // Update button states
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+                
+                // Apply language
+                this.applyLanguage(lang);
+            }
+
+            applyLanguage(lang) {
+                const translations = this.getTranslations();
+                
+                // Update all elements with data-key attributes
+                document.querySelectorAll('[data-key]').forEach(element => {
+                    const key = element.getAttribute('data-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // Update placeholder text
+                if (lang === 'en') {
+                    document.getElementById('customRR').placeholder = 'Add RR';
+                } else {
+                    document.getElementById('customRR').placeholder = 'เพิ่ม RR';
+                }
+                
+                // Update status messages
+                this.updateStatusMessages(lang);
+            }
+
+            getTranslations() {
+                return this.translations;
+            }
+
+            updateStatusMessages(lang) {
+                const translations = this.getTranslations();
+                
+                // Update status if it's currently showing initial message
+                const statusElement = document.getElementById('autoStatus');
+                if (statusElement.textContent.includes('กรอกข้อมูล') || statusElement.textContent.includes('Enter data')) {
+                    statusElement.innerHTML = `<i class="fas fa-calculator"></i> <span data-key="status-initial">${translations[lang]['status-initial']}</span>`;
+                }
             }
         }
 
