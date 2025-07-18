@@ -4,6 +4,38 @@
 
 ---
 
+## 🚀 [V4.7.0] - 2025-07-18 (Language Switcher Feature)
+
+### 🌐 **Multi-Language Support**
+- **🇹🇭 Thai Language**: Full Thai translation for all UI elements
+- **🇺🇸 English Language**: Complete English localization
+- **🔄 Language Switcher**: Toggle between Thai/English with TH/EN buttons
+- **💾 Language Persistence**: Remember user's language preference using localStorage
+- **⚡ Real-time Switching**: Instant language change without page reload
+
+### 🎯 **Translation Coverage**
+- **📋 Form Labels**: All input labels and descriptions
+- **🔘 Buttons**: Calculate, Add Card, and action buttons
+- **📊 Status Messages**: Auto/Manual calculation status
+- **📈 Statistics**: Page views, users, and calculation counters
+- **🎛️ Controls**: Direction selectors, type options, and RR ratios
+- **💬 Feedback**: Error messages and success notifications
+
+### 🔧 **Technical Implementation**
+- **🗂️ Translation Dictionary**: Comprehensive key-value translation system
+- **🔄 Dynamic Updates**: All elements with data-key attributes update automatically
+- **💾 localStorage Integration**: Persistent language preference across sessions
+- **🎨 UI Integration**: Language switcher positioned in header with active state styling
+- **⚡ Performance**: Lightweight implementation with minimal overhead
+
+### 🎨 **Design Features**
+- **🎯 Binance Theme**: Language switcher styled with Binance color scheme
+- **📱 Mobile Responsive**: Optimized for all screen sizes
+- **🔄 Active State**: Visual indication of currently selected language
+- **🎨 Hover Effects**: Smooth transitions and hover states
+
+---
+
 ## 🚀 [V4.6.1] - 2025-07-17 (Statistics Tracking Feature)
 
 ### 📊 **New Statistics Feature**
