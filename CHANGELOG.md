@@ -4,6 +4,33 @@
 
 ---
 
+## 🚀 [V5.1.0] - 2025-08-11 (Risk Calculator Enhancement & UI Improvements)
+
+### 🎯 **Risk Calculator Enhancements**
+- **💰 Profit Display in TP Levels**: Show profit amount for each TP level (e.g., TP1 +5.0 $)
+- **🎨 Enhanced Visual Design**: Green highlighting for profit amounts with background color
+- **🔧 Fixed Zone Calculation Logic**: Corrected zone assignment for Buy/Sell orders
+  - Buy orders: Zone starts from high price → low price (3004 → 3000)
+  - Sell orders: Zone starts from low price → high price (3000 → 3004)
+- **📐 Improved Column Width**: Support for 4-digit numbers with 1 decimal place
+- **📱 Comprehensive Responsive Design**: Optimized for all device sizes
+- **🔄 Side-by-Side Zone Layout**: Display TP zones horizontally across all screen sizes
+
+### 🎨 **UI/UX Improvements**
+- **✨ Clean Profit Display**: Removed parentheses from profit amounts for better readability
+- **🎯 Visual Highlighting**: Added green background and text color for profit indicators
+- **📱 Mobile-First Layout**: Zones display side-by-side even on iPhone screens
+- **💻 Responsive Grid System**: Flexible layout that adapts to all screen sizes
+- **🔧 Fixed CSS Syntax**: Resolved all CSS parsing errors for better performance
+
+### 🔧 **Technical Fixes**
+- **⚡ Zone Logic Correction**: Proper price zone assignment based on trade direction
+- **📐 Column Width Optimization**: Prevent text overflow for larger numbers
+- **📱 Mobile Responsive**: Consistent zone layout across iPhone, iPad, and Desktop
+- **🎨 CSS Structure**: Clean, maintainable responsive breakpoints
+
+---
+
 ## 🚀 [V5.0.0] - 2025-08-11 (Risk Calculator & Navigation Redesign)
 
 ### 🎯 **New Risk Calculator Page**

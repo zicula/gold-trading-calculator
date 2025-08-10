@@ -106,6 +106,29 @@
                 gap: 24px;
                 align-items: start;
             }
+
+            .tp-zones-container {
+                flex-direction: row;
+                gap: 16px;
+            }
+
+            .tp-zone {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .tp-grid {
+                gap: 12px;
+            }
+
+            .tp-item {
+                padding: 8px 12px;
+            }
+
+            .tp-profit {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+            }
             
             .header h1 {
                 font-size: 1.8rem;
@@ -572,8 +595,10 @@
 
         .tp-zones-container {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 12px;
+            width: 100%;
+            overflow: hidden;
         }
 
         .tp-zone {
@@ -581,6 +606,10 @@
             border-radius: 6px;
             padding: 8px;
             border: 1px solid var(--binance-border);
+            flex: 1;
+            min-width: 0;
+            overflow-x: auto;
+            box-sizing: border-box;
         }
 
         .tp-zone-title {
@@ -597,7 +626,9 @@
         .tp-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 8px;
+            width: 100%;
+            min-width: 0;
         }
 
         .tp-group {
@@ -614,12 +645,18 @@
             background: var(--binance-dark-2);
             border-radius: 4px;
             border: 1px solid var(--binance-border);
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
         }
 
         .tp-item-left {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .tp-item-right {
@@ -627,13 +664,29 @@
             flex-direction: column;
             align-items: flex-end;
             text-align: right;
-            min-width: 60px;
+            min-width: 70px;
+            flex-shrink: 0;
         }
 
         .tp-label {
             font-size: 0.65rem;
             color: var(--binance-light-gray);
             font-weight: 500;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tp-profit {
+            color: var(--binance-green);
+            font-weight: 700;
+            background: rgba(14, 203, 129, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            display: inline-block;
         }
 
         .tp-value {
@@ -746,8 +799,10 @@
             }
 
             .tp-zone {
-                flex: 1;
                 padding: 6px;
+                flex: 1;
+                min-width: 0;
+                overflow-x: auto;
             }
 
             .tp-zone-title {
@@ -756,8 +811,8 @@
             }
 
             .tp-grid {
-                grid-template-columns: 1fr;
                 gap: 6px;
+                grid-template-columns: 1fr;
             }
 
             .breakdown-items {
@@ -783,10 +838,23 @@
 
             .tp-item {
                 padding: 4px 6px;
+                width: 100%;
+                min-width: 0;
+            }
+
+            .tp-item-left {
+                min-width: 0;
+                flex: 1;
             }
 
             .tp-item-right {
                 min-width: 50px;
+                flex-shrink: 0;
+            }
+
+            .tp-profit {
+                padding: 1px 4px;
+                font-size: 0.55rem;
             }
 
             .tp-value {
@@ -795,6 +863,11 @@
 
             .tp-rr, .tp-points {
                 font-size: 0.55rem;
+            }
+
+            .tp-profit {
+                font-size: 0.55rem;
+                padding: 1px 3px;
             }
 
             .order-distribution {
@@ -827,11 +900,21 @@
 
             .tp-zone {
                 flex: 1;
+                min-width: 0;
             }
 
             .tp-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                gap: 8px;
+            }
+
+            .tp-item {
+                padding: 6px 8px;
+            }
+
+            .tp-profit {
+                font-size: 0.6rem;
+                padding: 1px 5px;
             }
 
             .trade-details {
@@ -1328,10 +1411,15 @@
                                                 const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
                                                 const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                                 const points = tpDistancePips.toFixed(0);
+                                                // Calculate profit for this TP level
+                                                const contractSize = 100; // oz per lot for Gold
+                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
+                                                const profitPerLot = contractSize * priceDistance;
+                                                const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
                                                 return `
                                                 <div class="tp-item">
                                                     <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level}</div>
+                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                         <div class="tp-value">${tp.price.toFixed(3)}</div>
                                                     </div>
                                                     <div class="tp-item-right">
@@ -1348,10 +1436,15 @@
                                                 const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
                                                 const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                                 const points = tpDistancePips.toFixed(0);
+                                                // Calculate profit for this TP level
+                                                const contractSize = 100; // oz per lot for Gold
+                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
+                                                const profitPerLot = contractSize * priceDistance;
+                                                const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
                                                 return `
                                                 <div class="tp-item">
                                                     <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level}</div>
+                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                         <div class="tp-value">${tp.price.toFixed(3)}</div>
                                                     </div>
                                                     <div class="tp-item-right">
@@ -1376,10 +1469,15 @@
                                                 const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
                                                 const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                                 const points = tpDistancePips.toFixed(0);
+                                                // Calculate profit for this TP level
+                                                const contractSize = 100; // oz per lot for Gold
+                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
+                                                const profitPerLot = contractSize * priceDistance;
+                                                const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
                                                 return `
                                                 <div class="tp-item">
                                                     <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level}</div>
+                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                         <div class="tp-value">${tp.price.toFixed(3)}</div>
                                                     </div>
                                                     <div class="tp-item-right">
@@ -1396,10 +1494,15 @@
                                                 const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
                                                 const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                                 const points = tpDistancePips.toFixed(0);
+                                                // Calculate profit for this TP level
+                                                const contractSize = 100; // oz per lot for Gold
+                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
+                                                const profitPerLot = contractSize * priceDistance;
+                                                const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
                                                 return `
                                                 <div class="tp-item">
                                                     <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level}</div>
+                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                         <div class="tp-value">${tp.price.toFixed(3)}</div>
                                                     </div>
                                                     <div class="tp-item-right">
@@ -1421,10 +1524,15 @@
                                         const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
                                         const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                         const points = tpDistancePips.toFixed(0);
+                                        // Calculate profit for this TP level
+                                        const contractSize = 100; // oz per lot for Gold
+                                        const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                                        const profitPerLot = contractSize * priceDistance;
+                                        const totalProfit = profitPerLot * data.totalLotSize;
                                         return `
                                         <div class="tp-item">
                                             <div class="tp-item-left">
-                                                <div class="tp-label">TP${tp.level}</div>
+                                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                 <div class="tp-value">${tp.price.toFixed(3)}</div>
                                             </div>
                                             <div class="tp-item-right">
@@ -1441,10 +1549,15 @@
                                         const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
                                         const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
                                         const points = tpDistancePips.toFixed(0);
+                                        // Calculate profit for this TP level
+                                        const contractSize = 100; // oz per lot for Gold
+                                        const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                                        const profitPerLot = contractSize * priceDistance;
+                                        const totalProfit = profitPerLot * data.totalLotSize;
                                         return `
                                         <div class="tp-item">
                                             <div class="tp-item-left">
-                                                <div class="tp-label">TP${tp.level}</div>
+                                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
                                                 <div class="tp-value">${tp.price.toFixed(3)}</div>
                                             </div>
                                             <div class="tp-item-right">
