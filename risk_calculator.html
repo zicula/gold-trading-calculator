@@ -528,6 +528,18 @@
             color: var(--binance-red);
         }
 
+        .sl-amount {
+            color: var(--binance-red);
+            background: rgba(246, 70, 93, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+            margin-left: 4px;
+            font-size: 0.65rem;
+            display: inline;
+            white-space: nowrap;
+        }
+
         .detail-value.risk {
             color: var(--binance-yellow);
         }
@@ -576,6 +588,15 @@
         .breakdown-percent {
             font-size: 0.65rem;
             color: var(--binance-light-gray);
+        }
+
+        .zone-sl {
+            font-size: 0.55rem;
+            color: var(--binance-red);
+            font-weight: 500;
+            white-space: nowrap;
+            display: inline-block;
+            margin-left: 4px;
         }
 
         /* TP Levels Grid */
@@ -1375,6 +1396,12 @@
                     ? `${data.entryPrice1.toFixed(3)}-${data.entryPrice2.toFixed(3)}`
                     : data.entryPrice1.toFixed(3);
 
+                // Calculate SL amounts
+                const totalSLAmount = data.riskAmount;
+
+                // Create SL display with amounts  
+                const slDisplay = `${data.stopLoss.toFixed(3)} <span class="sl-amount">(All: -${totalSLAmount.toFixed(1)}$)</span>`;
+
                 const orderBreakdownHTML = data.orderBreakdown ? `
                     <div class="order-breakdown">
                         <div class="breakdown-title">${translations[lang]['order-breakdown-label']}</div>
@@ -1382,12 +1409,12 @@
                             <div class="breakdown-item">
                                 <div class="breakdown-price">${data.orderBreakdown.zone1.price.toFixed(3)}</div>
                                 <div class="breakdown-lot">${data.orderBreakdown.zone1.lot.toFixed(2)} lots</div>
-                                <div class="breakdown-percent">${data.orderBreakdown.zone1.percent}%</div>
+                                <div class="breakdown-percent">${data.orderBreakdown.zone1.percent}% <span class="zone-sl">(SL Zone 1: -${(data.riskAmount * (data.orderBreakdown.zone1.percent / 100)).toFixed(1)}$)</span></div>
                             </div>
                             <div class="breakdown-item">
                                 <div class="breakdown-price">${data.orderBreakdown.zone2.price.toFixed(3)}</div>
                                 <div class="breakdown-lot">${data.orderBreakdown.zone2.lot.toFixed(2)} lots</div>
-                                <div class="breakdown-percent">${data.orderBreakdown.zone2.percent}%</div>
+                                <div class="breakdown-percent">${data.orderBreakdown.zone2.percent}% <span class="zone-sl">(SL Zone 2: -${(data.riskAmount * (data.orderBreakdown.zone2.percent / 100)).toFixed(1)}$)</span></div>
                             </div>
                         </div>
                     </div>
@@ -1601,7 +1628,7 @@
                             
                             <div class="detail-item">
                                 <div class="detail-label">SL</div>
-                                <div class="detail-value sl">${data.stopLoss.toFixed(3)}</div>
+                                <div class="detail-value sl">${slDisplay}</div>
                             </div>
                             
                             <div class="detail-item">

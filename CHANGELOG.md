@@ -4,6 +4,29 @@
 
 ---
 
+## 🚀 [V5.1.1] - 2025-08-11 (Enhanced SL Display & Zone-Specific Risk Information)
+
+### 💰 **Enhanced Stop Loss Display**
+- **📊 Comprehensive SL Information**: Show total SL amount in main display (e.g., SL: 2650.000 (All: -50.0$))
+- **🎯 Zone-Specific SL Breakdown**: Display SL amount for each zone in order distribution section
+  - Zone 1: 30% (SL Zone 1: -15.0$)
+  - Zone 2: 70% (SL Zone 2: -35.0$)
+- **📐 Compact Font Design**: Smaller font sizes to prevent line breaks and maintain clean layout
+- **🎨 Red Color Highlighting**: Consistent red color scheme for all SL-related information
+
+### 🎨 **UI/UX Improvements**
+- **✨ Inline SL Display**: All SL information stays on single line with proper spacing
+- **📱 Responsive Font Sizing**: Optimized font sizes (0.65rem main, 0.55rem zones) for all devices
+- **🔧 Clean Layout**: Removed redundant "per order" text for cleaner presentation
+- **🎯 Visual Consistency**: Unified styling across main SL display and zone breakdowns
+
+### 🔧 **Technical Enhancements**
+- **📋 Smart SL Calculation**: Automatic calculation of zone-specific SL amounts based on percentage allocation
+- **🎨 CSS Optimization**: Added `.sl-amount` and `.zone-sl` classes for precise styling control
+- **📱 No-Wrap Implementation**: `white-space: nowrap` ensures single-line display across all screen sizes
+
+---
+
 ## 🚀 [V5.1.0] - 2025-08-11 (Risk Calculator Enhancement & UI Improvements)
 
 ### 🎯 **Risk Calculator Enhancements**
