@@ -1,7 +1,7 @@
 {
   "name": "gold-trading-calculator",
-  "version": "1.0.0",
-  "description": "Money Management Calculator for Gold Trading",
+  "version": "5.0.0",
+  "description": "Comprehensive Money Management Calculator for Gold Trading with Risk Calculator",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 8000",

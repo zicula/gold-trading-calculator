@@ -4,6 +4,36 @@
 
 ---
 
+## 🚀 [V5.0.0] - 2025-08-11 (Risk Calculator & Navigation Redesign)
+
+### 🎯 **New Risk Calculator Page**
+- **📊 Risk-Based Lot Calculator**: Calculate lot size from portfolio risk percentage
+- **🎯 Dual-Zone Order Distribution**: Split orders across price zones with percentage allocation (30%/70% default)
+- **📈 Multi-TP Support**: Up to 6 Take Profit levels with R:R ratio calculations
+- **📋 Zone-Specific Analysis**: Separate R:R and points display for each zone
+- **🔄 Smart Zone Logic**: Automatic zone assignment based on trade direction (Buy: high→low, Sell: low→high)
+- **💰 Portfolio Risk Management**: Input portfolio size and risk percentage for precise lot sizing
+
+### 🧭 **Navigation System**
+- **🔗 Inter-Page Navigation**: Seamless switching between All-In Calculator and Risk Calculator
+- **🌐 Unified Language Switcher**: Moved to navigation menu, positioned right-aligned
+- **📱 Compact Menu Design**: Optimized sizing to prevent horizontal scrolling
+- **🎨 Consistent UI/UX**: Shared design system across both calculators
+
+### 🔧 **Technical Improvements**
+- **⚡ Corrected Zone Calculation Logic**: Fixed price zone assignment based on trade direction
+- **📐 Enhanced Validation**: Improved input validation for price ranges and percentages
+- **💾 Data Persistence**: localStorage integration for user preferences
+- **📱 Mobile-First Responsive**: Optimized for iPhone, iPad, and Desktop breakpoints
+
+### 🎨 **UI/UX Enhancements**
+- **🎯 Trade Direction Badges**: Clear visual indicators for Buy/Sell positions
+- **📊 Enhanced Card Layout**: Improved organization of calculation results
+- **🔢 Right-Aligned Numbers**: Professional alignment for R:R ratios and points
+- **🎨 Binance Design System**: Consistent color palette and styling
+
+---
+
 ## 🚀 [V4.7.0] - 2025-07-18 (Language Switcher Feature)
 
 ### 🌐 **Multi-Language Support**
