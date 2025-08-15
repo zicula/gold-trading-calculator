@@ -33,8 +33,32 @@
       "dest": "/all_in_calculator_v4.html"
     },
     {
+      "src": "/risk",
+      "dest": "/risk_calculator.html"
+    },
+    {
+      "src": "/risk-mt5",
+      "dest": "/risk_calculator_mt5.html"
+    },
+    {
+      "src": "/mt5",
+      "dest": "/mt5_integration.html"
+    },
+    {
       "src": "/all_in_calculator_v4.html",
       "dest": "/all_in_calculator_v4.html"
+    },
+    {
+      "src": "/risk_calculator.html",
+      "dest": "/risk_calculator.html"
+    },
+    {
+      "src": "/risk_calculator_mt5.html",
+      "dest": "/risk_calculator_mt5.html"
+    },
+    {
+      "src": "/mt5_integration.html",
+      "dest": "/mt5_integration.html"
     },
     {
       "src": "/all_in_calculator_v3.html",
