@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>🟡 Risk Calculator - Lot Size from %Risk</title>
+    <title>🟡 Risk Calculator MT5 - Lot Size from %Risk</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -37,8 +37,6 @@
             min-height: 100vh;
             color: var(--binance-white);
             line-height: 1.6;
-            overflow-x: hidden;
-            max-width: 100vw;
         }
 
         .container {
@@ -46,8 +44,6 @@
             margin: 0 auto;
             background: var(--binance-bg);
             min-height: 100vh;
-            overflow-x: hidden;
-            width: 100%;
         }
 
         /* Navigation Menu */
@@ -123,6 +119,7 @@
 
             .tp-grid {
                 gap: 12px;
+                grid-template-columns: 1fr;
             }
 
             .tp-item {
@@ -217,13 +214,10 @@
 
         .calculator-body {
             padding: 12px;
-            overflow-x: hidden;
-            max-width: 100%;
         }
 
         .main-content {
             display: block;
-            overflow-x: hidden;
         }
 
         .input-section {
@@ -417,9 +411,6 @@
             padding: 12px;
             margin: 12px 0;
             transition: all 0.3s ease;
-            overflow-x: hidden;
-            max-width: 100%;
-            word-wrap: break-word;
         }
 
         .trade-card:hover {
@@ -656,7 +647,7 @@
 
         .tp-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             gap: 8px;
             width: 100%;
             min-width: 0;
@@ -696,11 +687,8 @@
             align-items: flex-end;
             text-align: right;
             min-width: 80px;
-            max-width: 80px;
             flex-shrink: 0;
             gap: 1px;
-            overflow: hidden;
-            word-wrap: break-word;
         }
 
         .tp-label {
@@ -774,14 +762,11 @@
             display: none;
         }
 
-        /* MT5 Integration Panel - REMOVED */
-
         /* Mobile Responsive */
         @media (max-width: 430px) {
             .container {
                 max-width: 100%;
                 padding: 0;
-                overflow-x: hidden;
             }
 
             .header {
@@ -848,16 +833,13 @@
             .tp-zones-container {
                 flex-direction: column;
                 gap: 8px;
-                overflow-x: hidden;
             }
 
             .tp-zone {
                 padding: 6px;
                 flex: none;
                 min-width: 0;
-                overflow-x: hidden;
-                box-sizing: border-box;
-                max-width: 100%;
+                overflow-x: visible;
             }
 
             .tp-zone-title {
@@ -868,7 +850,6 @@
             .tp-grid {
                 gap: 6px;
                 grid-template-columns: 1fr;
-                overflow-x: hidden;
             }
 
             .breakdown-items {
@@ -896,24 +877,16 @@
                 padding: 4px 6px;
                 width: 100%;
                 min-width: 0;
-                max-width: 100%;
-                overflow: hidden;
-                box-sizing: border-box;
             }
 
             .tp-item-left {
                 min-width: 0;
                 flex: 1;
-                overflow: hidden;
-                max-width: 60%;
             }
 
             .tp-item-right {
-                min-width: 70px;
-                max-width: 70px;
+                min-width: 75px;
                 flex-shrink: 0;
-                overflow: hidden;
-                word-wrap: break-word;
             }
 
             .tp-profit {
@@ -930,14 +903,11 @@
             }
 
             .tp-mm {
-                font-size: 0.42rem;
+                font-size: 0.45rem;
                 padding: 1px 2px;
                 line-height: 1.1;
                 word-break: break-all;
                 max-width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
 
             .order-distribution {
@@ -972,16 +942,12 @@
             }
 
             .tp-item-right {
-                min-width: 65px;
-                max-width: 65px;
+                min-width: 70px;
             }
 
             .tp-mm {
-                font-size: 0.38rem;
+                font-size: 0.4rem;
                 padding: 1px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
 
             .tp-profit {
@@ -1016,7 +982,7 @@
             }
 
             .tp-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
                 gap: 8px;
             }
 
@@ -1051,7 +1017,7 @@
             }
 
             .tp-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
                 gap: 12px;
             }
 
@@ -1059,6 +1025,39 @@
                 grid-template-columns: repeat(4, 1fr);
                 gap: 10px;
             }
+        }
+
+        /* MT5 Integration Panel */
+        .mt5-integration-panel {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--binance-dark-3);
+            text-align: center;
+        }
+
+        .mt5-btn {
+            background: linear-gradient(135deg, var(--binance-green), #0ECB81);
+            color: var(--binance-dark-1);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(14, 203, 129, 0.3);
+        }
+
+        .mt5-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(14, 203, 129, 0.4);
+        }
+
+        .mt5-btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -1070,8 +1069,14 @@
                 <a href="all_in_calculator_v4.html" class="nav-item">
                     <i class="fas fa-calculator"></i> All-In Calculator
                 </a>
-                <a href="risk_calculator.html" class="nav-item active">
+                <a href="risk_calculator.html" class="nav-item">
                     <i class="fas fa-percentage"></i> Risk Calculator
+                </a>
+                <a href="risk_calculator_mt5.html" class="nav-item active">
+                    <i class="fas fa-chart-line"></i> Risk Calculator MT5
+                </a>
+                <a href="mt5_integration.html" class="nav-item">
+                    <i class="fas fa-rocket"></i> MT5 Integration
                 </a>
             </div>
             <div class="language-switcher">
@@ -1082,10 +1087,10 @@
 
         <div class="header">
             <h1>
-                <i class="fas fa-percentage" style="color: #F0B90B;"></i>
-                <span data-key="header-title">Risk Calculator - Lot Size from %Risk</span>
+                <i class="fas fa-chart-line" style="color: #F0B90B;"></i>
+                <span data-key="header-title">Risk Calculator MT5 - Lot Size from %Risk</span>
             </h1>
-            <p><span data-key="header-subtitle">คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง</span> <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
+            <p><span data-key="header-subtitle">คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง พร้อมเชื่อมต่อ MT5</span> <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
         </div>
 
         <div class="calculator-body">
@@ -1228,7 +1233,7 @@
     </div>
 
     <script>
-        class RiskCalculator {
+        class RiskCalculatorMT5 {
             constructor() {
                 this.initializeElements();
                 this.attachEventListeners();
@@ -1239,8 +1244,8 @@
             // Translation dictionary
             translations = {
                 'th': {
-                    'header-title': 'Risk Calculator - Lot Size from %Risk',
-                    'header-subtitle': 'คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง',
+                    'header-title': 'Risk Calculator MT5 - Lot Size from %Risk',
+                    'header-subtitle': 'คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง พร้อมเชื่อมต่อ MT5',
                     'symbol-label': 'Symbol',
                     'portfolio-label': 'ขนาดพอร์ต (USD)',
                     'risk-label': 'ความเสี่ยง (%)',
@@ -1257,14 +1262,15 @@
                     'risk-amount-label': 'Risk Amount',
                     'tp-levels-label': 'Take Profit Levels',
                     'order-breakdown-label': 'การกระจายออเดอร์',
+                    'send-to-mt5': 'ส่งไป MT5 Integration',
                     'error-invalid-inputs': 'กรุณากรอกข้อมูลให้ครบถ้วน',
                     'error-invalid-sl': 'Stop Loss ไม่ถูกต้องตามทิศทาง',
                     'error-invalid-entry': 'ราคาเข้า 2 ต้องมากกว่าราคาเข้า 1',
                     'error-invalid-percentage': 'รวมเปอร์เซ็นต์ต้องเท่ากับ 100%'
                 },
                 'en': {
-                    'header-title': 'Risk Calculator - Lot Size from %Risk',
-                    'header-subtitle': 'Calculate Lot Size from Risk Percentage',
+                    'header-title': 'Risk Calculator MT5 - Lot Size from %Risk',
+                    'header-subtitle': 'Calculate Lot Size from Risk Percentage with MT5 Integration',
                     'symbol-label': 'Symbol',
                     'portfolio-label': 'Portfolio Size (USD)',
                     'risk-label': 'Risk (%)',
@@ -1281,6 +1287,7 @@
                     'risk-amount-label': 'Risk Amount',
                     'tp-levels-label': 'Take Profit Levels',
                     'order-breakdown-label': 'Order Distribution',
+                    'send-to-mt5': 'Send to MT5 Integration',
                     'error-invalid-inputs': 'Please fill in all required fields',
                     'error-invalid-sl': 'Stop Loss direction is incorrect',
                     'error-invalid-entry': 'Entry Price 2 must be greater than Entry Price 1',
@@ -1443,8 +1450,8 @@
                 // Prepare TP levels
                 const tpLevels = this.getTakeProfitLevels();
 
-                // Generate trade card
-                this.generateTradeCard({
+                // Store data for MT5 integration
+                const tradeData = {
                     symbol,
                     direction,
                     entryPrice1,
@@ -1456,9 +1463,15 @@
                     riskPercent,
                     tpLevels,
                     orderBreakdown
-                });
+                };
 
-                // Save to storage
+                // Save to localStorage for MT5 integration
+                localStorage.setItem('riskCalculatorData', JSON.stringify(tradeData));
+
+                // Generate trade card
+                this.generateTradeCard(tradeData);
+
+                // Save current form data
                 this.saveToStorage();
             }
 
@@ -1479,34 +1492,9 @@
                 return tpLevels;
             }
 
-            // Calculate MM percentages based on number of TP levels
-            calculateMMPercentages(tpCount) {
-                if (tpCount <= 1) return [100];
-                if (tpCount === 2) return [70, 30];
-                if (tpCount === 3) return [50, 40, 10];
-                if (tpCount === 4) return [40, 30, 20, 10];
-                if (tpCount === 5) return [40, 20, 10, 10, 10];
-                if (tpCount === 6) return [30, 25, 15, 10, 10, 10];
-                
-                // For more than 6 TPs, distribute remaining equally
-                const mmPercentages = [30, 25, 15, 10, 10, 10];
-                const remaining = 100 - mmPercentages.reduce((sum, p) => sum + p, 0);
-                const extraTPs = tpCount - 6;
-                const extraPercent = Math.floor(remaining / extraTPs);
-                
-                for (let i = 0; i < extraTPs; i++) {
-                    mmPercentages.push(extraPercent);
-                }
-                
-                return mmPercentages;
-            }
-
             generateTradeCard(data) {
                 const translations = this.getTranslations();
                 const lang = this.currentLanguage;
-                
-                // Calculate MM percentages
-                const mmPercentages = this.calculateMMPercentages(data.tpLevels.length);
                 
                 const entryPriceDisplay = data.entryPrice2 
                     ? `${data.entryPrice1.toFixed(3)}-${data.entryPrice2.toFixed(3)}`
@@ -1540,197 +1528,7 @@
                 const tpLevelsHTML = data.tpLevels.length > 0 ? `
                     <div class="tp-section">
                         <div class="tp-title">${translations[lang]['tp-levels-label']}</div>
-                        ${data.orderBreakdown ? `
-                            <div class="tp-zones-container">
-                                <div class="tp-zone">
-                                    <div class="tp-zone-title">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Zone 1: ${data.orderBreakdown.zone1.price.toFixed(3)} (${data.orderBreakdown.zone1.percent}%)
-                                    </div>
-                                    <div class="tp-grid">
-                                        <div class="tp-group">
-                                            ${data.tpLevels.slice(0, 3).map((tp, index) => {
-                                                const stopDistancePips = Math.abs(data.orderBreakdown.zone1.price - data.stopLoss) / 0.01;
-                                                const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
-                                                const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                                const points = tpDistancePips.toFixed(0);
-                                                // Calculate profit for this TP level
-                                                const contractSize = 100; // oz per lot for Gold
-                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
-                                                const profitPerLot = contractSize * priceDistance;
-                                                const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
-                                                const mmPercent = mmPercentages[index] || 0;
-                                                const mmLotSize = (data.orderBreakdown.zone1.lot * mmPercent / 100).toFixed(2);
-                                                return `
-                                                <div class="tp-item">
-                                                    <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                        <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                                    </div>
-                                                    <div class="tp-item-right">
-                                                        <div class="tp-rr">R:R ${rrRatio}</div>
-                                                        <div class="tp-points">+${points}p</div>
-                                                        <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                                    </div>
-                                                </div>
-                                                `;
-                                            }).join('')}
-                                        </div>
-                                        <div class="tp-group">
-                                            ${data.tpLevels.slice(3, 6).map((tp, index) => {
-                                                const stopDistancePips = Math.abs(data.orderBreakdown.zone1.price - data.stopLoss) / 0.01;
-                                                const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
-                                                const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                                const points = tpDistancePips.toFixed(0);
-                                                // Calculate profit for this TP level
-                                                const contractSize = 100; // oz per lot for Gold
-                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
-                                                const profitPerLot = contractSize * priceDistance;
-                                                const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
-                                                const mmPercent = mmPercentages[index + 3] || 0;
-                                                const mmLotSize = (data.orderBreakdown.zone1.lot * mmPercent / 100).toFixed(2);
-                                                return `
-                                                <div class="tp-item">
-                                                    <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                        <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                                    </div>
-                                                    <div class="tp-item-right">
-                                                        <div class="tp-rr">R:R ${rrRatio}</div>
-                                                        <div class="tp-points">+${points}p</div>
-                                                        <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                                    </div>
-                                                </div>
-                                                `;
-                                            }).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tp-zone">
-                                    <div class="tp-zone-title">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Zone 2: ${data.orderBreakdown.zone2.price.toFixed(3)} (${data.orderBreakdown.zone2.percent}%)
-                                    </div>
-                                    <div class="tp-grid">
-                                        <div class="tp-group">
-                                            ${data.tpLevels.slice(0, 3).map((tp, index) => {
-                                                const stopDistancePips = Math.abs(data.orderBreakdown.zone2.price - data.stopLoss) / 0.01;
-                                                const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
-                                                const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                                const points = tpDistancePips.toFixed(0);
-                                                // Calculate profit for this TP level
-                                                const contractSize = 100; // oz per lot for Gold
-                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
-                                                const profitPerLot = contractSize * priceDistance;
-                                                const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
-                                                const mmPercent = mmPercentages[index] || 0;
-                                                const mmLotSize = (data.orderBreakdown.zone2.lot * mmPercent / 100).toFixed(2);
-                                                return `
-                                                <div class="tp-item">
-                                                    <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                        <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                                    </div>
-                                                    <div class="tp-item-right">
-                                                        <div class="tp-rr">R:R ${rrRatio}</div>
-                                                        <div class="tp-points">+${points}p</div>
-                                                        <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                                    </div>
-                                                </div>
-                                                `;
-                                            }).join('')}
-                                        </div>
-                                        <div class="tp-group">
-                                            ${data.tpLevels.slice(3, 6).map((tp, index) => {
-                                                const stopDistancePips = Math.abs(data.orderBreakdown.zone2.price - data.stopLoss) / 0.01;
-                                                const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
-                                                const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                                const points = tpDistancePips.toFixed(0);
-                                                // Calculate profit for this TP level
-                                                const contractSize = 100; // oz per lot for Gold
-                                                const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
-                                                const profitPerLot = contractSize * priceDistance;
-                                                const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
-                                                const mmPercent = mmPercentages[index + 3] || 0;
-                                                const mmLotSize = (data.orderBreakdown.zone2.lot * mmPercent / 100).toFixed(2);
-                                                return `
-                                                <div class="tp-item">
-                                                    <div class="tp-item-left">
-                                                        <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                        <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                                    </div>
-                                                    <div class="tp-item-right">
-                                                        <div class="tp-rr">R:R ${rrRatio}</div>
-                                                        <div class="tp-points">+${points}p</div>
-                                                        <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                                    </div>
-                                                </div>
-                                                `;
-                                            }).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : `
-                            <div class="tp-grid">
-                                <div class="tp-group">
-                                    ${data.tpLevels.slice(0, 3).map((tp, index) => {
-                                        const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
-                                        const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
-                                        const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                        const points = tpDistancePips.toFixed(0);
-                                        // Calculate profit for this TP level
-                                        const contractSize = 100; // oz per lot for Gold
-                                        const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
-                                        const profitPerLot = contractSize * priceDistance;
-                                        const totalProfit = profitPerLot * data.totalLotSize;
-                                        const mmPercent = mmPercentages[index] || 0;
-                                        const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
-                                        return `
-                                        <div class="tp-item">
-                                            <div class="tp-item-left">
-                                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                            </div>
-                                            <div class="tp-item-right">
-                                                <div class="tp-rr">R:R ${rrRatio}</div>
-                                                <div class="tp-points">+${points}p</div>
-                                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                            </div>
-                                        </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                                <div class="tp-group">
-                                    ${data.tpLevels.slice(3, 6).map((tp, index) => {
-                                        const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
-                                        const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
-                                        const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
-                                        const points = tpDistancePips.toFixed(0);
-                                        // Calculate profit for this TP level
-                                        const contractSize = 100; // oz per lot for Gold
-                                        const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
-                                        const profitPerLot = contractSize * priceDistance;
-                                        const totalProfit = profitPerLot * data.totalLotSize;
-                                        const mmPercent = mmPercentages[index + 3] || 0;
-                                        const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
-                                        return `
-                                        <div class="tp-item">
-                                            <div class="tp-item-left">
-                                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
-                                                <div class="tp-value">${tp.price.toFixed(3)}</div>
-                                            </div>
-                                            <div class="tp-item-right">
-                                                <div class="tp-rr">R:R ${rrRatio}</div>
-                                                <div class="tp-points">+${points}p</div>
-                                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
-                                            </div>
-                                        </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                            </div>
-                        `}
+                        ${data.orderBreakdown ? this.generateDualZoneTPLevels(data, translations, lang) : this.generateSingleZoneTPLevels(data, translations, lang)}
                     </div>
                 ` : '';
 
@@ -1773,10 +1571,213 @@
 
                         ${orderBreakdownHTML}
                         ${tpLevelsHTML}
+                        
+                        <div class="mt5-integration-panel">
+                            <button class="mt5-btn" onclick="sendToMT5Integration()">
+                                <i class="fas fa-rocket"></i>
+                                <span data-key="send-to-mt5">${translations[lang]['send-to-mt5']}</span>
+                            </button>
+                        </div>
                     </div>
                 `;
 
                 this.elements.resultsSection.innerHTML = cardHTML;
+            }
+
+            // Calculate MM percentages based on number of TP levels
+            calculateMMPercentages(tpCount) {
+                if (tpCount <= 1) return [100];
+                if (tpCount === 2) return [70, 30];
+                if (tpCount === 3) return [50, 40, 10];
+                if (tpCount === 4) return [40, 30, 20, 10];
+                if (tpCount === 5) return [40, 20, 10, 10, 10];
+                if (tpCount === 6) return [30, 25, 15, 10, 10, 10];
+                
+                // For more than 6 TPs, distribute remaining equally
+                const mmPercentages = [30, 25, 15, 10, 10, 10];
+                const remaining = 100 - mmPercentages.reduce((sum, p) => sum + p, 0);
+                const extraTPs = tpCount - 6;
+                const extraPercent = Math.floor(remaining / extraTPs);
+                
+                for (let i = 0; i < extraTPs; i++) {
+                    mmPercentages.push(extraPercent);
+                }
+                
+                return mmPercentages;
+            }
+
+            generateDualZoneTPLevels(data, translations, lang) {
+                let html = `<div class="tp-zones-container">`;
+
+                // Calculate MM percentages
+                const mmPercentages = this.calculateMMPercentages(data.tpLevels.length);
+
+                // Zone 1 TP levels
+                html += `
+                    <div class="tp-zone">
+                        <div class="tp-zone-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Zone 1: ${data.orderBreakdown.zone1.price.toFixed(3)} (${data.orderBreakdown.zone1.percent}%)
+                        </div>
+                        <div class="tp-grid">
+                `;
+
+                for (let i = 0; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.orderBreakdown.zone1.price - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.orderBreakdown.zone1.lot * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                // Zone 2 TP levels
+                html += `
+                    <div class="tp-zone">
+                        <div class="tp-zone-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Zone 2: ${data.orderBreakdown.zone2.price.toFixed(3)} (${data.orderBreakdown.zone2.percent}%)
+                        </div>
+                        <div class="tp-grid">
+                `;
+
+                for (let i = 0; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.orderBreakdown.zone2.price - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.orderBreakdown.zone2.lot * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                return html;
+            }
+
+            generateSingleZoneTPLevels(data, translations, lang) {
+                // Calculate MM percentages
+                const mmPercentages = this.calculateMMPercentages(data.tpLevels.length);
+                
+                let html = `
+                    <div class="tp-grid">
+                        <div class="tp-group">
+                `;
+
+                for (let i = 0; i < Math.min(3, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.totalLotSize;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                        <div class="tp-group">
+                `;
+
+                for (let i = 3; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.totalLotSize;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                return html;
             }
 
             clearResults() {
@@ -1810,11 +1811,11 @@
                     tp6: this.elements.tp6.value,
                     direction: document.querySelector('input[name="direction"]:checked')?.value
                 };
-                localStorage.setItem('riskCalculator', JSON.stringify(data));
+                localStorage.setItem('riskCalculatorMT5', JSON.stringify(data));
             }
 
             loadFromStorage() {
-                const data = JSON.parse(localStorage.getItem('riskCalculator') || '{}');
+                const data = JSON.parse(localStorage.getItem('riskCalculatorMT5') || '{}');
                 
                 if (data.symbol) this.elements.symbol.value = data.symbol;
                 if (data.portfolioSize) this.elements.portfolioSize.value = data.portfolioSize;
@@ -1885,11 +1886,27 @@
             }
         }
 
+        // Send data to MT5 Integration
+        function sendToMT5Integration() {
+            const data = localStorage.getItem('riskCalculatorData');
+            if (!data) {
+                alert('ไม่พบข้อมูลการคำนวณ กรุณาคำนวณใหม่');
+                return;
+            }
+
+            // Encode data for URL parameter
+            const encodedData = encodeURIComponent(data);
+            const url = `mt5_integration.html?data=${encodedData}`;
+            
+            // Open in new tab
+            window.open(url, '_blank');
+        }
+
         // Initialize calculator when page loads
         let calculator;
         
         document.addEventListener('DOMContentLoaded', () => {
-            calculator = new RiskCalculator();
+            calculator = new RiskCalculatorMT5();
         });
     </script>
 </body>
