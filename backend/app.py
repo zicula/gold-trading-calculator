@@ -314,6 +314,18 @@ def index():
     from flask import send_from_directory
     return send_from_directory('../', 'index.html')
 
+@app.route('/gold-trading-calculator/menu')
+def menu():
+    """Serve the menu page"""
+    from flask import send_from_directory
+    return send_from_directory('../', 'menu.html')
+
+@app.route('/gold-trading-calculator/')
+def calculator_index():
+    """Serve calculator index (redirect to menu)"""
+    from flask import send_from_directory
+    return send_from_directory('../', 'menu.html')
+
 @app.route('/<path:filename>')
 def static_files(filename):
     """Serve static files"""
