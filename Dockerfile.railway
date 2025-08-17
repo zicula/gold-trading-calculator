@@ -1,7 +1,12 @@
-# Railway Deployment Dockerfile
+# Railway Deployment Dockerfile - Simplified
 FROM python:3.11-slim
 
 WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
@@ -10,13 +15,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Copy and set permissions for start script
-COPY start.sh .
-RUN chmod +x start.sh
-
 # Set environment variables
 ENV FLASK_ENV=production
 ENV MT5_MODE=mock
+ENV PYTHONPATH=/app
 
-# Start using script that handles PORT environment variable
-CMD ["./start.sh"]
+# Create a simple start script inline
+RUN echo '#!/bin/bash\n\
+export PORT=${PORT:-8080}\n\
+echo "Starting server on port $PORT"\n\
+exec gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --access-logfile - backend.app:app\n\
+' > /app/run.sh && chmod +x /app/run.sh
+
+# Use the inline script
+CMD ["/app/run.sh"]
