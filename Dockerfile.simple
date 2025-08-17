@@ -1,4 +1,4 @@
-# Alternative Dockerfile - Ultra Simple
+# Simple Railway Dockerfile - Just Python direct execution
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -14,5 +14,5 @@ COPY . .
 ENV FLASK_ENV=production
 ENV MT5_MODE=mock
 
-# Direct command with hardcoded port for now
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--timeout", "120", "backend.app:app"]
+# Use Python direct execution (simpler than gunicorn)
+CMD ["python", "backend/app.py"]
