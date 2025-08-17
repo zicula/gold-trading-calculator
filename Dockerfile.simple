@@ -3,16 +3,21 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install requirements
+# Install requirements first (better caching)
 COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app
+# Copy application files
 COPY . .
 
-# Environment
+# Environment variables
 ENV FLASK_ENV=production
 ENV MT5_MODE=mock
+ENV PYTHONPATH=/app
+
+# Expose port for Railway
+EXPOSE $PORT
 
 # Use Python direct execution (simpler than gunicorn)
 CMD ["python", "backend/app.py"]
