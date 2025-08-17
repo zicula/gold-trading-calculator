@@ -1,0 +1,104 @@
+# 🐳 Docker Compose for Gold Trading Calculator
+# Production-ready setup for DigitalOcean VPS
+
+version: '3.8'
+
+services:
+  # Main Application
+  gold-trading-app:
+    build:
+      context: ../../
+      dockerfile: deploy/docker/Dockerfile
+    container_name: gold-trading-calculator
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-jwt-secret-here}
+      - DATABASE_PATH=/app/data/trading_accounts.db
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-your-encryption-key-here}
+      - CORS_ORIGINS=${CORS_ORIGINS:-https://yourdomain.com}
+    volumes:
+      - app_data:/app/data
+      - app_logs:/app/logs
+      - ./../../config:/app/config:ro
+    networks:
+      - trading_network
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for session storage and caching
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - trading_network
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-defaultpassword}
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - app_logs:/var/log/nginx
+    networks:
+      - trading_network
+    depends_on:
+      - gold-trading-app
+
+  # Database backup service
+  backup:
+    image: alpine:latest
+    container_name: db-backup
+    restart: unless-stopped
+    volumes:
+      - app_data:/app/data:ro
+      - backup_data:/backup
+    networks:
+      - trading_network
+    environment:
+      - BACKUP_INTERVAL=${BACKUP_INTERVAL:-3600}
+    command: >
+      sh -c "
+        while true; do
+          echo '[$(date)] Creating database backup...'
+          cp /app/data/trading_accounts.db /backup/trading_accounts_$(date +%Y%m%d_%H%M%S).db
+          # Keep only last 7 days of backups
+          find /backup -name 'trading_accounts_*.db' -mtime +7 -delete
+          echo '[$(date)] Backup completed'
+          sleep $${BACKUP_INTERVAL:-3600}
+        done
+      "
+
+volumes:
+  app_data:
+    driver: local
+  app_logs:
+    driver: local
+  redis_data:
+    driver: local
+  backup_data:
+    driver: local
+
+networks:
+  trading_network:
+    driver: bridge

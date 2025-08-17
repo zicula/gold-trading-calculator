@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>🟡 Risk Calculator MT5 - Lot Size from %Risk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Binance Color Palette */
+            --binance-yellow: #F0B90B;
+            --binance-dark: #0B0E11;
+            --binance-dark-2: #1E2329;
+            --binance-dark-3: #2B3139;
+            --binance-gray: #474D57;
+            --binance-light-gray: #848E9C;
+            --binance-white: #FFFFFF;
+            --binance-green: #0ECB81;
+            --binance-red: #F6465D;
+            --binance-blue: #1E88E5;
+            --binance-bg: #0B0E11;
+            --binance-card: #1E2329;
+            --binance-border: #2B3139;
+            --binance-hover: #2B3139;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--binance-bg);
+            min-height: 100vh;
+            color: var(--binance-white);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--binance-bg);
+            min-height: 100vh;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            background: var(--binance-card);
+            border-bottom: 1px solid var(--binance-border);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .nav-item {
+            flex-shrink: 0;
+            padding: 6px 12px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--binance-white);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            background: var(--binance-hover);
+            border-color: var(--binance-yellow);
+        }
+
+        .nav-item.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                padding: 0 20px;
+            }
+            
+            .calculator-body {
+                padding: 24px;
+            }
+            
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+
+            .tp-zones-container {
+                flex-direction: row;
+                gap: 16px;
+            }
+
+            .tp-zone {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .tp-grid {
+                gap: 12px;
+                grid-template-columns: 1fr;
+            }
+
+            .tp-item {
+                padding: 8px 12px;
+            }
+
+            .tp-profit {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1200px;
+                padding: 0 40px;
+            }
+            
+            .calculator-body {
+                padding: 32px;
+            }
+            
+            .main-content {
+                grid-template-columns: 400px 1fr;
+                gap: 32px;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--binance-yellow) 0%, #FFC107 100%);
+            padding: 16px 20px;
+            text-align: center;
+            color: var(--binance-dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(240, 185, 11, 0.3);
+            position: relative;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            padding: 4px 8px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 12px;
+            color: var(--binance-white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .lang-btn:hover {
+            background: var(--binance-hover);
+            border-color: var(--binance-yellow);
+        }
+
+        .lang-btn.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .calculator-body {
+            padding: 12px;
+        }
+
+        .main-content {
+            display: block;
+        }
+
+        .input-section {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--binance-white);
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--binance-border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--binance-yellow);
+            box-shadow: 0 0 0 2px rgba(240, 185, 11, 0.2);
+        }
+
+        .input-field::placeholder {
+            color: var(--binance-light-gray);
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--binance-light-gray);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .type-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--binance-border);
+            border-radius: 5px;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .type-btn:hover {
+            border-color: var(--binance-yellow);
+            background: var(--binance-hover);
+        }
+
+        .type-btn input {
+            display: none;
+        }
+
+        .type-btn input:checked + span {
+            color: var(--binance-dark);
+            background: var(--binance-yellow);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Order Distribution Section */
+        .order-distribution {
+            background: var(--binance-dark-3);
+            border: 1px solid var(--binance-border);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 6px;
+        }
+
+        .distribution-title {
+            font-size: 0.7rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 6px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .distribution-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .percentage-input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid var(--binance-border);
+            border-radius: 4px;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .percentage-input:focus {
+            outline: none;
+            border-color: var(--binance-yellow);
+        }
+
+        .percentage-label {
+            font-size: 0.65rem;
+            color: var(--binance-light-gray);
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        .distribution-separator {
+            color: var(--binance-light-gray);
+            font-size: 0.8rem;
+            padding: 0 4px;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, var(--binance-yellow) 0%, #FFC107 100%);
+            color: var(--binance-dark);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 3px 10px rgba(240, 185, 11, 0.3);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #FFC107 0%, var(--binance-yellow) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(240, 185, 11, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(240, 185, 11, 0.2);
+        }
+
+        /* Trade Card Styles */
+        .trade-card {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .trade-card:hover {
+            border-color: var(--binance-yellow);
+            box-shadow: 0 4px 12px rgba(240, 185, 11, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--binance-border);
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .trade-direction-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trade-direction-badge.buy {
+            background: rgba(14, 203, 129, 0.2);
+            color: var(--binance-green);
+            border: 1px solid var(--binance-green);
+        }
+
+        .trade-direction-badge.sell {
+            background: rgba(246, 70, 93, 0.2);
+            color: var(--binance-red);
+            border: 1px solid var(--binance-red);
+        }
+
+        .symbol-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .symbol-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--binance-yellow);
+        }
+
+        .trade-status {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--binance-green);
+            text-transform: uppercase;
+        }
+
+        .signal-direction {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .signal-direction.buy { color: var(--binance-green); }
+        .signal-direction.sell { color: var(--binance-red); }
+
+        /* Compact Trade Details */
+        .trade-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .detail-item {
+            background: var(--binance-dark-2);
+            border-radius: 6px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 0.65rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--binance-white);
+        }
+
+        .detail-value.lot {
+            color: var(--binance-yellow);
+            font-size: 1rem;
+        }
+
+        .detail-value.price {
+            color: var(--binance-blue);
+            font-size: 0.85rem;
+        }
+
+        .detail-value.sl {
+            color: var(--binance-red);
+        }
+
+        .sl-amount {
+            color: var(--binance-red);
+            background: rgba(246, 70, 93, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+            margin-left: 4px;
+            font-size: 0.65rem;
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .detail-value.risk {
+            color: var(--binance-yellow);
+        }
+
+        /* Order Distribution Display */
+        .order-breakdown {
+            background: var(--binance-dark-3);
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-title {
+            font-size: 0.7rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .breakdown-items {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .breakdown-item {
+            flex: 1;
+            text-align: center;
+            padding: 6px;
+            background: var(--binance-dark-2);
+            border-radius: 4px;
+        }
+
+        .breakdown-price {
+            font-size: 0.75rem;
+            color: var(--binance-blue);
+            font-weight: 600;
+        }
+
+        .breakdown-lot {
+            font-size: 0.8rem;
+            color: var(--binance-yellow);
+            font-weight: 700;
+        }
+
+        .breakdown-percent {
+            font-size: 0.65rem;
+            color: var(--binance-light-gray);
+        }
+
+        .zone-sl {
+            font-size: 0.55rem;
+            color: var(--binance-red);
+            font-weight: 500;
+            white-space: nowrap;
+            display: inline-block;
+            margin-left: 4px;
+        }
+
+        /* TP Levels Grid */
+        .tp-section {
+            background: var(--binance-dark-2);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .tp-title {
+            font-size: 0.7rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .tp-zones-container {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .tp-zone {
+            background: var(--binance-dark-3);
+            border-radius: 6px;
+            padding: 8px;
+            border: 1px solid var(--binance-border);
+            flex: 1;
+            min-width: 0;
+            overflow-x: auto;
+            box-sizing: border-box;
+        }
+
+        .tp-zone-title {
+            font-size: 0.65rem;
+            color: var(--binance-yellow);
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tp-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .tp-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .tp-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            background: var(--binance-dark-2);
+            border-radius: 4px;
+            border: 1px solid var(--binance-border);
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .tp-item-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .tp-item-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            min-width: 80px;
+            flex-shrink: 0;
+            gap: 1px;
+        }
+
+        .tp-label {
+            font-size: 0.65rem;
+            color: var(--binance-light-gray);
+            font-weight: 500;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tp-profit {
+            color: var(--binance-green);
+            font-weight: 700;
+            background: rgba(14, 203, 129, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .tp-value {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--binance-green);
+        }
+
+        .tp-rr {
+            font-size: 0.6rem;
+            color: var(--binance-yellow);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .tp-points {
+            font-size: 0.6rem;
+            color: var(--binance-blue);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .tp-mm {
+            font-size: 0.6rem;
+            color: var(--binance-yellow);
+            font-weight: 600;
+            text-align: right;
+            background: rgba(240, 185, 11, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin-top: 1px;
+            line-height: 1.2;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        .error-message {
+            background: rgba(246, 70, 93, 0.1);
+            border: 1px solid var(--binance-red);
+            color: var(--binance-red);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 430px) {
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .header {
+                padding: 10px 14px;
+            }
+
+            .header h1 {
+                font-size: 1rem;
+                margin-bottom: 1px;
+            }
+
+            .header p {
+                font-size: 0.65rem;
+            }
+
+            .nav-menu {
+                padding: 8px 12px;
+            }
+
+            .nav-links {
+                gap: 6px;
+            }
+
+            .nav-item {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+                border-radius: 14px;
+            }
+
+            .lang-btn {
+                padding: 3px 6px;
+                font-size: 0.65rem;
+            }
+
+            .calculator-body {
+                padding: 8px;
+            }
+
+            .input-section {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .input-group {
+                margin-bottom: 10px;
+            }
+
+            .input-label {
+                font-size: 0.8rem;
+                margin-bottom: 4px;
+                gap: 4px;
+            }
+
+            .input-field {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
+            .trade-details {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            .tp-zones-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .tp-zone {
+                padding: 6px;
+                flex: none;
+                min-width: 0;
+                overflow-x: visible;
+            }
+
+            .tp-zone-title {
+                font-size: 0.6rem;
+                margin-bottom: 4px;
+            }
+
+            .tp-grid {
+                gap: 6px;
+                grid-template-columns: 1fr;
+            }
+
+            .breakdown-items {
+                gap: 4px;
+            }
+
+            .breakdown-item {
+                padding: 4px;
+            }
+
+            .card-header-left {
+                gap: 8px;
+            }
+
+            .trade-direction-badge {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+
+            .symbol-name {
+                font-size: 1rem;
+            }
+
+            .tp-item {
+                padding: 4px 6px;
+                width: 100%;
+                min-width: 0;
+            }
+
+            .tp-item-left {
+                min-width: 0;
+                flex: 1;
+            }
+
+            .tp-item-right {
+                min-width: 75px;
+                flex-shrink: 0;
+            }
+
+            .tp-profit {
+                padding: 1px 3px;
+                font-size: 0.5rem;
+            }
+
+            .tp-value {
+                font-size: 0.65rem;
+            }
+
+            .tp-rr, .tp-points {
+                font-size: 0.5rem;
+            }
+
+            .tp-mm {
+                font-size: 0.45rem;
+                padding: 1px 2px;
+                line-height: 1.1;
+                word-break: break-all;
+                max-width: 100%;
+            }
+
+            .order-distribution {
+                padding: 6px;
+                margin-top: 4px;
+            }
+
+            .distribution-title {
+                font-size: 0.65rem;
+                margin-bottom: 4px;
+            }
+
+            .percentage-input {
+                padding: 4px 6px;
+                font-size: 0.75rem;
+            }
+
+            .percentage-label {
+                font-size: 0.6rem;
+                margin-top: 1px;
+            }
+        }
+
+        /* Extra Small Mobile (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            .header h1 {
+                font-size: 0.9rem;
+            }
+
+            .header p {
+                font-size: 0.6rem;
+            }
+
+            .tp-item-right {
+                min-width: 70px;
+            }
+
+            .tp-mm {
+                font-size: 0.4rem;
+                padding: 1px;
+            }
+
+            .tp-profit {
+                font-size: 0.45rem;
+            }
+
+            .tp-value {
+                font-size: 0.6rem;
+            }
+
+            .nav-item {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+            }
+
+            .input-field {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* iPad Portrait */
+        @media (min-width: 431px) and (max-width: 768px) {
+            .tp-zones-container {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .tp-zone {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .tp-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .tp-item {
+                padding: 6px 8px;
+            }
+
+            .tp-profit {
+                font-size: 0.6rem;
+                padding: 1px 5px;
+            }
+
+            .trade-details {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .breakdown-items {
+                gap: 6px;
+            }
+        }
+
+        /* iPad Landscape and larger */
+        @media (min-width: 769px) {
+            .tp-zones-container {
+                flex-direction: row;
+                gap: 12px;
+            }
+
+            .tp-zone {
+                flex: 1;
+            }
+
+            .tp-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .trade-details {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* MT5 Integration Panel */
+        .mt5-integration-panel {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--binance-dark-3);
+            text-align: center;
+        }
+
+        .mt5-btn {
+            background: linear-gradient(135deg, var(--binance-green), #0ECB81);
+            color: var(--binance-dark-1);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(14, 203, 129, 0.3);
+        }
+
+        .mt5-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(14, 203, 129, 0.4);
+        }
+
+        .mt5-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="all_in_calculator_v4.html" class="nav-item">
+                    <i class="fas fa-calculator"></i> All-In Calculator
+                </a>
+                <a href="risk_calculator.html" class="nav-item">
+                    <i class="fas fa-percentage"></i> Risk Calculator
+                </a>
+                <a href="risk_calculator_mt5.html" class="nav-item active">
+                    <i class="fas fa-chart-line"></i> Risk Calculator MT5
+                </a>
+                <a href="mt5_integration.html" class="nav-item">
+                    <i class="fas fa-rocket"></i> MT5 Integration
+                </a>
+            </div>
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="th">TH</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>
+                <i class="fas fa-chart-line" style="color: #F0B90B;"></i>
+                <span data-key="header-title">Risk Calculator MT5 - Lot Size from %Risk</span>
+            </h1>
+            <p><span data-key="header-subtitle">คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง พร้อมเชื่อมต่อ MT5</span> <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
+        </div>
+
+        <div class="calculator-body">
+            <div class="main-content">
+                <div class="calculator-section">
+                    <div class="input-section">
+                        <!-- Symbol Input -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-coins"></i>
+                                <span data-key="symbol-label">Symbol</span>
+                            </label>
+                            <input type="text" id="symbol" class="input-field" placeholder="XAUUSD" value="XAUUSD">
+                        </div>
+
+                        <!-- Portfolio Size -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-wallet"></i>
+                                <span data-key="portfolio-label">ขนาดพอร์ต (USD)</span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" id="portfolioSize" class="input-field" placeholder="10000" step="0.01">
+                                <span class="input-unit">USD</span>
+                            </div>
+                        </div>
+
+                        <!-- Risk Percentage -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-percentage"></i>
+                                <span data-key="risk-label">ความเสี่ยง (%)</span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" id="riskPercent" class="input-field" placeholder="2" step="0.1" min="0.1" max="100">
+                                <span class="input-unit">%</span>
+                            </div>
+                        </div>
+
+                        <!-- Trade Direction -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span data-key="direction-label">ทิศทาง</span>
+                            </label>
+                            <div class="type-buttons">
+                                <label class="type-btn">
+                                    <input type="radio" name="direction" value="buy" checked>
+                                    <span><i class="fas fa-arrow-up"></i> Buy</span>
+                                </label>
+                                <label class="type-btn">
+                                    <input type="radio" name="direction" value="sell">
+                                    <span><i class="fas fa-arrow-down"></i> Sell</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Entry Price Range -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-crosshairs"></i>
+                                <span data-key="entry-label">ราคาเข้า (Price Range)</span>
+                            </label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="number" id="entryPrice1" class="input-field" placeholder="3344.928" step="0.001">
+                                <span style="align-self: center; color: var(--binance-light-gray);">-</span>
+                                <input type="number" id="entryPrice2" class="input-field" placeholder="3348.928" step="0.001">
+                            </div>
+                            
+                            <!-- Order Distribution Controls -->
+                            <div class="order-distribution" id="orderDistribution" style="display: none;">
+                                <div class="distribution-title">
+                                    <i class="fas fa-chart-pie"></i> Order Distribution
+                                </div>
+                                <div class="distribution-controls">
+                                    <div>
+                                        <input type="number" id="firstZonePercent" class="percentage-input" value="30" min="1" max="99" step="1">
+                                        <div class="percentage-label">Zone 1 (%)</div>
+                                    </div>
+                                    <div class="distribution-separator">+</div>
+                                    <div>
+                                        <input type="number" id="secondZonePercent" class="percentage-input" value="70" min="1" max="99" step="1">
+                                        <div class="percentage-label">Zone 2 (%)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stop Loss -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-shield-alt"></i>
+                                <span data-key="sl-label">Stop Loss</span>
+                            </label>
+                            <input type="number" id="stopLoss" class="input-field" placeholder="3353.928" step="0.001">
+                        </div>
+
+                        <!-- Take Profit Levels -->
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-bullseye"></i>
+                                <span data-key="tp-label">Take Profit Levels</span>
+                            </label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <input type="number" id="tp1" class="input-field" placeholder="TP1: 3339.928" step="0.001">
+                                    <input type="number" id="tp2" class="input-field" placeholder="TP2: 3334.928" step="0.001">
+                                    <input type="number" id="tp3" class="input-field" placeholder="TP3: 3329.928" step="0.001">
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <input type="number" id="tp4" class="input-field" placeholder="TP4: 3324.928" step="0.001">
+                                    <input type="number" id="tp5" class="input-field" placeholder="TP5: 3319.928" step="0.001">
+                                    <input type="number" id="tp6" class="input-field" placeholder="TP6: 3314.928" step="0.001">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calculate Button -->
+                        <div class="input-group">
+                            <button id="calculateBtn" class="calculate-btn">
+                                <i class="fas fa-calculator"></i>
+                                <span data-key="calculate-btn">คำนวณขนาด Lot</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-wrapper">
+                    <div id="resultsSection" class="results-section">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message hidden">
+            Error message will appear here
+        </div>
+    </div>
+
+    <script>
+        class RiskCalculatorMT5 {
+            constructor() {
+                this.initializeElements();
+                this.attachEventListeners();
+                this.loadFromStorage();
+                this.initializeLanguage();
+            }
+
+            // Translation dictionary
+            translations = {
+                'th': {
+                    'header-title': 'Risk Calculator MT5 - Lot Size from %Risk',
+                    'header-subtitle': 'คำนวณขนาด Lot จากเปอร์เซ็นต์ความเสี่ยง พร้อมเชื่อมต่อ MT5',
+                    'symbol-label': 'Symbol',
+                    'portfolio-label': 'ขนาดพอร์ต (USD)',
+                    'risk-label': 'ความเสี่ยง (%)',
+                    'direction-label': 'ทิศทาง',
+                    'entry-label': 'ราคาเข้า (Price Range)',
+                    'sl-label': 'Stop Loss',
+                    'tp-label': 'Take Profit Levels',
+                    'calculate-btn': 'คำนวณขนาด Lot',
+                    'status-label': 'สถานะ',
+                    'status-opened': 'Opened',
+                    'signal-label': 'Signal',
+                    'price-label': 'Price',
+                    'lot-size-label': 'Total Lot',
+                    'risk-amount-label': 'Risk Amount',
+                    'tp-levels-label': 'Take Profit Levels',
+                    'order-breakdown-label': 'การกระจายออเดอร์',
+                    'send-to-mt5': 'ส่งไป MT5 Integration',
+                    'error-invalid-inputs': 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                    'error-invalid-sl': 'Stop Loss ไม่ถูกต้องตามทิศทาง',
+                    'error-invalid-entry': 'ราคาเข้า 2 ต้องมากกว่าราคาเข้า 1',
+                    'error-invalid-percentage': 'รวมเปอร์เซ็นต์ต้องเท่ากับ 100%'
+                },
+                'en': {
+                    'header-title': 'Risk Calculator MT5 - Lot Size from %Risk',
+                    'header-subtitle': 'Calculate Lot Size from Risk Percentage with MT5 Integration',
+                    'symbol-label': 'Symbol',
+                    'portfolio-label': 'Portfolio Size (USD)',
+                    'risk-label': 'Risk (%)',
+                    'direction-label': 'Direction',
+                    'entry-label': 'Entry Price (Price Range)',
+                    'sl-label': 'Stop Loss',
+                    'tp-label': 'Take Profit Levels',
+                    'calculate-btn': 'Calculate Lot Size',
+                    'status-label': 'Status',
+                    'status-opened': 'Opened',
+                    'signal-label': 'Signal',
+                    'price-label': 'Price',
+                    'lot-size-label': 'Total Lot',
+                    'risk-amount-label': 'Risk Amount',
+                    'tp-levels-label': 'Take Profit Levels',
+                    'order-breakdown-label': 'Order Distribution',
+                    'send-to-mt5': 'Send to MT5 Integration',
+                    'error-invalid-inputs': 'Please fill in all required fields',
+                    'error-invalid-sl': 'Stop Loss direction is incorrect',
+                    'error-invalid-entry': 'Entry Price 2 must be greater than Entry Price 1',
+                    'error-invalid-percentage': 'Total percentage must equal 100%'
+                }
+            };
+
+            initializeElements() {
+                this.elements = {
+                    symbol: document.getElementById('symbol'),
+                    portfolioSize: document.getElementById('portfolioSize'),
+                    riskPercent: document.getElementById('riskPercent'),
+                    entryPrice1: document.getElementById('entryPrice1'),
+                    entryPrice2: document.getElementById('entryPrice2'),
+                    firstZonePercent: document.getElementById('firstZonePercent'),
+                    secondZonePercent: document.getElementById('secondZonePercent'),
+                    orderDistribution: document.getElementById('orderDistribution'),
+                    stopLoss: document.getElementById('stopLoss'),
+                    tp1: document.getElementById('tp1'),
+                    tp2: document.getElementById('tp2'),
+                    tp3: document.getElementById('tp3'),
+                    tp4: document.getElementById('tp4'),
+                    tp5: document.getElementById('tp5'),
+                    tp6: document.getElementById('tp6'),
+                    calculateBtn: document.getElementById('calculateBtn'),
+                    resultsSection: document.getElementById('resultsSection'),
+                    errorMessage: document.getElementById('errorMessage')
+                };
+            }
+
+            attachEventListeners() {
+                // Calculate button
+                this.elements.calculateBtn.addEventListener('click', () => this.calculate());
+
+                // Show/hide order distribution when second price is entered
+                this.elements.entryPrice2.addEventListener('input', () => {
+                    if (this.elements.entryPrice2.value) {
+                        this.elements.orderDistribution.style.display = 'block';
+                    } else {
+                        this.elements.orderDistribution.style.display = 'none';
+                    }
+                });
+
+                // Auto-adjust percentages
+                this.elements.firstZonePercent.addEventListener('input', () => {
+                    const firstPercent = parseFloat(this.elements.firstZonePercent.value) || 0;
+                    const secondPercent = 100 - firstPercent;
+                    if (secondPercent >= 0 && secondPercent <= 100) {
+                        this.elements.secondZonePercent.value = secondPercent;
+                    }
+                });
+
+                this.elements.secondZonePercent.addEventListener('input', () => {
+                    const secondPercent = parseFloat(this.elements.secondZonePercent.value) || 0;
+                    const firstPercent = 100 - secondPercent;
+                    if (firstPercent >= 0 && firstPercent <= 100) {
+                        this.elements.firstZonePercent.value = firstPercent;
+                    }
+                });
+
+                // Input changes clear results
+                Object.keys(this.elements).forEach(key => {
+                    if (this.elements[key] && this.elements[key].addEventListener) {
+                        this.elements[key].addEventListener('input', () => this.clearResults());
+                    }
+                });
+
+                // Direction change
+                document.querySelectorAll('input[name="direction"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.clearResults());
+                });
+            }
+
+            calculate() {
+                const portfolioSize = parseFloat(this.elements.portfolioSize.value);
+                const riskPercent = parseFloat(this.elements.riskPercent.value);
+                const entryPrice1 = parseFloat(this.elements.entryPrice1.value);
+                const entryPrice2 = parseFloat(this.elements.entryPrice2.value);
+                const stopLoss = parseFloat(this.elements.stopLoss.value);
+                const direction = document.querySelector('input[name="direction"]:checked').value;
+                const symbol = this.elements.symbol.value || 'XAUUSD';
+
+                // Validation
+                if (!portfolioSize || !riskPercent || !entryPrice1 || !stopLoss) {
+                    this.showError(this.getTranslation('error-invalid-inputs'));
+                    return;
+                }
+
+                // If entryPrice2 is provided, validate it
+                if (entryPrice2 && entryPrice2 === entryPrice1) {
+                    this.showError(this.getTranslation('error-invalid-entry'));
+                    return;
+                }
+
+                // Validate percentages if second price is provided
+                if (entryPrice2) {
+                    const firstPercent = parseFloat(this.elements.firstZonePercent.value) || 0;
+                    const secondPercent = parseFloat(this.elements.secondZonePercent.value) || 0;
+                    if (Math.abs(firstPercent + secondPercent - 100) > 0.1) {
+                        this.showError(this.getTranslation('error-invalid-percentage'));
+                        return;
+                    }
+                }
+
+                this.hideError();
+
+                // Use average entry price if range is provided
+                const avgEntryPrice = entryPrice2 ? (entryPrice1 + entryPrice2) / 2 : entryPrice1;
+
+                // Validate SL direction
+                if (direction === 'buy' && stopLoss >= avgEntryPrice) {
+                    this.showError(this.getTranslation('error-invalid-sl'));
+                    return;
+                }
+                if (direction === 'sell' && stopLoss <= avgEntryPrice) {
+                    this.showError(this.getTranslation('error-invalid-sl'));
+                    return;
+                }
+
+                // Calculate risk amount
+                const riskAmount = portfolioSize * (riskPercent / 100);
+
+                // Calculate lot size
+                const stopDistanceUSD = Math.abs(avgEntryPrice - stopLoss);
+                const contractSize = 100; // oz per lot for Gold
+                const totalLotSize = riskAmount / (contractSize * stopDistanceUSD);
+
+                // Calculate order distribution if applicable
+                let orderBreakdown = null;
+                if (entryPrice2) {
+                    const firstPercent = parseFloat(this.elements.firstZonePercent.value) || 30;
+                    const secondPercent = parseFloat(this.elements.secondZonePercent.value) || 70;
+                    
+                    // Determine zone prices based on trade direction
+                    let zone1Price, zone2Price;
+                    if (direction === 'buy') {
+                        // For BUY: Start from higher price (zone1), then lower price (zone2)
+                        zone1Price = Math.max(entryPrice1, entryPrice2);
+                        zone2Price = Math.min(entryPrice1, entryPrice2);
+                    } else {
+                        // For SELL: Start from lower price (zone1), then higher price (zone2)
+                        zone1Price = Math.min(entryPrice1, entryPrice2);
+                        zone2Price = Math.max(entryPrice1, entryPrice2);
+                    }
+                    
+                    orderBreakdown = {
+                        zone1: {
+                            price: zone1Price,
+                            lot: totalLotSize * (firstPercent / 100),
+                            percent: firstPercent
+                        },
+                        zone2: {
+                            price: zone2Price,
+                            lot: totalLotSize * (secondPercent / 100),
+                            percent: secondPercent
+                        }
+                    };
+                }
+
+                // Prepare TP levels
+                const tpLevels = this.getTakeProfitLevels();
+
+                // Store data for MT5 integration
+                const tradeData = {
+                    symbol,
+                    direction,
+                    entryPrice1,
+                    entryPrice2,
+                    avgEntryPrice,
+                    stopLoss,
+                    totalLotSize,
+                    riskAmount,
+                    riskPercent,
+                    tpLevels,
+                    orderBreakdown
+                };
+
+                // Save to localStorage for MT5 integration
+                localStorage.setItem('riskCalculatorData', JSON.stringify(tradeData));
+
+                // Generate trade card
+                this.generateTradeCard(tradeData);
+
+                // Save current form data
+                this.saveToStorage();
+            }
+
+            getTakeProfitLevels() {
+                const tpLevels = [];
+                const tpInputs = [this.elements.tp1, this.elements.tp2, this.elements.tp3, this.elements.tp4, this.elements.tp5, this.elements.tp6];
+                
+                tpInputs.forEach((input, index) => {
+                    const value = parseFloat(input.value);
+                    if (value && value > 0) {
+                        tpLevels.push({
+                            level: index + 1,
+                            price: value
+                        });
+                    }
+                });
+
+                return tpLevels;
+            }
+
+            generateTradeCard(data) {
+                const translations = this.getTranslations();
+                const lang = this.currentLanguage;
+                
+                const entryPriceDisplay = data.entryPrice2 
+                    ? `${data.entryPrice1.toFixed(3)}-${data.entryPrice2.toFixed(3)}`
+                    : data.entryPrice1.toFixed(3);
+
+                // Calculate SL amounts
+                const totalSLAmount = data.riskAmount;
+
+                // Create SL display with amounts  
+                const slDisplay = `${data.stopLoss.toFixed(3)} <span class="sl-amount">(All: -${totalSLAmount.toFixed(1)}$)</span>`;
+
+                const orderBreakdownHTML = data.orderBreakdown ? `
+                    <div class="order-breakdown">
+                        <div class="breakdown-title">${translations[lang]['order-breakdown-label']}</div>
+                        <div class="breakdown-items">
+                            <div class="breakdown-item">
+                                <div class="breakdown-price">${data.orderBreakdown.zone1.price.toFixed(3)}</div>
+                                <div class="breakdown-lot">${data.orderBreakdown.zone1.lot.toFixed(2)} lots</div>
+                                <div class="breakdown-percent">${data.orderBreakdown.zone1.percent}% <span class="zone-sl">(SL Zone 1: -${(data.riskAmount * (data.orderBreakdown.zone1.percent / 100)).toFixed(1)}$)</span></div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-price">${data.orderBreakdown.zone2.price.toFixed(3)}</div>
+                                <div class="breakdown-lot">${data.orderBreakdown.zone2.lot.toFixed(2)} lots</div>
+                                <div class="breakdown-percent">${data.orderBreakdown.zone2.percent}% <span class="zone-sl">(SL Zone 2: -${(data.riskAmount * (data.orderBreakdown.zone2.percent / 100)).toFixed(1)}$)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                ` : '';
+
+                // Calculate Risk:Reward ratios and points for each TP
+                const tpLevelsHTML = data.tpLevels.length > 0 ? `
+                    <div class="tp-section">
+                        <div class="tp-title">${translations[lang]['tp-levels-label']}</div>
+                        ${data.orderBreakdown ? this.generateDualZoneTPLevels(data, translations, lang) : this.generateSingleZoneTPLevels(data, translations, lang)}
+                    </div>
+                ` : '';
+
+                const cardHTML = `
+                    <div class="trade-card">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <div class="trade-direction-badge ${data.direction}">
+                                    <i class="fas fa-arrow-${data.direction === 'buy' ? 'up' : 'down'}"></i>
+                                    ${data.direction.toUpperCase()}
+                                </div>
+                                <div class="symbol-info">
+                                    <div class="symbol-name">${data.symbol}</div>
+                                    <div class="trade-status">${translations[lang]['status-opened']}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="trade-details">
+                            <div class="detail-item">
+                                <div class="detail-label">${translations[lang]['lot-size-label']}</div>
+                                <div class="detail-value lot">${data.totalLotSize.toFixed(2)}</div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Price</div>
+                                <div class="detail-value price">${entryPriceDisplay}</div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">SL</div>
+                                <div class="detail-value sl">${slDisplay}</div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Risk</div>
+                                <div class="detail-value risk">${data.riskPercent}%</div>
+                            </div>
+                        </div>
+
+                        ${orderBreakdownHTML}
+                        ${tpLevelsHTML}
+                        
+                        <div class="mt5-integration-panel">
+                            <button class="mt5-btn" onclick="sendToMT5Integration()">
+                                <i class="fas fa-rocket"></i>
+                                <span data-key="send-to-mt5">${translations[lang]['send-to-mt5']}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                this.elements.resultsSection.innerHTML = cardHTML;
+            }
+
+            // Calculate MM percentages based on number of TP levels
+            calculateMMPercentages(tpCount) {
+                if (tpCount <= 1) return [100];
+                if (tpCount === 2) return [70, 30];
+                if (tpCount === 3) return [50, 30, 20];
+                if (tpCount === 4) return [40, 25, 20, 15];
+                if (tpCount === 5) return [40, 20, 20, 10, 10];
+                if (tpCount === 6) return [30, 20, 20, 15, 10, 5];
+                
+                // For more than 6 TPs, distribute remaining equally
+                const mmPercentages = [30, 25, 15, 10, 10, 10];
+                const remaining = 100 - mmPercentages.reduce((sum, p) => sum + p, 0);
+                const extraTPs = tpCount - 6;
+                const extraPercent = Math.floor(remaining / extraTPs);
+                
+                for (let i = 0; i < extraTPs; i++) {
+                    mmPercentages.push(extraPercent);
+                }
+                
+                return mmPercentages;
+            }
+
+            generateDualZoneTPLevels(data, translations, lang) {
+                let html = `<div class="tp-zones-container">`;
+
+                // Calculate MM percentages
+                const mmPercentages = this.calculateMMPercentages(data.tpLevels.length);
+
+                // Zone 1 TP levels
+                html += `
+                    <div class="tp-zone">
+                        <div class="tp-zone-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Zone 1: ${data.orderBreakdown.zone1.price.toFixed(3)} (${data.orderBreakdown.zone1.percent}%)
+                        </div>
+                        <div class="tp-grid">
+                `;
+
+                for (let i = 0; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.orderBreakdown.zone1.price - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone1.price) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone1.price);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.orderBreakdown.zone1.lot;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.orderBreakdown.zone1.lot * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                // Zone 2 TP levels
+                html += `
+                    <div class="tp-zone">
+                        <div class="tp-zone-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Zone 2: ${data.orderBreakdown.zone2.price.toFixed(3)} (${data.orderBreakdown.zone2.percent}%)
+                        </div>
+                        <div class="tp-grid">
+                `;
+
+                for (let i = 0; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.orderBreakdown.zone2.price - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.orderBreakdown.zone2.price) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.orderBreakdown.zone2.price);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.orderBreakdown.zone2.lot;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.orderBreakdown.zone2.lot * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                return html;
+            }
+
+            generateSingleZoneTPLevels(data, translations, lang) {
+                // Calculate MM percentages
+                const mmPercentages = this.calculateMMPercentages(data.tpLevels.length);
+                
+                let html = `
+                    <div class="tp-grid">
+                        <div class="tp-group">
+                `;
+
+                for (let i = 0; i < Math.min(3, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.totalLotSize;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                        <div class="tp-group">
+                `;
+
+                for (let i = 3; i < Math.min(6, data.tpLevels.length); i++) {
+                    const tp = data.tpLevels[i];
+                    const stopDistancePips = Math.abs(data.avgEntryPrice - data.stopLoss) / 0.01;
+                    const tpDistancePips = Math.abs(tp.price - data.avgEntryPrice) / 0.01;
+                    const rrRatio = (tpDistancePips / stopDistancePips).toFixed(1);
+                    const points = tpDistancePips.toFixed(0);
+                    const contractSize = 100;
+                    const priceDistance = Math.abs(tp.price - data.avgEntryPrice);
+                    const profitPerLot = contractSize * priceDistance;
+                    const totalProfit = profitPerLot * data.totalLotSize;
+                    const mmPercent = mmPercentages[i] || 0;
+                    const mmLotSize = (data.totalLotSize * mmPercent / 100).toFixed(2);
+
+                    html += `
+                        <div class="tp-item">
+                            <div class="tp-item-left">
+                                <div class="tp-label">TP${tp.level} <span class="tp-profit">+${totalProfit.toFixed(1)} $</span></div>
+                                <div class="tp-value">${tp.price.toFixed(3)}</div>
+                            </div>
+                            <div class="tp-item-right">
+                                <div class="tp-rr">R:R ${rrRatio}</div>
+                                <div class="tp-points">+${points}p</div>
+                                <div class="tp-mm">${mmPercent}% (${mmLotSize}L)</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                return html;
+            }
+
+            clearResults() {
+                this.elements.resultsSection.innerHTML = '';
+            }
+
+            hideError() {
+                this.elements.errorMessage.classList.add('hidden');
+            }
+
+            showError(message) {
+                this.elements.errorMessage.textContent = message;
+                this.elements.errorMessage.classList.remove('hidden');
+            }
+
+            saveToStorage() {
+                const data = {
+                    symbol: this.elements.symbol.value,
+                    portfolioSize: this.elements.portfolioSize.value,
+                    riskPercent: this.elements.riskPercent.value,
+                    entryPrice1: this.elements.entryPrice1.value,
+                    entryPrice2: this.elements.entryPrice2.value,
+                    firstZonePercent: this.elements.firstZonePercent.value,
+                    secondZonePercent: this.elements.secondZonePercent.value,
+                    stopLoss: this.elements.stopLoss.value,
+                    tp1: this.elements.tp1.value,
+                    tp2: this.elements.tp2.value,
+                    tp3: this.elements.tp3.value,
+                    tp4: this.elements.tp4.value,
+                    tp5: this.elements.tp5.value,
+                    tp6: this.elements.tp6.value,
+                    direction: document.querySelector('input[name="direction"]:checked')?.value
+                };
+                localStorage.setItem('riskCalculatorMT5', JSON.stringify(data));
+            }
+
+            loadFromStorage() {
+                const data = JSON.parse(localStorage.getItem('riskCalculatorMT5') || '{}');
+                
+                if (data.symbol) this.elements.symbol.value = data.symbol;
+                if (data.portfolioSize) this.elements.portfolioSize.value = data.portfolioSize;
+                if (data.riskPercent) this.elements.riskPercent.value = data.riskPercent;
+                if (data.entryPrice1) this.elements.entryPrice1.value = data.entryPrice1;
+                if (data.entryPrice2) {
+                    this.elements.entryPrice2.value = data.entryPrice2;
+                    this.elements.orderDistribution.style.display = 'block';
+                }
+                if (data.firstZonePercent) this.elements.firstZonePercent.value = data.firstZonePercent;
+                if (data.secondZonePercent) this.elements.secondZonePercent.value = data.secondZonePercent;
+                if (data.stopLoss) this.elements.stopLoss.value = data.stopLoss;
+                if (data.tp1) this.elements.tp1.value = data.tp1;
+                if (data.tp2) this.elements.tp2.value = data.tp2;
+                if (data.tp3) this.elements.tp3.value = data.tp3;
+                if (data.tp4) this.elements.tp4.value = data.tp4;
+                if (data.tp5) this.elements.tp5.value = data.tp5;
+                if (data.tp6) this.elements.tp6.value = data.tp6;
+                
+                if (data.direction) {
+                    const directionRadio = document.querySelector(`input[name="direction"][value="${data.direction}"]`);
+                    if (directionRadio) directionRadio.checked = true;
+                }
+            }
+
+            // Language system
+            initializeLanguage() {
+                this.currentLanguage = localStorage.getItem('goldCalculatorLanguage') || 'th';
+                
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.switchLanguage(btn.dataset.lang);
+                    });
+                });
+                
+                this.applyLanguage(this.currentLanguage);
+            }
+
+            switchLanguage(lang) {
+                this.currentLanguage = lang;
+                localStorage.setItem('goldCalculatorLanguage', lang);
+                
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+                
+                this.applyLanguage(lang);
+            }
+
+            applyLanguage(lang) {
+                const translations = this.getTranslations();
+                
+                document.querySelectorAll('[data-key]').forEach(element => {
+                    const key = element.getAttribute('data-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+            }
+
+            getTranslations() {
+                return this.translations;
+            }
+
+            getTranslation(key) {
+                const translations = this.getTranslations();
+                return translations[this.currentLanguage][key] || key;
+            }
+        }
+
+        // Send data to MT5 Integration
+        function sendToMT5Integration() {
+            const data = localStorage.getItem('riskCalculatorData');
+            if (!data) {
+                alert('ไม่พบข้อมูลการคำนวณ กรุณาคำนวณใหม่');
+                return;
+            }
+
+            // Encode data for URL parameter
+            const encodedData = encodeURIComponent(data);
+            const url = `mt5_integration.html?data=${encodedData}`;
+            
+            // Open in new tab
+            window.open(url, '_blank');
+        }
+
+        // Initialize calculator when page loads
+        let calculator;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            calculator = new RiskCalculatorMT5();
+        });
+    </script>
+</body>
+</html>

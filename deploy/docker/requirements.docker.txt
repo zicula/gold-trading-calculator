@@ -1,0 +1,15 @@
+# Backend server requirements for Docker deployment
+# MetaTrader5 removed for cross-platform compatibility
+
+# Core web framework
+Flask==2.3.3
+flask-cors==4.0.0
+
+# Security and authentication
+PyJWT==2.8.0
+bcrypt==4.0.1
+cryptography==41.0.4
+Werkzeug==2.3.7
+
+# Utilities
+python-dotenv==1.0.0

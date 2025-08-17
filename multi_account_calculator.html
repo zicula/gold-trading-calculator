@@ -1,0 +1,933 @@
+<!-- Frontend modifications for Multi-Account MT5 Trading System -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Trading Calculator - Multi Account</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styles for multi-account features */
+        .auth-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .account-selector {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+        }
+        
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .account-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .account-item.active {
+            background-color: #e7f3ff;
+            border-color: #007cba;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-connected { background-color: #28a745; }
+        .status-disconnected { background-color: #dc3545; }
+        .status-connecting { background-color: #ffc107; animation: pulse 1s infinite; }
+        
+        /* Broadcast Mode Styles */
+        .broadcast-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #fff8e1, #fff3c4);
+        }
+        
+        .broadcast-title {
+            color: #e65100;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .broadcast-controls {
+            margin: 15px 0;
+        }
+        
+        .broadcast-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .broadcast-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #f8f9fa;
+            border-left: 4px solid #007cba;
+        }
+        
+        .super-admin-badge {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .broadcast-badge {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .hidden { display: none !important; }
+        .error { color: #dc3545; margin: 10px 0; }
+        .success { color: #28a745; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="authContainer" class="auth-container">
+        <h2>เข้าสู่ระบบ Trading Calculator</h2>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h3>เข้าสู่ระบบ</h3>
+            <input type="text" id="loginUsername" placeholder="ชื่อผู้ใช้ หรือ อีเมล" required>
+            <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+            <button onclick="login()">เข้าสู่ระบบ</button>
+            <p><a href="#" onclick="showRegisterForm()">สมัครสมาชิกใหม่</a></p>
+        </div>
+        
+        <!-- Register Form -->
+        <div id="registerForm" class="hidden">
+            <h3>สมัครสมาชิก</h3>
+            <input type="text" id="registerUsername" placeholder="ชื่อผู้ใช้" required>
+            <input type="email" id="registerEmail" placeholder="อีเมล" required>
+            <input type="password" id="registerPassword" placeholder="รหัสผ่าน" required>
+            <input type="password" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+            <select id="registerRole">
+                <option value="user">ผู้ใช้ทั่วไป</option>
+                <option value="broadcast">ผู้ใช้ Broadcast</option>
+                <option value="super_admin">Super Admin</option>
+            </select>
+            <button onclick="register()">สมัครสมาชิก</button>
+            <p><a href="#" onclick="showLoginForm()">เข้าสู่ระบบ</a></p>
+        </div>
+        
+        <div id="authMessage" class="error"></div>
+    </div>
+
+    <!-- Main Application (hidden until authenticated) -->
+    <div id="mainApp" class="hidden">
+        
+        <!-- User Info and Logout -->
+        <div style="text-align: right; padding: 10px; border-bottom: 1px solid #eee;">
+            <span id="userInfo"></span>
+            <span id="userRoleBadge" class="hidden"></span>
+            <button onclick="logout()" style="margin-left: 10px;">ออกจากระบบ</button>
+        </div>
+
+        <!-- Broadcast Section (Super Admin Only) -->
+        <div id="broadcastSection" class="broadcast-section hidden">
+            <h3 class="broadcast-title">
+                📡 ระบบ Broadcast Orders (Super Admin)
+            </h3>
+            
+            <div class="broadcast-controls">
+                <div class="broadcast-toggle">
+                    <input type="checkbox" id="broadcastMode" onchange="toggleBroadcastMode()">
+                    <label for="broadcastMode">🚀 เปิดใช้งาน Broadcast Mode</label>
+                </div>
+                
+                <div id="broadcastInfo" class="broadcast-status hidden">
+                    <p><strong>📢 Broadcast Mode เปิดใช้งาน</strong></p>
+                    <p>เมื่อส่งคำสั่ง จะส่งไปยังผู้ใช้ทุกคนที่มี role "broadcast"</p>
+                    <button onclick="checkBroadcastStatus()">🔍 ตรวจสอบสถานะ Broadcast</button>
+                </div>
+            </div>
+            
+            <div id="broadcastStatusInfo"></div>
+        </div>
+
+        <!-- Account Management Section -->
+        <div class="account-selector">
+            <h3>บัญชี MT5 ของคุณ</h3>
+            
+            <!-- Add Account Form -->
+            <div id="addAccountForm" class="hidden">
+                <h4>เพิ่มบัญชี MT5 ใหม่</h4>
+                <input type="text" id="accountName" placeholder="ชื่อบัญชี">
+                <input type="text" id="accountLogin" placeholder="Login MT5">
+                <input type="password" id="accountPassword" placeholder="รหัสผ่าน MT5">
+                <input type="text" id="accountServer" placeholder="Server MT5">
+                <input type="text" id="accountBroker" placeholder="โบรกเกอร์ (ไม่จำเป็น)">
+                <select id="accountType">
+                    <option value="demo">Demo</option>
+                    <option value="real">Real</option>
+                </select>
+                <div>
+                    <button onclick="addAccount()">เพิ่มบัญชี</button>
+                    <button onclick="hideAddAccountForm()">ยกเลิก</button>
+                </div>
+            </div>
+            
+            <button id="showAddAccountBtn" onclick="showAddAccountForm()">+ เพิ่มบัญชี MT5</button>
+            
+            <!-- Account List -->
+            <div id="accountList"></div>
+            
+            <!-- Current Connection Status -->
+            <div id="connectionStatus" class="hidden">
+                <h4>บัญชีที่เชื่อมต่ออยู่:</h4>
+                <div id="currentAccount"></div>
+            </div>
+        </div>
+
+        <!-- Original Calculator Interface -->
+        <div class="container">
+            <h1>🏆 Gold Trading Calculator</h1>
+            <p class="subtitle">ระบบคำนวณ Lot Size และ Take Profit สำหรับการเทรด Gold แบบมืออาชีพ</p>
+
+            <!-- Portfolio Settings -->
+            <div class="section">
+                <h2>📊 ข้อมูลพอร์ตโฟลิโอ</h2>
+                <div class="input-group">
+                    <label for="portfolioSize">💰 ขนาดพอร์ตโฟลิโอ (USD):</label>
+                    <input type="number" id="portfolioSize" value="1000" min="1" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="riskPercent">⚠️ เปอร์เซ็นต์ความเสี่ยง (%):</label>
+                    <input type="number" id="riskPercent" value="2" min="0.1" max="50" step="0.1">
+                </div>
+            </div>
+
+            <!-- Entry Orders -->
+            <div class="section">
+                <h2>🎯 คำสั่งซื้อ (Entry Orders)</h2>
+                <div class="input-group">
+                    <label for="symbol">📈 Symbol:</label>
+                    <select id="symbol">
+                        <option value="XAUUSD">XAUUSD (Gold)</option>
+                        <option value="XAGUSD">XAGUSD (Silver)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="entryPrice1">💲 Entry Price 1:</label>
+                    <input type="number" id="entryPrice1" value="2650.00" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="stopLoss">🛑 Stop Loss:</label>
+                    <input type="number" id="stopLoss" value="2640.00" step="0.01">
+                </div>
+            </div>
+
+            <!-- Take Profit Management -->
+            <div class="section">
+                <h2>🎯 Take Profit Management</h2>
+                <div class="input-group">
+                    <label for="tpCount">จำนวน TP:</label>
+                    <select id="tpCount" onchange="updateTPFields()">
+                        <option value="3">3 TP</option>
+                        <option value="5">5 TP</option>
+                    </select>
+                </div>
+                <div id="tpContainer"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="section">
+                <button onclick="calculateRisk()" class="calc-btn">🧮 คำนวณ</button>
+                <button onclick="sendToMT5()" class="send-btn" disabled id="sendBtn">📤 ส่งคำสั่งไป MT5</button>
+                <button onclick="broadcastToMT5()" class="send-btn hidden" id="broadcastBtn">📡 Broadcast ไปทุก User</button>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+        let userRole = null;
+        let accounts = [];
+        let currentAccount = null;
+        let isBroadcastMode = false;
+        
+        // API Configuration
+        const API_BASE = 'http://localhost:8080/api';  // Change for production
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            if (authToken) {
+                validateToken();
+            } else {
+                showAuthContainer();
+            }
+            updateTPFields(); // Initialize TP fields
+        });
+        
+        // Authentication Functions
+        function showAuthContainer() {
+            document.getElementById('authContainer').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+        
+        function showMainApp() {
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            loadUserAccounts();
+        }
+        
+        function showLoginForm() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            clearAuthMessage();
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            clearAuthMessage();
+        }
+        
+        function clearAuthMessage() {
+            document.getElementById('authMessage').textContent = '';
+            document.getElementById('authMessage').className = 'error';
+        }
+        
+        function showAuthMessage(message, isError = true) {
+            const messageEl = document.getElementById('authMessage');
+            messageEl.textContent = message;
+            messageEl.className = isError ? 'error' : 'success';
+        }
+        
+        async function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('registerRole').value;
+            
+            if (!username || !email || !password) {
+                showAuthMessage('กรุณากรอกข้อมูลให้ครบทุกช่อง');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAuthMessage('รหัสผ่านไม่ตรงกัน');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAuthMessage(`สมัครสมาชิกสำเร็จ (Role: ${data.role}) กรุณาเข้าสู่ระบบ`, false);
+                    setTimeout(showLoginForm, 2000);
+                } else {
+                    showAuthMessage(data.error || 'การสมัครสมาชิกล้มเหลว');
+                }
+            } catch (error) {
+                showAuthMessage('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                showAuthMessage('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.token;
+                    currentUser = { id: data.user_id, username };
+                    userRole = data.role;
+                    localStorage.setItem('authToken', authToken);
+                    showMainApp();
+                    updateUserInfo();
+                    setupRoleBasedUI();
+                } else {
+                    showAuthMessage(data.error || 'เข้าสู่ระบบล้มเหลว');
+                }
+            } catch (error) {
+                showAuthMessage('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        async function validateToken() {
+            try {
+                const response = await fetch(`${API_BASE}/accounts`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    showMainApp();
+                    updateUserInfo();
+                } else {
+                    localStorage.removeItem('authToken');
+                    authToken = null;
+                    showAuthContainer();
+                }
+            } catch (error) {
+                localStorage.removeItem('authToken');
+                authToken = null;
+                showAuthContainer();
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('authToken');
+            authToken = null;
+            currentUser = null;
+            userRole = null;
+            currentAccount = null;
+            accounts = [];
+            isBroadcastMode = false;
+            showAuthContainer();
+        }
+        
+        function updateUserInfo() {
+            if (currentUser) {
+                document.getElementById('userInfo').textContent = `ยินดีต้อนรับ ${currentUser.username}`;
+                
+                // Show role badge
+                const roleBadge = document.getElementById('userRoleBadge');
+                if (userRole) {
+                    roleBadge.classList.remove('hidden');
+                    if (userRole === 'super_admin') {
+                        roleBadge.className = 'super-admin-badge';
+                        roleBadge.textContent = '👑 Super Admin';
+                    } else if (userRole === 'broadcast') {
+                        roleBadge.className = 'broadcast-badge';
+                        roleBadge.textContent = '📡 Broadcast User';
+                    } else {
+                        roleBadge.classList.add('hidden');
+                    }
+                }
+            }
+        }
+        
+        function setupRoleBasedUI() {
+            // Show broadcast section only for super_admin
+            if (userRole === 'super_admin') {
+                document.getElementById('broadcastSection').classList.remove('hidden');
+            }
+            
+            // For broadcast users, show different UI elements if needed
+            if (userRole === 'broadcast') {
+                // Could add special indicators or limitations
+                console.log('User has broadcast role');
+            }
+        }
+        
+        // Account Management Functions
+        async function loadUserAccounts() {
+            try {
+                const response = await fetch(`${API_BASE}/accounts`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    accounts = data.accounts;
+                    renderAccountList();
+                }
+            } catch (error) {
+                console.error('Failed to load accounts:', error);
+            }
+        }
+        
+        function renderAccountList() {
+            const container = document.getElementById('accountList');
+            
+            if (accounts.length === 0) {
+                container.innerHTML = '<p>ยังไม่มีบัญชี MT5 กรุณาเพิ่มบัญชีใหม่</p>';
+                return;
+            }
+            
+            container.innerHTML = accounts.map(account => `
+                <div class="account-item ${currentAccount?.id === account.id ? 'active' : ''}" 
+                     onclick="selectAccount(${account.id})">
+                    <div>
+                        <span class="status-indicator ${getAccountStatus(account.id)}"></span>
+                        <strong>${account.account_name}</strong><br>
+                        <small>Login: ${account.login} | Server: ${account.server}</small>
+                    </div>
+                    <div>
+                        ${currentAccount?.id === account.id ? 
+                            '<button onclick="disconnectAccount(event)">ตัดการเชื่อมต่อ</button>' : 
+                            '<button onclick="connectAccount(event, ' + account.id + ')">เชื่อมต่อ</button>'
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function getAccountStatus(accountId) {
+            if (currentAccount?.id === accountId) {
+                return 'status-connected';
+            }
+            return 'status-disconnected';
+        }
+        
+        function showAddAccountForm() {
+            document.getElementById('addAccountForm').classList.remove('hidden');
+            document.getElementById('showAddAccountBtn').classList.add('hidden');
+        }
+        
+        function hideAddAccountForm() {
+            document.getElementById('addAccountForm').classList.add('hidden');
+            document.getElementById('showAddAccountBtn').classList.remove('hidden');
+        }
+        
+        async function addAccount() {
+            const accountData = {
+                account_name: document.getElementById('accountName').value,
+                login: document.getElementById('accountLogin').value,
+                password: document.getElementById('accountPassword').value,
+                server: document.getElementById('accountServer').value,
+                broker: document.getElementById('accountBroker').value,
+                account_type: document.getElementById('accountType').value
+            };
+            
+            if (!accountData.account_name || !accountData.login || !accountData.password || !accountData.server) {
+                alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/accounts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(accountData)
+                });
+                
+                if (response.ok) {
+                    hideAddAccountForm();
+                    // Clear form
+                    ['accountName', 'accountLogin', 'accountPassword', 'accountServer', 'accountBroker'].forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    loadUserAccounts();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'ไม่สามารถเพิ่มบัญชีได้');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        function selectAccount(accountId) {
+            // This just highlights the account, doesn't connect
+            const account = accounts.find(a => a.id === accountId);
+            if (account) {
+                console.log('Selected account:', account.account_name);
+            }
+        }
+        
+        async function connectAccount(event, accountId) {
+            event.stopPropagation();
+            
+            try {
+                const response = await fetch(`${API_BASE}/accounts/${accountId}/connect`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.token; // Update token with account context
+                    localStorage.setItem('authToken', authToken);
+                    currentAccount = accounts.find(a => a.id === accountId);
+                    renderAccountList();
+                    updateConnectionStatus();
+                    enableSendButton();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'ไม่สามารถเชื่อมต่อบัญชีได้');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        function disconnectAccount(event) {
+            event.stopPropagation();
+            currentAccount = null;
+            renderAccountList();
+            updateConnectionStatus();
+            disableSendButton();
+        }
+        
+        function updateConnectionStatus() {
+            const statusDiv = document.getElementById('connectionStatus');
+            const currentAccountDiv = document.getElementById('currentAccount');
+            
+            if (currentAccount) {
+                statusDiv.classList.remove('hidden');
+                currentAccountDiv.innerHTML = `
+                    <span class="status-indicator status-connected"></span>
+                    <strong>${currentAccount.account_name}</strong> (${currentAccount.login})
+                `;
+            } else {
+                statusDiv.classList.add('hidden');
+            }
+        }
+        
+        function enableSendButton() {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = false;
+            sendBtn.textContent = '📤 ส่งคำสั่งไป MT5';
+            
+            // Show/hide broadcast button based on mode and role
+            updateBroadcastButton();
+        }
+        
+        function disableSendButton() {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = '📤 เชื่อมต่อบัญชีก่อนส่งคำสั่ง';
+            
+            // Hide broadcast button
+            document.getElementById('broadcastBtn').classList.add('hidden');
+        }
+        
+        function updateBroadcastButton() {
+            const broadcastBtn = document.getElementById('broadcastBtn');
+            
+            if (userRole === 'super_admin' && isBroadcastMode) {
+                broadcastBtn.classList.remove('hidden');
+            } else {
+                broadcastBtn.classList.add('hidden');
+            }
+        }
+        
+        // Broadcast Mode Functions
+        function toggleBroadcastMode() {
+            isBroadcastMode = document.getElementById('broadcastMode').checked;
+            const broadcastInfo = document.getElementById('broadcastInfo');
+            
+            if (isBroadcastMode) {
+                broadcastInfo.classList.remove('hidden');
+            } else {
+                broadcastInfo.classList.add('hidden');
+            }
+            
+            updateBroadcastButton();
+        }
+        
+        async function checkBroadcastStatus() {
+            if (userRole !== 'super_admin') {
+                alert('เฉพาะ Super Admin เท่านั้นที่สามารถดูสถานะ Broadcast ได้');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/broadcast_status`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayBroadcastStatus(data);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'ไม่สามารถดูสถานะ Broadcast ได้');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        function displayBroadcastStatus(data) {
+            const statusDiv = document.getElementById('broadcastStatusInfo');
+            
+            let html = '<h4>📊 สถานะ Broadcast ล่าสุด (24 ชั่วโมง)</h4>';
+            
+            if (data.broadcast_statistics && data.broadcast_statistics.length > 0) {
+                html += '<div style="margin: 10px 0;"><strong>สถิติการส่ง:</strong><ul>';
+                data.broadcast_statistics.forEach(stat => {
+                    html += `<li>${stat.status}: ${stat.count} ครั้ง (ล่าสุด: ${new Date(stat.latest).toLocaleString('th-TH')})</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            if (data.broadcast_users && data.broadcast_users.length > 0) {
+                html += '<div style="margin: 10px 0;"><strong>ผู้ใช้ Broadcast ในระบบ:</strong><ul>';
+                data.broadcast_users.forEach(user => {
+                    const lastLogin = user.last_login ? new Date(user.last_login).toLocaleString('th-TH') : 'ยังไม่เคย login';
+                    const status = user.is_active ? '🟢 เปิดใช้งาน' : '🔴 ปิดใช้งาน';
+                    html += `<li>${user.username} - ${status} (Login ล่าสุด: ${lastLogin})</li>`;
+                });
+                html += '</ul></div>';
+            } else {
+                html += '<p>⚠️ ไม่มีผู้ใช้ Broadcast ในระบบ</p>';
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        // Original Calculator Functions (modified for API)
+        function updateTPFields() {
+            const count = parseInt(document.getElementById('tpCount').value);
+            const container = document.getElementById('tpContainer');
+            
+            const percentages = {
+                3: [50, 30, 20],
+                5: [40, 20, 20, 10, 10]
+            };
+            
+            let html = '';
+            for (let i = 1; i <= count; i++) {
+                html += `
+                    <div class="tp-group">
+                        <label for="tp${i}">Take Profit ${i} (${percentages[count][i-1]}%):</label>
+                        <input type="number" id="tp${i}" step="0.01">
+                        <span class="tp-percentage">${percentages[count][i-1]}%</span>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+        
+        async function calculateRisk() {
+            if (!currentAccount) {
+                alert('กรุณาเชื่อมต่อบัญชี MT5 ก่อนคำนวณ');
+                return;
+            }
+            
+            const data = {
+                symbol: document.getElementById('symbol').value,
+                entryPrice1: document.getElementById('entryPrice1').value,
+                stopLoss: document.getElementById('stopLoss').value,
+                portfolioSize: document.getElementById('portfolioSize').value,
+                riskPercent: document.getElementById('riskPercent').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/calculate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    displayResults(result);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'การคำนวณล้มเหลว');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        function displayResults(result) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <h3>📊 ผลการคำนวณ</h3>
+                <div class="result-item">
+                    <span class="label">Symbol:</span>
+                    <span class="value">${result.symbol}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Lot Size:</span>
+                    <span class="value highlight">${result.lotSize}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Risk Amount:</span>
+                    <span class="value">$${result.riskAmount.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Stop Distance:</span>
+                    <span class="value">${result.stopDistance.toFixed(2)} points</span>
+                </div>
+                <p class="calculation-time">คำนวณเมื่อ: ${new Date(result.calculatedAt).toLocaleString('th-TH')}</p>
+            `;
+        }
+        
+        async function sendToMT5() {
+            if (!currentAccount && !isBroadcastMode) {
+                alert('กรุณาเชื่อมต่อบัญชี MT5 ก่อนส่งคำสั่ง');
+                return;
+            }
+            
+            // Collect all form data
+            const orderData = {
+                symbol: document.getElementById('symbol').value,
+                entryPrice1: document.getElementById('entryPrice1').value,
+                stopLoss: document.getElementById('stopLoss').value,
+                portfolioSize: document.getElementById('portfolioSize').value,
+                riskPercent: document.getElementById('riskPercent').value
+            };
+            
+            // Add TP levels
+            const tpCount = parseInt(document.getElementById('tpCount').value);
+            for (let i = 1; i <= tpCount; i++) {
+                const tpValue = document.getElementById(`tp${i}`).value;
+                if (tpValue) {
+                    orderData[`tp${i}`] = tpValue;
+                }
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/send_orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('ส่งคำสั่งไป MT5 สำเร็จ!');
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'การส่งคำสั่งล้มเหลว');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+        
+        async function broadcastToMT5() {
+            if (userRole !== 'super_admin') {
+                alert('เฉพาะ Super Admin เท่านั้นที่สามารถใช้ Broadcast ได้');
+                return;
+            }
+            
+            if (!isBroadcastMode) {
+                alert('กรุณาเปิดใช้งาน Broadcast Mode ก่อน');
+                return;
+            }
+            
+            // Confirm broadcast action
+            const confirmResult = confirm(
+                '🚨 คำเตือน: คุณกำลังจะส่ง Broadcast Order ไปยังผู้ใช้ทุกคนที่มี role "broadcast"\n\n' +
+                'การกระทำนี้จะทำให้ผู้ใช้ทุกคนทำ order ตามเงื่อนไขที่คุณตั้งไว้\n\n' +
+                'คุณแน่ใจหรือไม่ที่จะดำเนินการต่อ?'
+            );
+            
+            if (!confirmResult) {
+                return;
+            }
+            
+            // Collect all form data
+            const orderData = {
+                symbol: document.getElementById('symbol').value,
+                entryPrice1: document.getElementById('entryPrice1').value,
+                stopLoss: document.getElementById('stopLoss').value,
+                portfolioSize: document.getElementById('portfolioSize').value,
+                riskPercent: document.getElementById('riskPercent').value
+            };
+            
+            // Add TP levels
+            const tpCount = parseInt(document.getElementById('tpCount').value);
+            for (let i = 1; i <= tpCount; i++) {
+                const tpValue = document.getElementById(`tp${i}`).value;
+                if (tpValue) {
+                    orderData[`tp${i}`] = tpValue;
+                }
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/broadcast_orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(
+                        `📡 Broadcast Order ส่งสำเร็จ!\n\n` +
+                        `🎯 ส่งไปยัง: ${result.target_users} คน\n` +
+                        `✅ ดำเนินการสำเร็จ: ${result.executed_successfully} คน\n` +
+                        `⏰ เวลา: ${new Date(result.timestamp).toLocaleString('th-TH')}`
+                    );
+                    
+                    // Auto refresh broadcast status
+                    setTimeout(checkBroadcastStatus, 1000);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'การส่ง Broadcast ล้มเหลว');
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+            }
+        }
+    </script>
+</body>
+</html>

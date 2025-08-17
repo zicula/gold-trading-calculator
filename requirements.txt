@@ -1,5 +1,0 @@
-Flask==2.3.3
-flask-cors==4.0.0
-# MetaTrader5==5.0.45  # Only available on Windows
-# For macOS/Linux development, we'll use mock implementation
-requests==2.31.0

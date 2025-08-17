@@ -1,344 +1,336 @@
-# 🟡 Gold Trading Calculator V5.1.1 - Binance Style (by Zic)
+# 🏆 Gold Trading Calculator - Multi-Account MT5 System
 
-เครื่องคำนวณการเทรดทองแบบครอบคลุม พร้อมระบบคำนวณ All In และ Risk Calculator สไตล์ Binance
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](./tests/)
+[![Docker Support](https://img.shields.io/badge/docker-supported-blue.svg)](./deploy/docker/)
+[![Security](https://img.shields.io/badge/security-jwt%20auth-green.svg)](#security)
+[![Testing](https://img.shields.io/badge/testing-comprehensive-orange.svg)](./TESTING_GUIDE.md)
 
-## 🎯 คุณสมบัติหลัก
+> **Professional Gold Trading Lot Calculator with Multi-Account MT5 Integration, Role-Based Authentication, and Advanced Risk Management**
 
-### 🚀 ฟีเจอร์ใหม่ V5.1.1 (Enhanced SL Display & Zone-Specific Risk Information)
+## 🌟 Overview
 
-#### 💰 **Enhanced Stop Loss Display**
-- **📊 Comprehensive SL Information** - แสดงยอด SL รวมในหน้าหลัก (SL: 2650.000 (All: -50.0$))
-- **🎯 Zone-Specific SL Breakdown** - แสดงยอด SL แยกตาม zone ใน section การกระจาย order
-  - Zone 1: 30% (SL Zone 1: -15.0$)
-  - Zone 2: 70% (SL Zone 2: -35.0$)
-- **📐 Compact Font Design** - ใช้ฟอนต์เล็กเพื่อไม่ให้ตกบรรทัดและ layout สะอาด
-- **🎨 Red Color Highlighting** - ใช้สีแดงสม่ำเสมอสำหรับข้อมูล SL ทั้งหมด
+The Gold Trading Calculator is a comprehensive trading system that combines precision lot size calculations with multi-account MetaTrader 5 integration. Built with security-first architecture, it supports multiple user roles, automated trade execution, and real-time market data integration.
 
-#### 🎨 **UI/UX Improvements**
-- **✨ Inline SL Display** - ข้อมูล SL ทั้งหมดอยู่บรรทัดเดียวกันพร้อม spacing ที่เหมาะสม
-- **📱 Responsive Font Sizing** - ปรับขนาดฟอนต์ (0.65rem หลัก, 0.55rem zones) สำหรับทุกอุปกรณ์
-- **🔧 Clean Layout** - ลบข้อความ "per order" ที่ซ้ำซ้อนเพื่อการแสดงผลที่สะอาด
-- **🎯 Visual Consistency** - รูปแบบการแสดงผลเหมือนกันทั้งหน้าหลักและ zone breakdowns
+### ✨ Key Features
 
-### 🚀 ฟีเจอร์ใหม่ V5.1.0 (Risk Calculator Enhancement & UI Improvements)
+- **🧮 Advanced Lot Calculator**: Precise position sizing for XAUUSD with multi-zone support
+- **🔐 Multi-Account MT5**: Manage multiple MetaTrader 5 accounts per user
+- **👥 Role-Based Access**: User, Broadcast, and Super Admin roles
+- **🚀 Docker Deployment**: Complete containerization with production setup
+- **🔒 JWT Authentication**: Secure API access with encrypted credentials
+- **📊 Real-Time Data**: Live price feeds and account synchronization
+- **🧪 Comprehensive Testing**: 60+ automated tests covering all functionality
+- **🌐 REST API**: Full-featured API for external integrations
 
-#### 🎯 **Risk Calculator Enhancements**
-- **💰 Profit Display in TP Levels** - แสดงกำไรแต่ละ TP level (เช่น TP1 +5.0 $)
-- **🎨 Enhanced Visual Design** - Highlight กำไรด้วยสีเขียวและพื้นหลัง
-- **🔧 Fixed Zone Calculation Logic** - แก้ไขการจัดลำดับ zone ให้ถูกต้อง:
-  - **Buy**: Zone เริ่มจากราคาสูง → ราคาต่ำ (3004 → 3000)
-  - **Sell**: Zone เริ่มจากราคาต่ำ → ราคาสูง (3000 → 3004)
-- **📐 Improved Column Width** - รองรับตัวเลข 4 หลักพร้อม 1 ทศนิยม
-- **🔄 Side-by-Side Zone Layout** - Zone แสดงแบบซ้าย-ขวาทุกขนาดหน้าจอ
+## 🏗️ Architecture
 
-#### 🎨 **UI/UX Improvements**
-- **✨ Clean Profit Display** - เอาวงเล็บออกจากกำไร เพื่อความอ่านง่าย
-- **🎯 Visual Highlighting** - เพิ่มพื้นหลังสีเขียวให้ตัวเลขกำไร
-- **📱 Mobile-First Layout** - Zone แสดงแนวนอนแม้ในหน้าจอ iPhone
-- **💻 Responsive Grid System** - ระบบ layout ยืดหยุ่นทุกขนาดหน้าจอ
-- **🔧 Fixed CSS Syntax** - แก้ไข CSS error เพื่อประสิทธิภาพที่ดีขึ้น
-- **⚖️ Percentage Allocation** - กำหนดสัดส่วนการแบ่งออเดอร์ (ค่าเริ่มต้น 30%/70%)
-- **📈 Multi-TP Support** - รองรับ Take Profit ถึง 6 เลเวล
-- **📋 Zone-Specific Analysis** - แสดง R:R และ Points แยกตามแต่ละโซน
-- **🧠 Smart Zone Logic** - จัดลำดับโซนอัตโนมัติตามทิศทางการเทรด
-
-#### 🧭 **Navigation System**
-- **🔗 Inter-Page Navigation** - เมนูสำหรับสลับระหว่าง All-In Calculator และ Risk Calculator
-- **🌐 Unified Language Switcher** - ปุ่มเปลี่ยนภาษาย้ายมาอยู่ในเมนูด้านขวา
-- **📱 Compact Menu Design** - ออกแบบให้ไม่ต้อง scroll แนวนอนในมือถือ
-- **🎨 Consistent UI/UX** - ระบบดีไซน์เดียวกันทั้ง 2 หน้า
-
-#### 🔧 **Technical Improvements**
-- **⚡ Corrected Zone Logic** - แก้ไขการคำนวณโซนราคาให้ถูกต้องตามทิศทางการเทรด
-  - **Buy**: เริ่มซื้อจากราคาสูง → ราคาต่ำ
-  - **Sell**: เริ่มขายจากราคาต่ำ → ราคาสูง
-- **📐 Enhanced Validation** - ปรับปรุงการตรวจสอบข้อมูลสำหรับ price range
-- **💾 Data Persistence** - บันทึกการตั้งค่าผู้ใช้ใน localStorage
-
-### 🚀 ฟีเจอร์ใหม่ V4.7.0 (Language Switcher)
-- **🌐 Multi-Language Support** - รองรับภาษาไทยและอังกฤษ
-- **🔄 Language Toggle** - ปุ่มเปลี่ยนภาษา TH/EN แบบเรียลไทม์
-- **💾 Language Persistence** - จำค่าภาษาที่เลือกไว้ใน localStorage
-- **📋 Complete Translation** - แปลทุกองค์ประกอบ UI อย่างครบถ้วน
-- **⚡ Instant Switch** - เปลี่ยนภาษาทันทีไม่ต้องรีโหลดหน้า
-
-### 🚀 ฟีเจอร์ใหม่ V4.6.1 (Statistics Tracking)
-- **📊 Usage Statistics** - ติดตามสถิติการใช้งานแบบเรียลไทม์
-- **👁️ Page Views** - นับยอดเข้าชมหน้าเว็บ
-- **👥 Unique Users** - ระบบนับผู้ใช้งานเฉพาะรายวัน
-- **💾 Local Storage** - บันทึกข้อมูลสถิติในเครื่อง
-- **🎨 Non-intrusive Display** - แสดงผลที่ไม่รบกวนเนื้อหาหลัก
-
-### 🚀 ฟีเจอร์ใหม่ V4.4 (Project Ownership & Enhanced Responsive)
-- **Project Branding** - เพิ่ม "by Zic" เพื่อแสดงความเป็นเจ้าของโปรเจ็กต์
-- **Enhanced Responsive Design** - ปรับปรุงการแสดงผลทุกขนาดหน้าจอ
-- **Better User Experience** - ปรับปรุงประสบการณ์ผู้ใช้โดยรวม
-- **Professional Branding** - เพิ่มการแสดงผล branding ที่เหมาะสม
-
-### 🚀 ฟีเจอร์ใหม่ V4.3 (Enhanced Card Display)
-- **Pips Display** - แสดงค่า Pips ใต้ราคา SL/TP ด้วยสีเหลืองเหมือน Lot Size
-- **Improved Card Layout** - การจัดวางข้อมูลชัดเจนขึ้น
-- **Enhanced Visual Hierarchy** - ข้อมูลสำคัญเด่นชัดกว่าเดิม
-- **Mobile Card Optimization** - การ์ดขนาดเหมาะสมสำหรับ iPhone 14 Pro Max
-
-### 🚀 ฟีเจอร์ใหม่ V4.2 (Enhanced UX & Responsive)
-- **ปุ่มเพิ่มการ์ด** - เพิ่มการ์ดจากการคำนวณปัจจุบันเป็นการ์ดถาวร
-- **ระบบบันทึกการ์ด** - บันทึกการคำนวณที่ต้องการไว้ใช้ในอนาคต
-- **การแสดงผลแบบแยกบรรทัด** - กำไร/ขาดทุนแสดงแยกบรรทัดพร้อมสีที่ชัดเจน
-- **Responsive Cards Grid** - การ์ดแสดงผลเหมาะสมทุกขนาดหน้าจอ
-- **Mobile Optimized** - การ์ดแสดง 2 ใบต่อแถวบนมือถือ
-
-### 🎨 การออกแบบ Responsive
-- **📱 Mobile (iPhone 14 Pro Max)**: 2 การ์ดต่อแถว, UI ขนาดกะทัดรัด
-- **📲 Tablet**: 2-3 การ์ดต่อแถว, เลย์เอาต์ 2 คอลัมน์
-- **💻 Desktop**: 3-4 การ์ดต่อแถว, เลย์เอาต์ Calculator + Results
-- **🖥️ Large Desktop**: 4+ การ์ดต่อแถว, เลย์เอาต์กว้างขวาง
-
-### ✨ ฟีเจอร์หลัก V4.1 (RR Management)
-- **เรียงลำดับการ์ดตาม RR** - การ์ดจัดเรียงตามลำดับ RR checkbox
-- **TP Auto-RR Creation** - กรอก TP แล้วสร้าง RR อัตโนมัติเป็นลำดับแรก
-- **Reset RR เป็น Default** - กด "คำนวณ" จะ reset RR เป็น 1:1, 1:2, 1:3, 1:10
-- **Color Coding** - เขียวสำหรับกำไร, แดงสำหรับขาดทุน, เหลืองสำหรับเน้น
-
-### 🔥 ฟีเจอร์หลัก V4.0 (Binance Style)
-- **Binance Dark Theme** - ธีมสีดำสไตล์ Binance พร้อมสีมาตรฐาน
-- **คำนวณอัตโนมัติ** - ไม่ต้องกดปุ่ม เมื่อกรอกข้อมูลครบจะคำนวณทันที
-- **การจัดการ RR แบบ Checkbox** - เลือก RR ที่ต้องการได้หลายตัวพร้อมกัน
-- **ลบ RR และ Card** - ลบ RR ที่ไม่ต้องการ การ์ดจะหายไปด้วย
-- **SL ยืดหยุ่น** - รองรับการใส่ Stop Loss แบบ Pips หรือ ราคาโดยตรง
-- **Local Storage** - บันทึกข้อมูลอัตโนมัติ ไม่ต้องกรอกใหม่
-
-## 📱 การออกแบบ Binance Style
-
-### เพิ่มประสิทธิภาพสำหรับ iPhone 14 Pro Max
-- **ขนาดหน้าจอ**: 390x844px viewport
-- **Theme**: Binance Dark Theme (#0B0E11, #1E2329, #F0B90B)
-- **ฟอนต์**: Inter (Binance Standard Font)
-- **สี**: Binance Color Palette (เหลือง=เน้น, เขียว=กำไร, แดง=ขาดทุน)
-- **การใช้งาน**: Touch-optimized interface สไตล์ Binance
-
-## 🛠️ วิธีการใช้งาน
-
-### 1. ข้อมูลพื้นฐาน
 ```
-1. ทุน (Capital) - ใส่จำนวนเงินทุนใน USD
-2. ราคาเข้า (Entry Price) - ใส่ราคาทองที่ต้องการเข้า
-3. ทิศทางการเทรด - เลือก BUY หรือ SELL
+Gold Trading Calculator
+├── Frontend (HTML/CSS/JS)
+│   ├── Lot Calculator Interface
+│   ├── Multi-Account Dashboard
+│   └── Admin Broadcast System
+├── Backend (Flask/Python)
+│   ├── JWT Authentication
+│   ├── MT5 Integration
+│   ├── Role Management
+│   └── Encrypted Storage
+├── Database (SQLite)
+│   ├── Users & Roles
+│   ├── MT5 Accounts
+│   ├── Trading Sessions
+│   └── Audit Logs
+└── Deployment
+    ├── Docker Containers
+    ├── Nginx Proxy
+    └── Automated Testing
 ```
 
-### 2. การตั้ง Stop Loss
-```
-- เลือกประเภท: Pips หรือ ราคา
-- Pips: ใส่จำนวน Pips (เช่น 200)
-- ราคา: ใส่ราคา SL โดยตรง (เช่น 2560.00)
-```
+## 🚀 Quick Start
 
-### 3. Quick RR Selection
-```
-- เลือก RR ที่ต้องการจากปุ่ม (1:1, 1:2, 1:3, 1:5)
-- เพิ่ม RR ใหม่: ใส่ตัวเลขแล้วกด "เพิ่ม RR"
-- ลบ RR: hover บนปุ่ม RR แล้วกด X
-- เรียง RR: ลากปุ่ม RR เพื่อเปลี่ยนลำดับ
-```
+### Option 1: Docker Deployment (Recommended)
 
-### 4. ผลลัพธ์
-```
-แสดงเป็น Card แต่ละ RR ประกอบด้วย:
-- Signal Type (BUY/SELL)
-- RR Ratio (แสดงชัดเจน)
-- Lot Size (ไฮไลท์)
-- Entry Price (ไฮไลท์)
-- Stop Loss (ไฮไลท์)
-- Take Profit (ไฮไลท์)
-- Profit/Loss คาดหวัง
-```
-
-## � Quick Deployment Guide
-
-### 🌐 Live Demo
-- **Production**: https://zicula.github.io/gold-trading-calculator/all_in_calculator_v4.html
-- **V4 Calculator**: https://zicula.github.io/gold-trading-calculator/all_in_calculator_v4.html
-- **Direct V4 Link**: https://zicula.github.io/gold-trading-calculator/all_in_calculator_v4.html
-- **Repository**: https://github.com/zicula/gold-trading-calculator
-- **Author**: Zic Trading
-
-### ⚡ One-Click Deployment
 ```bash
-# Run the automated deployment script
-./deploy.sh
+# Clone the repository
+git clone https://github.com/zicula/gold-trading-calculator.git
+cd gold-trading-calculator
+
+# Build and run with Docker
+docker build -f deploy/docker/Dockerfile.simple -t gold-trading-calc .
+docker run -d -p 8080:8080 --name gold-calc gold-trading-calc
+
+# Or use Docker Compose for full stack
+docker-compose -f deploy/docker/docker-compose.yml up -d
 ```
 
-### 🔧 Manual Deployment Steps
+### Option 2: Local Development
+
 ```bash
-# 1. Initialize Git & Push to GitHub
-git init
-git add .
-git commit -m "🚀 Gold Trading Calculator V4 by Zic"
-git remote add origin https://github.com/zicula/gold-trading-calculator.git
-git push -u origin main
+# Setup Python environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# 2. Deploy to Vercel (Free & Fast)
-npm install -g vercel
-vercel login
-vercel --prod
+# Install dependencies
+pip install -r backend/requirements.txt
 
-# 3. Deploy to Netlify (Alternative)
-npm install -g netlify-cli
-netlify login
-netlify deploy --prod --dir=.
+# Run the application
+python backend/app.py
 ```
 
-### 📱 Access URLs
-- **Main App**: `/all_in_calculator_v4.html` 
-- **Landing Page**: `/index.html`
-- **Direct Calculator**: `/calculator` (redirect)
+### Access the Application
 
-## �🔧 การติดตั้งและใช้งาน
+- **Web Interface**: http://localhost:8080
+- **API Documentation**: http://localhost:8080/api/status
+- **Health Check**: http://localhost:8080/api/status
 
-### วิธีที่ 1: ใช้งานท้องถิ่น (Local)
+## 📋 API Overview
+
+### Authentication Endpoints
+
 ```bash
-# วิธีที่ 1: Python HTTP Server
-cd /path/to/Gold_Trading_Calculator
-python3 -m http.server 8080
+# Register new user
+POST /api/register
+{
+  "username": "trader1",
+  "email": "trader1@example.com", 
+  "password": "SecurePass123!"
+}
 
-# วิธีที่ 2: Node.js
-npx serve . -p 8080
-
-# แล้วเปิด: http://localhost:8080/all_in_calculator_v3.html
+# Login
+POST /api/login
+{
+  "username": "trader1",
+  "password": "SecurePass123!"
+}
 ```
 
-### วิธีที่ 2: เปิดไฟล์โดยตรง
-```
-1. ดับเบิลคลิกที่ไฟล์ all_in_calculator_v3.html
-2. จะเปิดในเบราว์เซอร์โดยตรง
-3. ใช้งานได้ทันที (บางฟีเจอร์อาจจำกัด)
-```
+### MT5 Account Management
 
-## 📊 สูตรการคำนวณ
+```bash
+# Add MT5 account
+POST /api/accounts
+Authorization: Bearer <token>
+{
+  "account_name": "Live Account 1",
+  "login": "12345678",
+  "password": "mt5password",
+  "server": "MetaQuotes-Demo"
+}
 
-### All In Calculation
-```javascript
-// ระยะห่าง SL ในหน่วย USD
-stopDistanceUSD = Math.abs(entryPrice - stopLossPrice)
-
-// Lot Size (ใช้เงินทุนทั้งหมด)
-lotSize = capital / (contractSize * stopDistanceUSD)
-
-// where: contractSize = 100 oz, pipValue = 0.01
+# Connect to MT5
+POST /api/accounts/<id>/connect
+Authorization: Bearer <token>
 ```
 
-### การแปลง Pips เป็นราคา
-```javascript
-// BUY: SL ต่ำกว่า Entry
-stopLossPrice = entryPrice - (stopLossPips / 100)
+### Trading Calculations
 
-// SELL: SL สูงกว่า Entry  
-stopLossPrice = entryPrice + (stopLossPips / 100)
+```bash
+# Calculate lot size
+POST /api/calculate
+Authorization: Bearer <token>
+{
+  "symbol": "XAUUSD",
+  "entryPrice1": "2000",
+  "stopLoss": "1990", 
+  "portfolioSize": "10000",
+  "riskPercent": "2"
+}
 ```
 
-### การคำนวณ Take Profit
-```javascript
-// TP Pips = SL Pips × RR Ratio
-takeProfitPips = stopLossPips * rrRatio
+## 🔒 Security Features
 
-// BUY: TP สูงกว่า Entry
-takeProfitPrice = entryPrice + (takeProfitPips / 100)
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Access Control**: User, Broadcast, Super Admin roles
+- **Password Encryption**: bcrypt with salt rounds
+- **API Key Management**: Unique encrypted API keys per user
+- **Audit Logging**: Complete audit trail of all activities
+- **Rate Limiting**: Protection against API abuse
+- **CORS Configuration**: Secure cross-origin resource sharing
 
-// SELL: TP ต่ำกว่า Entry
-takeProfitPrice = entryPrice - (takeProfitPips / 100)
+## 🧪 Testing
+
+Run comprehensive automated tests:
+
+```bash
+# Quick test (5 minutes)
+./tests/quick_test.sh
+
+# Full test suite (60+ tests)
+./tests/run_tests.sh
+
+# Frontend testing
+# Follow guide in tests/FRONTEND_TESTING_CHECKLIST.md
 ```
 
-## 📈 ข้อมูลการเทรดทอง
+### Test Coverage
 
-| พารามิเตอร์ | ค่า |
-|------------|-----|
-| Contract Size | 100 oz/lot |
-| Pip Value | $0.01 |
-| Minimum Trade | 0.01 lot |
-| Typical Spread | 3-5 pips |
-| Trading Hours | 24/5 |
+- ✅ **Authentication**: Registration, login, JWT validation
+- ✅ **Authorization**: Role-based access control
+- ✅ **MT5 Integration**: Account management, connections
+- ✅ **Calculations**: Lot sizing, risk management
+- ✅ **Security**: Input validation, injection prevention
+- ✅ **Performance**: Load testing, response times
 
-## 💡 ตัวอย่างการใช้งาน
+## 🌐 Deployment Options
 
-### ตัวอย่าง 1: BUY Gold
-```
-ทุน: $1,000
-Entry: $2,560.50
-SL: 200 pips (2,558.50)
-RR: 1:2
+### 1. Production Docker (Recommended)
 
-ผลลัพธ์:
-- Lot Size: 0.50
-- TP: $2,564.50 (400 pips)
-- กำไรคาดหวัง: $2,000
-```
+```bash
+# Production deployment with full stack
+docker-compose -f deploy/docker/docker-compose.yml up -d
 
-### ตัวอย่าง 2: SELL Gold
-```
-ทุน: $500
-Entry: $2,580.00
-SL: $2,585.00 (500 pips)
-RR: 1:3
-
-ผลลัพธ์:
-- Lot Size: 0.20
-- TP: $2,565.00 (1,500 pips)
-- กำไรคาดหวัง: $1,500
+# Includes:
+# - Flask application
+# - Redis cache
+# - Nginx reverse proxy
+# - Automated backups
 ```
 
-## ⚠️ คำเตือนและข้อควรระวัง
+### 2. DigitalOcean VPS
 
-### 🚨 คำเตือนสำคัญ
-- **การเทรด All In มีความเสี่ยงสูงมาก**
-- อาจสูญเสียเงินทุนทั้งหมดได้
-- ควรทดสอบด้วย Demo Account ก่อน
-- เข้าใจกลยุทธ์และบริหารความเสี่ยงให้ดี
+Follow the [DigitalOcean Setup Guide](./docs/guides/DIGITALOCEAN_SETUP_GUIDE.md)
 
-### 📱 การใช้งานบนมือถือ
-- รองรับการสัมผัสและการลาก
-- ออกแบบเฉพาะสำหรับ iPhone 14 Pro Max
-- ใช้งานได้บนอุปกรณ์อื่นๆ ด้วย
+### 3. Local Development Server
 
-### 🔧 การแก้ไขปัญหา
-- ใช้เบราว์เซอร์ที่ทันสมัย (Chrome, Safari, Firefox)
-- เปิดใช้งาน JavaScript
-- ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต (สำหรับฟอนต์และไอคอน)
-
-## 📂 ไฟล์ในโปรเจค
-
-```
-Gold_Trading_Calculator/
-├── all_in_calculator_v3.html     # ไฟล์หลัก (เวอร์ชั่นล่าสุด)
-├── all_in_calculator_v2.html     # เวอร์ชั่นก่อนหน้า
-├── all_in_calculator.html        # เวอร์ชั่นแรก
-├── README.md                     # ไฟล์นี้
-├── PROMPT_HISTORY.md            # ประวัติการพัฒนา
-└── CHANGELOG.md                 # บันทึกการเปลี่ยนแปลง
+```bash
+# Development mode with hot reload
+export FLASK_ENV=development
+python backend/app.py
 ```
 
-## 🔄 การอัปเดต
+## 📖 Documentation
 
-### เวอร์ชั่นปัจจุบัน: V3.0
-- ระบบคำนวณอัตโนมัติ
-- การจัดการ RR และ Card ที่ดีขึ้น
-- UI/UX ที่เหมาะกับมือถือมากขึ้น
+- **[Getting Started Guide](./docs/guides/GETTING_STARTED.md)** - Complete setup instructions
+- **[Testing Guide](./TESTING_GUIDE.md)** - Comprehensive testing methodology
+- **[Deployment Guide](./docs/guides/DEPLOYMENT_GUIDE.md)** - Production deployment
+- **[API Reference](./docs/api/)** - Complete API documentation
+- **[Security Guide](./docs/guides/SECURITY.md)** - Security best practices
 
-### เวอร์ชั่นถัดไป: V4.0 (แผน)
-- การเชื่อมต่อ API ราคาทองเรียลไทม์
-- การบันทึกประวัติการคำนวณ
-- การส่งออกข้อมูลเป็น PDF
-- Multi-language support
+## 🔧 Configuration
 
-## 📞 การติดต่อและสนับสนุน
+### Environment Variables
 
-- **เป้าหมาย**: สำหรับนักเทรดมืออาชีพ
-- **กลยุทธ์**: "เทรดสั้น All In 1,000 เด้ง"
-- **พัฒนาโดย**: GitHub Copilot AI Assistant
-- **วันที่พัฒนา**: กรกฎาคม 2025
+```bash
+# Security
+export SECRET_KEY="your-secret-key"
+export JWT_SECRET_KEY="your-jwt-secret"
+export ENCRYPTION_KEY="your-encryption-key"
+
+# Database
+export DATABASE_PATH="trading_accounts.db"
+
+# CORS
+export CORS_ORIGINS="https://yourdomain.com"
+
+# Rate Limiting
+export API_RATE_LIMIT="100"  # requests per hour
+export SESSION_TIMEOUT="24"  # hours
+```
+
+### Database Configuration
+
+The system uses SQLite by default with the following tables:
+
+- `users` - User accounts and roles
+- `mt5_accounts` - MetaTrader 5 account credentials
+- `trading_sessions` - Active trading sessions
+- `audit_log` - Security and activity audit trail
+- `broadcast_queue` - Admin broadcast messages
+
+## 🎯 Use Cases
+
+### Individual Traders
+- Calculate optimal lot sizes for gold trading
+- Manage multiple MT5 accounts
+- Track trading performance
+
+### Trading Firms
+- Multi-user environment with role management
+- Centralized MT5 account management
+- Broadcast system for firm-wide communications
+
+### Educational Institutions
+- Teaching risk management concepts
+- Demonstrating lot size calculations
+- Safe environment for practice trading
+
+## 🔄 Changelog
+
+### Version 2.0.0 (Current)
+- ✅ Multi-account MT5 integration
+- ✅ JWT authentication system
+- ✅ Role-based access control
+- ✅ Docker containerization
+- ✅ Comprehensive testing framework
+- ✅ Production-ready security
+
+### Version 1.0.0
+- ✅ Basic lot size calculator
+- ✅ XAUUSD trading support
+- ✅ Risk management calculations
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Run tests: `./tests/run_tests.sh`
+4. Commit changes: `git commit -am 'Add new feature'`
+5. Push to branch: `git push origin feature/new-feature`
+6. Submit a Pull Request
+
+### Development Guidelines
+
+- Follow Python PEP 8 style guide
+- Add tests for new features
+- Update documentation
+- Maintain security best practices
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**MetaTrader 5 Connection Fails**
+```bash
+# Check MT5 is running and Auto Trading is enabled
+# Verify server settings and credentials
+# Check firewall settings for port 8080
+```
+
+**Docker Build Fails**
+```bash
+# Use simplified Dockerfile for development
+docker build -f deploy/docker/Dockerfile.simple -t gold-calc .
+```
+
+**Authentication Issues**
+```bash
+# Check JWT token validity
+# Verify CORS settings
+# Clear browser cache and cookies
+```
+
+## 📞 Support
+
+- **Documentation**: [Full Documentation](./docs/)
+- **Issues**: [GitHub Issues](https://github.com/zicula/gold-trading-calculator/issues)
+- **Testing**: [Testing Guide](./TESTING_GUIDE.md)
+- **Deployment**: [Deployment Guides](./docs/guides/)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🎖️ Acknowledgments
+
+- MetaQuotes for MetaTrader 5 platform
+- Flask community for the web framework
+- Docker for containerization support
+- All contributors and testers
 
 ---
 
-**⚡ All In Gold Trading Calculator V3**  
-*Money Management Tool for Professional Gold Traders*
+**⚠️ Disclaimer**: This software is for educational and professional trading purposes. Always use proper risk management and test thoroughly before live trading.
 
-**🚀 "เทรดให้รวย คิดให้รอบคอบ วางแผนให้ดี"**
+**🔒 Security Note**: Never commit real trading credentials to version control. Use environment variables for sensitive data.
+
+**📈 Trading Note**: Past performance does not guarantee future results. Trade responsibly and within your risk tolerance.

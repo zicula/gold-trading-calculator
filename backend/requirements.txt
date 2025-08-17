@@ -1,0 +1,26 @@
+# Backend server requirements for Multi-Account MT5 Trading System
+
+# Core web framework
+Flask==2.3.3
+flask-cors==4.0.0
+
+# Security and authentication
+PyJWT==2.8.0
+bcrypt==4.0.1
+cryptography==41.0.4
+Werkzeug==2.3.7
+
+# Database
+# sqlite3 is built into Python, no need to install
+
+# MT5 Integration (Windows only)
+MetaTrader5==5.0.45
+
+# Utilities
+python-dotenv==1.0.0
+gunicorn==21.2.0  # Production WSGI server
+
+# Development and testing
+pytest==7.4.2
+pytest-flask==1.2.0
+requests==2.31.0  # For testing API calls

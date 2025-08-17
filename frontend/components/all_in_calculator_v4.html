@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>🟡 Gold Trading Calculator V4 - Binance Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Binance Color Palette */
+            --binance-yellow: #F0B90B;
+            --binance-dark: #0B0E11;
+            --binance-dark-2: #1E2329;
+            --binance-dark-3: #2B3139;
+            --binance-gray: #474D57;
+            --binance-light-gray: #848E9C;
+            --binance-white: #FFFFFF;
+            --binance-green: #0ECB81;
+            --binance-red: #F6465D;
+            --binance-blue: #1E88E5;
+            --binance-bg: #0B0E11;
+            --binance-card: #1E2329;
+            --binance-border: #2B3139;
+            --binance-hover: #2B3139;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--binance-bg);
+            min-height: 100vh;
+            color: var(--binance-white);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--binance-bg);
+            min-height: 100vh;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            background: var(--binance-card);
+            border-bottom: 1px solid var(--binance-border);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .nav-item {
+            flex-shrink: 0;
+            padding: 6px 12px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--binance-white);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            background: var(--binance-hover);
+            border-color: var(--binance-yellow);
+        }
+
+        .nav-item.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            /* iPad and larger */
+            .container {
+                max-width: 800px;
+                padding: 0 20px;
+            }
+            
+            .calculator-body {
+                padding: 24px;
+            }
+            
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            /* Results grid for tablet */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 16px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+            }
+        }
+
+        /* Mobile responsive grid for cards */
+        @media (max-width: 767px) {
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+            
+            .trade-card .card-header {
+                margin-bottom: 12px;
+                padding-bottom: 8px;
+            }
+            
+            .trade-card .signal-type {
+                font-size: 0.9rem;
+            }
+            
+            .trade-card .rr-display {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .trade-card .info-row {
+                gap: 8px;
+            }
+            
+            .trade-card .info-item {
+                padding: 8px;
+            }
+            
+            .trade-card .info-label {
+                font-size: 0.7rem;
+            }
+            
+            .trade-card .info-value {
+                font-size: 0.8rem;
+            }
+            
+            .trade-card .profit-item {
+                font-size: 1rem;
+                padding: 6px 8px;
+                margin-bottom: 6px;
+            }
+            
+            .trade-card .delete-card-btn {
+                padding: 4px 6px;
+                font-size: 0.7rem;
+            }
+            
+            .trade-card .card-footer small {
+                font-size: 0.65rem;
+            }
+            
+            /* Compact input section for mobile */
+            .input-section {
+                padding: 16px;
+            }
+            
+            .input-group {
+                margin-bottom: 12px;
+            }
+            
+            .input-label {
+                font-size: 0.85rem;
+                margin-bottom: 6px;
+            }
+            
+            .input-field {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .calculate-buttons {
+                gap: 8px;
+            }
+            
+            .calculate-btn, .add-card-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            /* PC and desktop */
+            .container {
+                max-width: 1200px;
+                padding: 0 40px;
+            }
+            
+            .calculator-body {
+                padding: 32px;
+            }
+            
+            .main-content {
+                grid-template-columns: 400px 1fr;
+                gap: 32px;
+            }
+            
+            .header {
+                padding: 24px 40px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-section {
+                padding: 24px;
+            }
+            
+            .input-field {
+                padding: 14px 18px;
+                font-size: 16px;
+            }
+            
+            /* Desktop cards grid */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 20px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            /* Large desktop */
+            .container {
+                max-width: 1400px;
+            }
+            
+            .main-content {
+                grid-template-columns: 450px 1fr;
+                gap: 40px;
+            }
+            
+            /* Large desktop cards grid */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 24px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+                padding: 24px;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--binance-yellow) 0%, #FFC107 100%);
+            padding: 20px;
+            text-align: center;
+            color: var(--binance-dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(240, 185, 11, 0.3);
+            position: relative;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            padding: 4px 8px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 12px;
+            color: var(--binance-white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .lang-btn:hover {
+            background: var(--binance-hover);
+            border-color: var(--binance-yellow);
+        }
+
+        .lang-btn.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .header p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .auto-status {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--binance-green);
+            font-weight: 500;
+        }
+
+        .auto-status.calculating {
+            color: var(--binance-yellow);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .calculator-body {
+            padding: 16px;
+        }
+
+        .main-content {
+            /* Mobile first - single column */
+            display: block;
+        }
+
+        .calculator-section {
+            width: 100%;
+        }
+
+        .results-wrapper {
+            width: 100%;
+        }
+
+        .input-section {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--binance-white);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--binance-border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--binance-yellow);
+            box-shadow: 0 0 0 2px rgba(240, 185, 11, 0.2);
+        }
+
+        .input-field::placeholder {
+            color: var(--binance-light-gray);
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--binance-light-gray);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .type-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--binance-border);
+            border-radius: 6px;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .type-btn:hover {
+            border-color: var(--binance-yellow);
+            background: var(--binance-hover);
+        }
+
+        .type-btn input {
+            display: none;
+        }
+
+        .type-btn input:checked + span {
+            color: var(--binance-dark);
+            background: var(--binance-yellow);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .rr-section {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .rr-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .custom-rr-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--binance-border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--binance-dark-2);
+            color: var(--binance-white);
+        }
+
+        .custom-rr-input:focus {
+            outline: none;
+            border-color: var(--binance-yellow);
+        }
+
+        .add-rr-btn {
+            padding: 10px 16px;
+            background: var(--binance-green);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-rr-btn:hover {
+            background: #0BB871;
+            transform: translateY(-1px);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--binance-yellow) 0%, #FFC107 100%);
+            color: var(--binance-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(240, 185, 11, 0.3);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #FFC107 0%, var(--binance-yellow) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(240, 185, 11, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(240, 185, 11, 0.2);
+        }
+
+        .calculate-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .calculate-buttons .calculate-btn {
+            flex: 1;
+        }
+
+        .add-card-btn {
+            flex: 1;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--binance-green) 0%, #0BB871 100%);
+            color: var(--binance-white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(14, 203, 129, 0.3);
+        }
+
+        .add-card-btn:hover {
+            background: linear-gradient(135deg, #0BB871 0%, var(--binance-green) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(14, 203, 129, 0.4);
+        }
+
+        .add-card-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(14, 203, 129, 0.2);
+        }
+
+        .rr-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .rr-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--binance-white);
+            user-select: none;
+        }
+
+        .rr-btn:hover {
+            border-color: var(--binance-yellow);
+            background: var(--binance-hover);
+        }
+
+        .rr-btn.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        .rr-delete-btn {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 16px;
+            height: 16px;
+            background: var(--binance-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 8px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .rr-btn:hover .rr-delete-btn {
+            display: flex;
+        }
+
+        .rr-checkbox {
+            margin-right: 4px;
+            accent-color: var(--binance-yellow);
+        }
+
+        .trade-card {
+            background: var(--binance-card);
+            border: 1px solid var(--binance-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            transition: all 0.3s ease;
+        }
+
+        .trade-card:hover {
+            border-color: var(--binance-yellow);
+            box-shadow: 0 4px 12px rgba(240, 185, 11, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--binance-border);
+        }
+
+        .signal-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .signal-type.buy { color: var(--binance-green); }
+        .signal-type.sell { color: var(--binance-red); }
+
+        .rr-display {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .key-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .info-item {
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .info-item.highlight {
+            border-color: var(--binance-yellow);
+            background: rgba(240, 185, 11, 0.1);
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--binance-white);
+        }
+
+        .info-value.lot-size {
+            color: var(--binance-yellow);
+            font-size: 1.2rem;
+        }
+
+        .info-value.entry-price {
+            color: var(--binance-blue);
+        }
+
+        .info-value.tp-price {
+            color: var(--binance-green);
+        }
+
+        .info-value.sl-price {
+            color: var(--binance-red);
+        }
+
+        .price-with-pips {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .pips-display {
+            font-size: 0.7rem;
+            color: var(--binance-yellow);
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .profit-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .profit-label {
+            font-size: 0.8rem;
+            color: var(--binance-light-gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .profit-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .profit-value.positive {
+            color: var(--binance-green);
+        }
+
+        .profit-value.negative {
+            color: var(--binance-red);
+        }
+
+        .profit-item {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .profit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .profit-item.positive {
+            color: var(--binance-green);
+            background: rgba(14, 203, 129, 0.1);
+            border: 1px solid rgba(14, 203, 129, 0.3);
+        }
+
+        .profit-item.negative {
+            color: var(--binance-red);
+            background: rgba(246, 70, 93, 0.1);
+            border: 1px solid rgba(246, 70, 93, 0.3);
+        }
+
+        .positive {
+            color: var(--binance-green);
+        }
+
+        .negative {
+            color: var(--binance-red);
+        }
+
+        .saved-card {
+            border-left: 4px solid var(--binance-green);
+            background: linear-gradient(135deg, var(--binance-card) 0%, rgba(14, 203, 129, 0.05) 100%);
+        }
+
+        .delete-card-btn {
+            background: var(--binance-red);
+            color: var(--binance-white);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .delete-card-btn:hover {
+            background: #E53E3E;
+            transform: scale(1.05);
+        }
+
+        .card-footer {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--binance-border);
+            text-align: center;
+        }
+
+        .card-footer small {
+            color: var(--binance-light-gray);
+            font-size: 0.75rem;
+        }
+
+        .profit-item {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .profit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .profit-item.positive {
+            color: var(--binance-green);
+            background: rgba(14, 203, 129, 0.1);
+            border: 1px solid rgba(14, 203, 129, 0.3);
+        }
+
+        .profit-item.negative {
+            color: var(--binance-red);
+            background: rgba(246, 70, 93, 0.1);
+            border: 1px solid rgba(246, 70, 93, 0.3);
+        }
+
+        .warning-box {
+            background: rgba(246, 70, 93, 0.1);
+            border: 1px solid var(--binance-red);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            text-align: center;
+            color: var(--binance-red);
+            font-size: 0.85rem;
+        }
+
+        .error-message {
+            background: rgba(246, 70, 93, 0.1);
+            border: 1px solid var(--binance-red);
+            color: var(--binance-red);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        
+        /* Mobile Devices (up to 430px) */
+        @media (max-width: 430px) {
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .header {
+                padding: 14px;
+            }
+
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            .header p {
+                font-size: 0.75rem;
+            }
+
+            .auto-status {
+                margin: 12px;
+                padding: 10px 14px;
+                font-size: 0.8rem;
+            }
+
+            .calculator-body {
+                padding: 10px;
+            }
+
+            .input-section, .rr-section {
+                padding: 14px;
+                margin-bottom: 12px;
+                border-radius: 10px;
+            }
+
+            .input-group {
+                margin-bottom: 12px;
+            }
+
+            .input-label {
+                font-size: 0.8rem;
+                margin-bottom: 6px;
+                gap: 6px;
+            }
+
+            .input-field {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+                border-radius: 6px;
+            }
+
+            .type-buttons {
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+
+            .type-btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+                border-radius: 4px;
+            }
+
+            .calculate-buttons {
+                gap: 8px;
+            }
+
+            .calculate-btn, .add-card-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                border-radius: 6px;
+            }
+
+            .rr-controls {
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+
+            .custom-rr-input {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+                border-radius: 4px;
+            }
+
+            .add-rr-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+                border-radius: 4px;
+            }
+
+            .rr-buttons {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            .rr-btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+                border-radius: 4px;
+            }
+
+            /* Mobile: 2 cards per row - optimized for iPhone 14 Pro Max */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+                font-size: 0.8rem;
+                padding: 12px;
+            }
+            
+            .trade-card .card-header {
+                margin-bottom: 8px;
+                padding-bottom: 6px;
+            }
+            
+            .trade-card .signal-type {
+                font-size: 0.8rem;
+                gap: 4px;
+            }
+            
+            .trade-card .rr-display {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            
+            .trade-card .key-info {
+                gap: 8px;
+            }
+            
+            .trade-card .info-row {
+                gap: 6px;
+            }
+            
+            .trade-card .info-item {
+                padding: 8px;
+            }
+            
+            .trade-card .info-label {
+                font-size: 0.65rem;
+                margin-bottom: 2px;
+            }
+            
+            .trade-card .info-value {
+                font-size: 0.85rem;
+            }
+            
+            .trade-card .profit-section {
+                margin-top: 8px;
+                padding: 8px;
+            }
+            
+            .trade-card .profit-item {
+                font-size: 0.9rem;
+                padding: 6px;
+                margin-bottom: 4px;
+            }
+            
+            .trade-card .card-footer {
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+            
+            .trade-card .delete-card-btn {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+            }
+        }
+
+        /* Tablet - Portrait (431px to 768px) */
+        @media (min-width: 431px) and (max-width: 768px) {
+            .container {
+                max-width: 600px;
+                margin: 20px auto;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+
+            .header {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .calculator-body {
+                padding: 24px;
+            }
+
+            .input-section, .rr-section {
+                padding: 24px;
+                margin-bottom: 20px;
+            }
+
+            .rr-buttons {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+
+            .trade-card {
+                padding: 24px;
+                margin-bottom: 16px;
+            }
+
+            .detail-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            /* Tablet Portrait: 3 cards per row */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0;
+                font-size: 0.9rem;
+            }
+            
+            .trade-card .info-value {
+                font-size: 0.95rem;
+            }
+            
+            .trade-card .profit-item {
+                font-size: 1.1rem;
+                padding: 8px 10px;
+            }
+        }
+
+        /* Tablet - Landscape & Small Desktop (769px to 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 800px;
+                margin: 30px auto;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            }
+
+            .header {
+                padding: 32px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .calculator-body {
+                padding: 32px;
+            }
+
+            .input-section, .rr-section {
+                padding: 28px;
+                margin-bottom: 24px;
+            }
+
+            .rr-buttons {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 16px;
+            }
+
+            .trade-card {
+                padding: 28px;
+                margin-bottom: 20px;
+            }
+
+            .detail-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            /* Two-column layout for larger tablets */
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+
+            .calculator-section {
+                grid-column: 1;
+            }
+
+            .results-section {
+                grid-column: 2;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0; /* Remove margin when in grid */
+                font-size: 0.95rem;
+            }
+            
+            .trade-card .info-value {
+                font-size: 1rem;
+            }
+            
+            .trade-card .profit-item {
+                font-size: 1.15rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Desktop (1025px and up) */
+        @media (min-width: 1025px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                border-radius: 24px;
+                overflow: hidden;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            }
+
+            .header {
+                padding: 40px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .calculator-body {
+                padding: 40px;
+            }
+
+            /* Desktop Layout - Side by Side */
+            .main-content {
+                display: grid;
+                grid-template-columns: 450px 1fr;
+                gap: 40px;
+                align-items: start;
+            }
+
+            .calculator-section {
+                grid-column: 1;
+                position: sticky;
+                top: 20px;
+            }
+
+            .results-section {
+                grid-column: 2;
+                max-height: 80vh;
+                overflow-y: auto;
+                padding-right: 16px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0; /* Remove margin when in grid */
+            }
+
+            .input-section, .rr-section {
+                padding: 32px;
+                margin-bottom: 24px;
+            }
+
+            .rr-buttons {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+
+            .trade-card {
+                padding: 32px;
+                margin-bottom: 24px;
+            }
+
+            .detail-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+
+            /* Enhanced hover effects for desktop */
+            .input-field:hover {
+                border-color: var(--binance-yellow);
+                transform: translateY(-1px);
+            }
+
+            .rr-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px rgba(240, 185, 11, 0.2);
+            }
+
+            .trade-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Large Desktop (1440px and up) */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+
+            .main-content {
+                grid-template-columns: 500px 1fr;
+                gap: 60px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            /* Results grid for large desktop */
+            .results-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 24px;
+                grid-auto-rows: max-content;
+            }
+            
+            .trade-card {
+                margin: 0; /* Remove margin when in grid */
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--binance-dark-2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--binance-gray);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--binance-light-gray);
+        }
+
+        /* Statistics Section */
+        .statistics-section {
+            background: var(--binance-dark-2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 30px;
+            border: 1px solid var(--binance-border);
+            text-align: center;
+        }
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--binance-yellow);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--binance-light-gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            font-size: 0.8rem;
+            color: var(--binance-gray);
+            margin-right: 4px;
+        }
+
+        .stats-footer {
+            font-size: 0.6rem;
+            color: var(--binance-gray);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--binance-border);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .language-btn {
+            background: var(--binance-dark-2);
+            border: 1px solid var(--binance-border);
+            color: var(--binance-white);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 4px;
+        }
+
+        .language-btn:hover {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        .language-btn.active {
+            background: var(--binance-yellow);
+            color: var(--binance-dark);
+            border-color: var(--binance-yellow);
+        }
+
+        /* Mobile responsive for statistics */
+        @media (max-width: 430px) {
+            .statistics-section {
+                padding: 10px 12px;
+                margin-top: 20px;
+            }
+
+            .statistics-grid {
+                gap: 16px;
+            }
+
+            .stat-value {
+                font-size: 1rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+            }
+
+            .stats-footer {
+                font-size: 0.55rem;
+            }
+
+            .nav-menu {
+                padding: 8px 12px;
+            }
+
+            .nav-links {
+                gap: 6px;
+            }
+
+            .nav-item {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+                border-radius: 14px;
+            }
+
+            .lang-btn {
+                padding: 3px 6px;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="all_in_calculator_v4.html" class="nav-item active">
+                    <i class="fas fa-calculator"></i> All-In Calculator
+                </a>
+                <a href="risk_calculator.html" class="nav-item">
+                    <i class="fas fa-percentage"></i> คำนวณ Lot จาก %Risk
+                </a>
+            </div>
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="th">TH</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>
+                <i class="fab fa-bitcoin" style="color: #F0B90B;"></i>
+                <span data-key="header-title">Gold Trading Calculator V4</span>
+            </h1>
+            <p><span data-key="header-subtitle">Binance Style - Auto Calculate</span> <span style="font-weight: 600; color: rgba(11, 14, 17, 0.8);">by Zic</span></p>
+        </div>
+
+        <!-- Manual Calculate Status -->
+        <div class="auto-status" id="autoStatus">
+            <i class="fas fa-calculator"></i> <span data-key="status-initial">กรอกข้อมูลแล้วกดปุ่ม "คำนวณ" เพื่อเริ่มต้น</span>
+        </div>
+
+        <div class="calculator-body">
+            <div class="main-content">
+                <div class="calculator-section">
+                    <!-- Input Section -->
+                    <div class="input-section">
+                <!-- Trade Direction -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-exchange-alt" style="color: var(--binance-blue);"></i>
+                        <span data-key="direction-label">ทิศทางการเทรด</span>
+                    </div>
+                    <div class="type-buttons">
+                        <label class="type-btn">
+                            <input type="radio" name="direction" value="buy" checked>
+                            <span data-key="direction-buy">🔼 BUY</span>
+                        </label>
+                        <label class="type-btn">
+                            <input type="radio" name="direction" value="sell">
+                            <span data-key="direction-sell">🔽 SELL</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Capital Input -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-dollar-sign" style="color: var(--binance-green);"></i>
+                        <span data-key="capital-label">ทุน (Capital)</span>
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="capital" placeholder="100" value="100" min="1" step="0.01">
+                        <span class="input-unit">USD</span>
+                    </div>
+                </div>
+
+                <!-- Entry Price Input -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-chart-line" style="color: var(--binance-blue);"></i>
+                        <span data-key="entry-price-label">ราคา Entry</span>
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="entryPrice" placeholder="2000.00" min="0" step="0.01">
+                        <span class="input-unit">USD</span>
+                    </div>
+                </div>
+
+                <!-- Stop Loss Input -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-shield-alt" style="color: var(--binance-red);"></i>
+                        <span data-key="stop-loss-label">Stop Loss</span>
+                    </div>
+                    <div class="type-buttons">
+                        <label class="type-btn">
+                            <input type="radio" name="slType" value="pips" checked>
+                            <span data-key="sl-type-pips">Pips</span>
+                        </label>
+                        <label class="type-btn">
+                            <input type="radio" name="slType" value="price">
+                            <span data-key="sl-type-price">ราคา</span>
+                        </label>
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="stopLoss" placeholder="50" min="0" step="0.01">
+                        <span class="input-unit" id="slUnit">Pips</span>
+                    </div>
+                </div>
+
+                <!-- Take Profit Input (Optional) -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-bullseye" style="color: var(--binance-green);"></i>
+                        <span data-key="take-profit-label">Take Profit (Optional)</span>
+                    </div>
+                    <div class="type-buttons">
+                        <label class="type-btn">
+                            <input type="radio" name="tpType" value="pips" checked>
+                            <span data-key="tp-type-pips">Pips</span>
+                        </label>
+                        <label class="type-btn">
+                            <input type="radio" name="tpType" value="price">
+                            <span data-key="tp-type-price">ราคา</span>
+                        </label>
+                        <label class="type-btn">
+                            <input type="radio" name="tpType" value="rr">
+                            <span data-key="tp-type-rr">RR</span>
+                        </label>
+                    </div>
+                    <div class="input-with-unit">
+                        <input type="number" class="input-field" id="takeProfit" placeholder="100" min="0" step="0.01">
+                        <span class="input-unit" id="tpUnit">Pips</span>
+                    </div>
+                </div>
+
+                <!-- Calculate Buttons -->
+                <div class="input-group">
+                    <div class="calculate-buttons">
+                        <button class="calculate-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i>
+                            <span data-key="calculate-btn">คำนวณ</span>
+                        </button>
+                        <button class="add-card-btn" id="addCardBtn">
+                            <i class="fas fa-plus"></i>
+                            <span data-key="add-card-btn">เพิ่มการ์ด</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RR Selection Section -->
+            <div class="rr-section">
+                <div class="input-label">
+                    <i class="fas fa-balance-scale" style="color: var(--binance-yellow);"></i>
+                    <span data-key="rr-label">Risk:Reward Ratios</span>
+                </div>
+                
+                <div class="rr-controls">
+                    <input type="number" class="custom-rr-input" id="customRR" placeholder="เพิ่ม RR" min="0.1" step="0.1">
+                    <button class="add-rr-btn" id="addRRBtn">
+                        <i class="fas fa-plus"></i> <span data-key="add-rr-btn">เพิ่ม</span>
+                    </button>
+                </div>
+                
+                <div class="rr-buttons" id="rrButtons">
+                    <div class="rr-btn" data-rr="1">
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:1
+                    </div>
+                    <div class="rr-btn" data-rr="2">
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:2
+                    </div>
+                    <div class="rr-btn" data-rr="3">
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:3
+                    </div>
+                    <div class="rr-btn" data-rr="10">
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:10
+                    </div>
+                </div>
+            </div>
+                </div> <!-- End calculator-section -->
+
+                <div class="results-wrapper">
+                    <!-- Results Section -->
+                    <div id="resultsSection" class="results-section"></div>
+
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="error-message hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        กรุณากรอกข้อมูลให้ครบถ้วน
+                    </div>
+                </div> <!-- End results-wrapper -->
+            </div> <!-- End main-content -->
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="statistics-section">
+            <div class="statistics-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="viewCount">
+                        <i class="fas fa-eye stat-icon"></i>
+                        <span id="viewCountValue">0</span>
+                    </div>
+                    <div class="stat-label" data-key="view-count-label">ยอดวิว</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userCount">
+                        <i class="fas fa-users stat-icon"></i>
+                        <span id="userCountValue">0</span>
+                    </div>
+                    <div class="stat-label" data-key="user-count-label">ผู้ใช้งาน</div>
+                </div>
+            </div>
+            <div class="stats-footer" data-key="stats-footer">
+                สถิติการใช้งาน Gold Trading Calculator V4
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AllInGoldCalculatorV4 {
+            constructor() {
+                this.initializeElements();
+                this.attachEventListeners();
+                this.loadFromStorage();
+                this.initializeStatistics();
+                this.initializeLanguage();
+                // Remove auto-calculation on startup
+            }
+
+            // Translation dictionary
+            translations = {
+                'th': {
+                    'header-title': 'Gold Trading Calculator V4',
+                    'header-subtitle': 'Binance Style - Auto Calculate',
+                    'initial-capital': 'เงินต้นเริ่มต้น (USD)',
+                    'risk-percentage': 'ความเสี่ยงต่อการเทรด (%)',
+                    'entry-price': 'ราคาเข้า (USD)',
+                    'stop-loss': 'ราคาตัดขาดทุน (USD)',
+                    'take-profit': 'ราคาเป้าหมาย (USD)',
+                    'position-type': 'ประเภทการซื้อขาย',
+                    'buy-long': 'ซื้อ (Long)',
+                    'sell-short': 'ขาย (Short)',
+                    'calculate': 'คำนวณ',
+                    'calculate-manual': 'คำนวณด้วยตนเอง',
+                    'results-title': 'ผลการคำนวณ',
+                    'position-size': 'ขนาดการซื้อขาย',
+                    'risk-amount': 'จำนวนเงินเสี่ยง',
+                    'potential-profit': 'กำไรที่คาดหวัง',
+                    'risk-reward': 'อัตราส่วนความเสี่ยงต่อผลตอบแทน',
+                    'add-card': 'เพิ่มการคำนวณ',
+                    'statistics-title': 'สถิติการใช้งาน',
+                    'page-views': 'จำนวนการเข้าชม',
+                    'unique-users': 'ผู้ใช้งานเฉพาะ',
+                    'calculations': 'จำนวนการคำนวณ',
+                    'updated-realtime': 'อัปเดตแบบเรียลไทม์',
+                    'auto-calculate': 'คำนวณอัตโนมัติ',
+                    'manual-calculate': 'คำนวณด้วยตนเอง',
+                    'auto-status': 'เปิดใช้งานการคำนวณอัตโนมัติ',
+                    'manual-status': 'เปิดใช้งานการคำนวณด้วยตนเอง',
+                    'cards': 'การ์ด',
+                    'usd': 'USD',
+                    'oz': 'oz',
+                    'clear': 'ล้าง',
+                    'close': 'ปิด',
+                    'remove': 'ลบ',
+                    'recommended-rr': 'แนะนำ RR ≥ 1:2',
+                    'excellent-rr': 'ดีเยี่ยม!',
+                    'good-rr': 'ดี',
+                    'poor-rr': 'ต่ำ',
+                    'very-poor-rr': 'ต่ำมาก',
+                    'status-initial': 'กรอกข้อมูลแล้วกดปุ่ม "คำนวณ" เพื่อเริ่มต้น',
+                    'direction-label': 'ทิศทางการเทรด',
+                    'direction-buy': '🔼 BUY',
+                    'direction-sell': '🔽 SELL',
+                    'capital-label': 'ทุน (Capital)',
+                    'entry-price-label': 'ราคา Entry',
+                    'stop-loss-label': 'Stop Loss',
+                    'sl-type-pips': 'Pips',
+                    'sl-type-price': 'ราคา',
+                    'take-profit-label': 'Take Profit (Optional)',
+                    'tp-type-pips': 'Pips',
+                    'tp-type-price': 'ราคา',
+                    'tp-type-rr': 'RR',
+                    'calculate-btn': 'คำนวณ',
+                    'add-card-btn': 'เพิ่มการ์ด',
+                    'rr-label': 'Risk:Reward Ratios',
+                    'add-rr-btn': 'เพิ่ม',
+                    'view-count-label': 'ยอดวิว',
+                    'user-count-label': 'ผู้ใช้งาน'
+                },
+                'en': {
+                    'header-title': 'Gold Trading Calculator V4',
+                    'header-subtitle': 'Binance Style - Auto Calculate',
+                    'initial-capital': 'Initial Capital (USD)',
+                    'risk-percentage': 'Risk Percentage (%)',
+                    'entry-price': 'Entry Price (USD)',
+                    'stop-loss': 'Stop Loss (USD)',
+                    'take-profit': 'Take Profit (USD)',
+                    'position-type': 'Position Type',
+                    'buy-long': 'Buy (Long)',
+                    'sell-short': 'Sell (Short)',
+                    'calculate': 'Calculate',
+                    'calculate-manual': 'Calculate Manually',
+                    'results-title': 'Calculation Results',
+                    'position-size': 'Position Size',
+                    'risk-amount': 'Risk Amount',
+                    'potential-profit': 'Potential Profit',
+                    'risk-reward': 'Risk/Reward Ratio',
+                    'add-card': 'Add Calculation',
+                    'statistics-title': 'Usage Statistics',
+                    'page-views': 'Page Views',
+                    'unique-users': 'Unique Users',
+                    'calculations': 'Calculations',
+                    'updated-realtime': 'Updated in Real-time',
+                    'auto-calculate': 'Auto Calculate',
+                    'manual-calculate': 'Manual Calculate',
+                    'auto-status': 'Auto calculation enabled',
+                    'manual-status': 'Manual calculation enabled',
+                    'cards': 'Cards',
+                    'usd': 'USD',
+                    'oz': 'oz',
+                    'clear': 'Clear',
+                    'close': 'Close',
+                    'remove': 'Remove',
+                    'recommended-rr': 'Recommended RR ≥ 1:2',
+                    'excellent-rr': 'Excellent!',
+                    'good-rr': 'Good',
+                    'poor-rr': 'Poor',
+                    'very-poor-rr': 'Very Poor',
+                    'status-initial': 'Enter data and click "Calculate" to begin',
+                    'direction-label': 'Trade Direction',
+                    'direction-buy': '🔼 BUY',
+                    'direction-sell': '🔽 SELL',
+                    'capital-label': 'Capital (USD)',
+                    'entry-price-label': 'Entry Price',
+                    'stop-loss-label': 'Stop Loss',
+                    'sl-type-pips': 'Pips',
+                    'sl-type-price': 'Price',
+                    'take-profit-label': 'Take Profit (Optional)',
+                    'tp-type-pips': 'Pips',
+                    'tp-type-price': 'Price',
+                    'tp-type-rr': 'RR',
+                    'calculate-btn': 'Calculate',
+                    'add-card-btn': 'Add Card',
+                    'rr-label': 'Risk:Reward Ratios',
+                    'add-rr-btn': 'Add',
+                    'view-count-label': 'Page Views',
+                    'user-count-label': 'Users'
+                }
+            };
+
+            initializeElements() {
+                this.elements = {
+                    capital: document.getElementById('capital'),
+                    entryPrice: document.getElementById('entryPrice'),
+                    stopLoss: document.getElementById('stopLoss'),
+                    takeProfit: document.getElementById('takeProfit'),
+                    slUnit: document.getElementById('slUnit'),
+                    tpUnit: document.getElementById('tpUnit'),
+                    customRR: document.getElementById('customRR'),
+                    addRRBtn: document.getElementById('addRRBtn'),
+                    calculateBtn: document.getElementById('calculateBtn'),
+                    addCardBtn: document.getElementById('addCardBtn'),
+                    rrButtons: document.getElementById('rrButtons'),
+                    resultsSection: document.getElementById('resultsSection'),
+                    errorMessage: document.getElementById('errorMessage'),
+                    autoStatus: document.getElementById('autoStatus'),
+                    viewCountValue: document.getElementById('viewCountValue'),
+                    userCountValue: document.getElementById('userCountValue')
+                };
+                
+                // Initialize saved cards array
+                this.savedCards = [];
+            }
+
+            attachEventListeners() {
+                // Calculate button (manual calculation)
+                this.elements.calculateBtn.addEventListener('click', () => this.manualCalculate());
+                
+                // Add Card button (add calculation as card)
+                this.elements.addCardBtn.addEventListener('click', () => this.addAsCard());
+
+                // Direction change
+                document.querySelectorAll('input[name="direction"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.clearResults());
+                });
+
+                // SL Type change
+                document.querySelectorAll('input[name="slType"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        this.elements.slUnit.textContent = radio.value === 'pips' ? 'Pips' : 'USD';
+                        this.clearResults();
+                    });
+                });
+
+                // TP Type change
+                document.querySelectorAll('input[name="tpType"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        const tpType = radio.value;
+                        this.elements.tpUnit.textContent = tpType === 'pips' ? 'Pips' : tpType === 'price' ? 'USD' : 'RR';
+                        this.elements.takeProfit.placeholder = tpType === 'pips' ? '100' : tpType === 'price' ? '2010.00' : '1.5';
+                        this.clearResults();
+                    });
+                });
+
+                // RR button events
+                this.elements.rrButtons.addEventListener('change', () => this.clearResults());
+                this.elements.rrButtons.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('rr-delete-btn')) {
+                        this.deleteRR(e.target.closest('.rr-btn'));
+                    }
+                });
+
+                // Add custom RR
+                this.elements.addRRBtn.addEventListener('click', () => this.addCustomRR());
+                this.elements.customRR.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.addCustomRR();
+                });
+
+                // Input changes clear results
+                ['capital', 'entryPrice', 'stopLoss', 'takeProfit'].forEach(id => {
+                    this.elements[id].addEventListener('input', () => this.clearResults());
+                });
+            }
+
+            manualCalculate() {
+                const translations = this.getTranslations();
+                const lang = this.currentLanguage;
+                
+                this.elements.autoStatus.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${translations[lang]['status-calculating']}`;
+                this.elements.autoStatus.className = 'auto-status calculating';
+                
+                // Track calculation event
+                this.trackCalculation();
+                
+                // Reset to default RRs
+                this.resetToDefaultRRs();
+                
+                setTimeout(() => {
+                    this.calculate();
+                    this.elements.autoStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${translations[lang]['status-complete']}`;
+                    this.elements.autoStatus.className = 'auto-status';
+                }, 300);
+            }
+
+            resetToDefaultRRs() {
+                // Clear all RR buttons
+                this.elements.rrButtons.innerHTML = '';
+                
+                // Add default RRs
+                const defaultRRs = [1, 2, 3, 10];
+                defaultRRs.forEach(rr => {
+                    const rrBtn = document.createElement('div');
+                    rrBtn.className = 'rr-btn';
+                    rrBtn.dataset.rr = rr;
+                    rrBtn.innerHTML = `
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:${rr}
+                    `;
+                    this.elements.rrButtons.appendChild(rrBtn);
+                });
+            }
+
+            addAsCard() {
+                const capital = parseFloat(this.elements.capital.value);
+                const entryPrice = parseFloat(this.elements.entryPrice.value);
+                const stopLossValue = parseFloat(this.elements.stopLoss.value);
+                const takeProfitValue = parseFloat(this.elements.takeProfit.value);
+                const slType = document.querySelector('input[name="slType"]:checked').value;
+                const tpType = document.querySelector('input[name="tpType"]:checked').value;
+                const direction = document.querySelector('input[name="direction"]:checked').value;
+
+                if (!capital || !entryPrice || !stopLossValue) {
+                    this.showError('กรุณากรอกข้อมูลให้ครบถ้วน');
+                    return;
+                }
+
+                // Calculate the trade data
+                let slPrice;
+                if (slType === 'pips') {
+                    if (direction === 'buy') {
+                        slPrice = entryPrice - (stopLossValue * 0.01);
+                    } else {
+                        slPrice = entryPrice + (stopLossValue * 0.01);
+                    }
+                } else {
+                    slPrice = stopLossValue;
+                }
+
+                // Validate SL direction
+                if (direction === 'buy' && slPrice >= entryPrice) {
+                    this.showError('BUY: Stop Loss ต้องต่ำกว่าราคา Entry');
+                    return;
+                }
+                if (direction === 'sell' && slPrice <= entryPrice) {
+                    this.showError('SELL: Stop Loss ต้องสูงกว่าราคา Entry');
+                    return;
+                }
+
+                const stopDistanceUSD = Math.abs(entryPrice - slPrice);
+                const contractSize = 100;
+                const lotSize = capital / (contractSize * stopDistanceUSD);
+                const stopLossPips = Math.abs(entryPrice - slPrice) / 0.01;
+
+                // Handle Take Profit and calculate RR if provided
+                let tpRR = null;
+                if (takeProfitValue && takeProfitValue > 0) {
+                    let tpPrice;
+                    if (tpType === 'pips') {
+                        if (direction === 'buy') {
+                            tpPrice = entryPrice + (takeProfitValue * 0.01);
+                        } else {
+                            tpPrice = entryPrice - (takeProfitValue * 0.01);
+                        }
+                    } else if (tpType === 'price') {
+                        tpPrice = takeProfitValue;
+                    } else if (tpType === 'rr') {
+                        tpRR = takeProfitValue;
+                        if (direction === 'buy') {
+                            tpPrice = entryPrice + (stopLossPips * tpRR * 0.01);
+                        } else {
+                            tpPrice = entryPrice - (stopLossPips * tpRR * 0.01);
+                        }
+                    }
+
+                    // Calculate RR from TP price if not already set
+                    if (tpRR === null) {
+                        const tpDistanceUSD = Math.abs(tpPrice - entryPrice);
+                        tpRR = tpDistanceUSD / stopDistanceUSD;
+                    }
+
+                    // Reset RRs and add the TP RR as first option
+                    this.resetToDefaultRRs();
+                    if (tpRR && tpRR > 0) {
+                        this.addCustomRRValue(tpRR, true, true); // Add as first item
+                    }
+                } else {
+                    // No TP provided, just reset to defaults
+                    this.resetToDefaultRRs();
+                }
+
+                // Create a card object
+                const cardData = {
+                    id: Date.now(),
+                    capital,
+                    entryPrice,
+                    slPrice,
+                    lotSize,
+                    stopLossPips,
+                    direction,
+                    timestamp: new Date().toLocaleString('th-TH')
+                };
+
+                // Add to saved cards
+                this.savedCards.push(cardData);
+
+                // Generate and display all cards (saved + current calculation)
+                this.displayAllCards();
+
+                this.elements.autoStatus.innerHTML = '<i class="fas fa-check-circle"></i> เพิ่มการ์ดเรียบร้อย';
+                this.elements.autoStatus.className = 'auto-status';
+            }
+
+            displayAllCards() {
+                // Generate cards for all saved calculations plus current RRs
+                let allCardsHTML = '';
+
+                // Add saved cards first
+                this.savedCards.forEach((cardData, index) => {
+                    const selectedRRs = this.getSelectedRRsInOrder();
+                    selectedRRs.forEach(rrValue => {
+                        let tpPrice;
+                        if (cardData.direction === 'buy') {
+                            tpPrice = cardData.entryPrice + (cardData.stopLossPips * rrValue * 0.01);
+                        } else {
+                            tpPrice = cardData.entryPrice - (cardData.stopLossPips * rrValue * 0.01);
+                        }
+
+                        const stopDistanceUSD = Math.abs(cardData.entryPrice - cardData.slPrice);
+                        const profit = cardData.lotSize * 100 * (stopDistanceUSD * rrValue);
+                        const loss = cardData.lotSize * 100 * stopDistanceUSD;
+                        
+                        // Calculate pips for TP
+                        const tpPips = (cardData.stopLossPips * rrValue).toFixed(1);
+
+                        const signalIcon = cardData.direction === 'buy' ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
+
+                        allCardsHTML += `
+                            <div class="trade-card saved-card">
+                                <div class="card-header">
+                                    <div class="signal-type ${cardData.direction}">
+                                        <i class="${signalIcon}"></i>
+                                        ${cardData.direction.toUpperCase()}
+                                    </div>
+                                    <div class="rr-display">RR 1:${rrValue}</div>
+                                    <button class="delete-card-btn" onclick="calculator.deleteSavedCard(${index})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="key-info">
+                                    <div class="info-row">
+                                        <div class="info-item highlight">
+                                            <div class="info-label">Lot Size</div>
+                                            <div class="info-value lot-size">${cardData.lotSize.toFixed(2)}</div>
+                                        </div>
+                                        <div class="info-item highlight">
+                                            <div class="info-label">Entry Price</div>
+                                            <div class="info-value entry-price">$${cardData.entryPrice.toFixed(2)}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="info-row">
+                                        <div class="info-item highlight">
+                                            <div class="info-label">Stop Loss</div>
+                                            <div class="price-with-pips">
+                                                <div class="info-value sl-price">$${cardData.slPrice.toFixed(2)}</div>
+                                                <div class="pips-display">(${cardData.stopLossPips.toFixed(1)} pips)</div>
+                                            </div>
+                                        </div>
+                                        <div class="info-item highlight">
+                                            <div class="info-label">Take Profit</div>
+                                            <div class="price-with-pips">
+                                                <div class="info-value tp-price">$${tpPrice.toFixed(2)}</div>
+                                                <div class="pips-display">(${tpPips} pips)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profit-section">
+                                    <div class="profit-value">
+                                        <div class="profit-item positive">กำไร: $${profit.toFixed(2)}</div>
+                                        <div class="profit-item negative">ขาดทุน: $${loss.toFixed(2)}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer">
+                                    <small>บันทึกเมื่อ: ${cardData.timestamp}</small>
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
+
+                this.elements.resultsSection.innerHTML = allCardsHTML;
+            }
+
+            deleteSavedCard(index) {
+                this.savedCards.splice(index, 1);
+                this.displayAllCards();
+            }
+
+            autoCalculate() {
+                this.elements.autoStatus.innerHTML = '<i class="fas fa-cog fa-spin"></i> กำลังคำนวณ...';
+                this.elements.autoStatus.className = 'auto-status calculating';
+                
+                setTimeout(() => {
+                    this.calculate();
+                    this.elements.autoStatus.innerHTML = '<i class="fas fa-check-circle"></i> คำนวณเสร็จสิ้น';
+                    this.elements.autoStatus.className = 'auto-status';
+                }, 300);
+            }
+
+            calculate() {
+                const capital = parseFloat(this.elements.capital.value);
+                const entryPrice = parseFloat(this.elements.entryPrice.value);
+                const stopLossValue = parseFloat(this.elements.stopLoss.value);
+                const takeProfitValue = parseFloat(this.elements.takeProfit.value);
+                const slType = document.querySelector('input[name="slType"]:checked').value;
+                const tpType = document.querySelector('input[name="tpType"]:checked').value;
+                const direction = document.querySelector('input[name="direction"]:checked').value;
+
+                if (!capital || !entryPrice || !stopLossValue) {
+                    this.clearResults();
+                    return;
+                }
+
+                this.hideError();
+
+                // Calculate SL price based on direction
+                let slPrice;
+                if (slType === 'pips') {
+                    if (direction === 'buy') {
+                        slPrice = entryPrice - (stopLossValue * 0.01);
+                    } else {
+                        slPrice = entryPrice + (stopLossValue * 0.01);
+                    }
+                } else {
+                    slPrice = stopLossValue;
+                }
+
+                // Validate SL direction
+                if (direction === 'buy' && slPrice >= entryPrice) {
+                    this.showError('BUY: Stop Loss ต้องต่ำกว่าราคา Entry');
+                    return;
+                }
+                if (direction === 'sell' && slPrice <= entryPrice) {
+                    this.showError('SELL: Stop Loss ต้องสูงกว่าราคา Entry');
+                    return;
+                }
+
+                // Calculate lot size using All In formula
+                const stopDistanceUSD = Math.abs(entryPrice - slPrice);
+                const contractSize = 100; // oz per lot
+                const lotSize = capital / (contractSize * stopDistanceUSD);
+
+                // Calculate stop loss in pips for display
+                const stopLossPips = stopDistanceUSD / 0.01;
+
+                // Handle TP auto-calculation and RR addition
+                this.handleTakeProfitCalculation(entryPrice, stopLossPips, takeProfitValue, tpType, direction);
+
+                // Generate trade cards for selected RRs
+                this.generateTradeCards(capital, entryPrice, slPrice, lotSize, stopLossPips, direction);
+            }
+
+            handleTakeProfitCalculation(entryPrice, stopLossPips, takeProfitValue, tpType, direction) {
+                if (!takeProfitValue) return;
+
+                let calculatedRR = null;
+
+                if (tpType === 'pips') {
+                    // TP in pips, calculate RR
+                    calculatedRR = takeProfitValue / stopLossPips;
+                } else if (tpType === 'price') {
+                    // TP as price, calculate distance then RR
+                    let tpDistanceUSD;
+                    if (direction === 'buy') {
+                        // For BUY: TP should be higher than entry
+                        if (takeProfitValue <= entryPrice) {
+                            this.showError('BUY: Take Profit ต้องสูงกว่าราคา Entry');
+                            return;
+                        }
+                        tpDistanceUSD = takeProfitValue - entryPrice;
+                    } else {
+                        // For SELL: TP should be lower than entry
+                        if (takeProfitValue >= entryPrice) {
+                            this.showError('SELL: Take Profit ต้องต่ำกว่าราคา Entry');
+                            return;
+                        }
+                        tpDistanceUSD = entryPrice - takeProfitValue;
+                    }
+                    const tpPips = tpDistanceUSD / 0.01;
+                    calculatedRR = tpPips / stopLossPips;
+                } else if (tpType === 'rr') {
+                    // Direct RR input
+                    calculatedRR = takeProfitValue;
+                }
+
+                if (calculatedRR && calculatedRR > 0) {
+                    // Round to 1 decimal place
+                    calculatedRR = Math.round(calculatedRR * 10) / 10;
+                    
+                    // Add TP-calculated RR at the beginning (first position)
+                    this.addTPCalculatedRR(calculatedRR);
+                }
+            }
+
+            addTPCalculatedRR(rrValue) {
+                // Check if this RR already exists
+                const existingRR = document.querySelector(`.rr-btn[data-rr="${rrValue}"]`);
+                if (existingRR) {
+                    // Move existing to first position and check it
+                    this.elements.rrButtons.insertBefore(existingRR, this.elements.rrButtons.firstChild);
+                    existingRR.querySelector('.rr-checkbox').checked = true;
+                    // Add TP indicator if not already present
+                    if (!existingRR.innerHTML.includes('(TP)')) {
+                        existingRR.innerHTML = existingRR.innerHTML.replace(`1:${rrValue}`, `1:${rrValue} <span style="color: var(--binance-green); font-size: 0.7rem;">(TP)</span>`);
+                    }
+                } else {
+                    // Create new RR button at first position with TP indicator
+                    const newRRBtn = document.createElement('div');
+                    newRRBtn.className = 'rr-btn tp-calculated';
+                    newRRBtn.dataset.rr = rrValue;
+                    newRRBtn.innerHTML = `
+                        <button class="rr-delete-btn"><i class="fas fa-times"></i></button>
+                        <input type="checkbox" class="rr-checkbox" checked>
+                        1:${rrValue} <span style="color: var(--binance-green); font-size: 0.7rem;">(TP)</span>
+                    `;
+                    this.elements.rrButtons.insertBefore(newRRBtn, this.elements.rrButtons.firstChild);
+                }
+            }
+
+            addCustomRRValue(rrValue, addToBeginning = false, skipSort = false) {
+                const newRRBtn = document.createElement('div');
+                newRRBtn.className = 'rr-btn';
+                newRRBtn.dataset.rr = rrValue;
+                newRRBtn.innerHTML = `
+                    <button class="rr-delete-btn"><i class="fas fa-times"></i></button>
+                    <input type="checkbox" class="rr-checkbox" checked>
+                    1:${rrValue}
+                `;
+
+                if (addToBeginning) {
+                    this.elements.rrButtons.insertBefore(newRRBtn, this.elements.rrButtons.firstChild);
+                } else {
+                    this.elements.rrButtons.appendChild(newRRBtn);
+                }
+                
+                // Auto-sort RR buttons after adding new one (unless skipped)
+                if (!skipSort) {
+                    this.sortRRButtons();
+                }
+            }
+
+            sortRRButtons() {
+                const rrButtons = Array.from(this.elements.rrButtons.querySelectorAll('.rr-btn'));
+                
+                // Sort by RR value (ascending)
+                rrButtons.sort((a, b) => {
+                    const rrA = parseFloat(a.dataset.rr);
+                    const rrB = parseFloat(b.dataset.rr);
+                    return rrA - rrB;
+                });
+
+                // Clear container and re-append in sorted order
+                this.elements.rrButtons.innerHTML = '';
+                rrButtons.forEach(btn => {
+                    this.elements.rrButtons.appendChild(btn);
+                });
+            }
+
+            generateTradeCards(capital, entryPrice, slPrice, lotSize, stopLossPips, direction) {
+                const selectedRRs = this.getSelectedRRsInOrder();
+                let cardsHTML = '';
+
+                selectedRRs.forEach(rrValue => {
+                    let tpPrice;
+                    if (direction === 'buy') {
+                        tpPrice = entryPrice + (stopLossPips * rrValue * 0.01);
+                    } else {
+                        tpPrice = entryPrice - (stopLossPips * rrValue * 0.01);
+                    }
+
+                    const stopDistanceUSD = Math.abs(entryPrice - slPrice);
+                    const profit = lotSize * 100 * (stopDistanceUSD * rrValue);
+                    const loss = lotSize * 100 * stopDistanceUSD;
+                    
+                    // Calculate pips for TP
+                    const tpPips = (stopLossPips * rrValue).toFixed(1);
+
+                    const signalIcon = direction === 'buy' ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
+
+                    cardsHTML += `
+                        <div class="trade-card">
+                            <div class="card-header">
+                                <div class="signal-type ${direction}">
+                                    <i class="${signalIcon}"></i>
+                                    ${direction.toUpperCase()}
+                                </div>
+                                <div class="rr-display">RR 1:${rrValue}</div>
+                            </div>
+                            
+                            <div class="key-info">
+                                <div class="info-row">
+                                    <div class="info-item highlight">
+                                        <div class="info-label">Lot Size</div>
+                                        <div class="info-value lot-size">${lotSize.toFixed(2)}</div>
+                                    </div>
+                                    <div class="info-item highlight">
+                                        <div class="info-label">Entry Price</div>
+                                        <div class="info-value entry-price">$${entryPrice.toFixed(2)}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-row">
+                                    <div class="info-item highlight">
+                                        <div class="info-label">Stop Loss</div>
+                                        <div class="price-with-pips">
+                                            <div class="info-value sl-price">$${slPrice.toFixed(2)}</div>
+                                            <div class="pips-display">(${stopLossPips.toFixed(1)} pips)</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item highlight">
+                                        <div class="info-label">Take Profit</div>
+                                        <div class="price-with-pips">
+                                            <div class="info-value tp-price">$${tpPrice.toFixed(2)}</div>
+                                            <div class="pips-display">(${tpPips} pips)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profit-section">
+                                <div class="profit-value">
+                                    <div class="profit-item positive">กำไร: $${profit.toFixed(2)}</div>
+                                    <div class="profit-item negative">ขาดทุน: $${loss.toFixed(2)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                this.elements.resultsSection.innerHTML = cardsHTML;
+            }
+
+            getSelectedRRs() {
+                const checkboxes = this.elements.rrButtons.querySelectorAll('.rr-checkbox:checked');
+                return Array.from(checkboxes).map(cb => parseFloat(cb.closest('.rr-btn').dataset.rr));
+            }
+
+            getSelectedRRsInOrder() {
+                // Get all RR buttons in DOM order, then filter for checked ones
+                const allRRButtons = this.elements.rrButtons.querySelectorAll('.rr-btn');
+                const selectedRRs = [];
+                
+                allRRButtons.forEach(btn => {
+                    const checkbox = btn.querySelector('.rr-checkbox');
+                    if (checkbox && checkbox.checked) {
+                        selectedRRs.push(parseFloat(btn.dataset.rr));
+                    }
+                });
+                
+                return selectedRRs;
+            }
+
+            addCustomRR() {
+                const rrValue = parseFloat(this.elements.customRR.value);
+                if (!rrValue || rrValue <= 0) return;
+
+                // Check if already exists
+                if (document.querySelector(`.rr-btn[data-rr="${rrValue}"]`)) {
+                    this.elements.customRR.value = '';
+                    return;
+                }
+
+                this.addCustomRRValue(rrValue, false);
+                this.elements.customRR.value = '';
+                this.saveToStorage();
+                this.autoCalculate();
+            }
+
+            deleteRR(rrBtn) {
+                rrBtn.remove();
+                this.saveToStorage();
+                this.autoCalculate();
+            }
+
+            clearResults() {
+                this.elements.resultsSection.innerHTML = '';
+            }
+
+            hideError() {
+                this.elements.errorMessage.classList.add('hidden');
+            }
+
+            showError(message) {
+                this.elements.errorMessage.textContent = message;
+                this.elements.errorMessage.classList.remove('hidden');
+            }
+
+            saveToStorage() {
+                const data = {
+                    capital: this.elements.capital.value,
+                    entryPrice: this.elements.entryPrice.value,
+                    stopLoss: this.elements.stopLoss.value,
+                    takeProfit: this.elements.takeProfit.value,
+                    direction: document.querySelector('input[name="direction"]:checked').value,
+                    slType: document.querySelector('input[name="slType"]:checked').value,
+                    tpType: document.querySelector('input[name="tpType"]:checked').value,
+                    customRRs: this.getCustomRRs(),
+                    selectedRRs: this.getSelectedRRs()
+                };
+                localStorage.setItem('goldCalculatorV4', JSON.stringify(data));
+            }
+
+            loadFromStorage() {
+                const data = JSON.parse(localStorage.getItem('goldCalculatorV4') || '{}');
+                
+                if (data.capital) this.elements.capital.value = data.capital;
+                if (data.entryPrice) this.elements.entryPrice.value = data.entryPrice;
+                if (data.stopLoss) this.elements.stopLoss.value = data.stopLoss;
+                if (data.takeProfit) this.elements.takeProfit.value = data.takeProfit;
+                
+                if (data.direction) {
+                    document.querySelector(`input[name="direction"][value="${data.direction}"]`).checked = true;
+                }
+                
+                if (data.slType) {
+                    document.querySelector(`input[name="slType"][value="${data.slType}"]`).checked = true;
+                    this.elements.slUnit.textContent = data.slType === 'pips' ? 'Pips' : 'USD';
+                }
+                
+                if (data.tpType) {
+                    document.querySelector(`input[name="tpType"][value="${data.tpType}"]`).checked = true;
+                    this.elements.tpUnit.textContent = data.tpType === 'pips' ? 'Pips' : data.tpType === 'price' ? 'USD' : 'RR';
+                }
+
+                if (data.customRRs) {
+                    this.loadCustomRRs(data.customRRs, data.selectedRRs || []);
+                }
+            }
+
+            getCustomRRs() {
+                const allRRs = Array.from(this.elements.rrButtons.querySelectorAll('.rr-btn'))
+                    .map(btn => parseFloat(btn.dataset.rr));
+                const defaultRRs = [1, 1.5, 2, 3];
+                return allRRs.filter(rr => !defaultRRs.includes(rr));
+            }
+
+            loadCustomRRs(customRRs, selectedRRs) {
+                customRRs.forEach(rrValue => {
+                    if (document.querySelector(`.rr-btn[data-rr="${rrValue}"]`)) return;
+                    
+                    const isSelected = selectedRRs.includes(rrValue);
+                    const newRRBtn = document.createElement('div');
+                    newRRBtn.className = 'rr-btn';
+                    newRRBtn.dataset.rr = rrValue;
+                    newRRBtn.innerHTML = `
+                        <button class="rr-delete-btn"><i class="fas fa-times"></i></button>
+                        <input type="checkbox" class="rr-checkbox" ${isSelected ? 'checked' : ''}>
+                        1:${rrValue}
+                    `;
+                    this.elements.rrButtons.appendChild(newRRBtn);
+                });
+            }
+
+            // Statistics tracking methods
+            initializeStatistics() {
+                this.trackPageView();
+                this.trackUniqueUser();
+                this.updateStatisticsDisplay();
+            }
+
+            trackPageView() {
+                // Get current view count from localStorage
+                let viewCount = parseInt(localStorage.getItem('goldCalculatorViewCount') || '0');
+                viewCount += 1;
+                localStorage.setItem('goldCalculatorViewCount', viewCount.toString());
+                
+                // Update display
+                this.elements.viewCountValue.textContent = this.formatNumber(viewCount);
+            }
+
+            trackUniqueUser() {
+                // Generate or retrieve unique user ID
+                let userId = localStorage.getItem('goldCalculatorUserId');
+                if (!userId) {
+                    userId = this.generateUserId();
+                    localStorage.setItem('goldCalculatorUserId', userId);
+                }
+                
+                // Track unique users using a simple counter method
+                // In a real application, you would use a proper analytics service
+                let userCount = parseInt(localStorage.getItem('goldCalculatorUserCount') || '0');
+                const lastUserDate = localStorage.getItem('goldCalculatorLastUserDate');
+                const today = new Date().toDateString();
+                
+                // If it's a new day, increment user count (simplified approach)
+                if (lastUserDate !== today) {
+                    userCount += 1;
+                    localStorage.setItem('goldCalculatorUserCount', userCount.toString());
+                    localStorage.setItem('goldCalculatorLastUserDate', today);
+                }
+                
+                // Update display
+                this.elements.userCountValue.textContent = this.formatNumber(userCount);
+            }
+
+            generateUserId() {
+                // Generate a simple unique ID
+                return 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+            }
+
+            updateStatisticsDisplay() {
+                // Update view count
+                const viewCount = parseInt(localStorage.getItem('goldCalculatorViewCount') || '0');
+                this.elements.viewCountValue.textContent = this.formatNumber(viewCount);
+                
+                // Update user count
+                const userCount = parseInt(localStorage.getItem('goldCalculatorUserCount') || '0');
+                this.elements.userCountValue.textContent = this.formatNumber(userCount);
+            }
+
+            formatNumber(num) {
+                // Format numbers with commas for thousands
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                } else {
+                    return num.toString();
+                }
+            }
+
+            // Track calculation events
+            trackCalculation() {
+                let calcCount = parseInt(localStorage.getItem('goldCalculatorCalcCount') || '0');
+                calcCount += 1;
+                localStorage.setItem('goldCalculatorCalcCount', calcCount.toString());
+            }
+
+            // Language system
+            initializeLanguage() {
+                // Get saved language or default to Thai
+                this.currentLanguage = localStorage.getItem('goldCalculatorLanguage') || 'th';
+                
+                // Set up language switcher
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.switchLanguage(e.target.dataset.lang);
+                    });
+                });
+                
+                // Apply initial language
+                this.applyLanguage(this.currentLanguage);
+            }
+
+            switchLanguage(lang) {
+                this.currentLanguage = lang;
+                localStorage.setItem('goldCalculatorLanguage', lang);
+                
+                // Update button states
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === lang);
+                });
+                
+                // Apply language
+                this.applyLanguage(lang);
+            }
+
+            applyLanguage(lang) {
+                const translations = this.getTranslations();
+                
+                // Update all elements with data-key attributes
+                document.querySelectorAll('[data-key]').forEach(element => {
+                    const key = element.getAttribute('data-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // Update placeholder text
+                if (lang === 'en') {
+                    document.getElementById('customRR').placeholder = 'Add RR';
+                } else {
+                    document.getElementById('customRR').placeholder = 'เพิ่ม RR';
+                }
+                
+                // Update status messages
+                this.updateStatusMessages(lang);
+            }
+
+            getTranslations() {
+                return this.translations;
+            }
+
+            updateStatusMessages(lang) {
+                const translations = this.getTranslations();
+                
+                // Update status if it's currently showing initial message
+                const statusElement = document.getElementById('autoStatus');
+                if (statusElement.textContent.includes('กรอกข้อมูล') || statusElement.textContent.includes('Enter data')) {
+                    statusElement.innerHTML = `<i class="fas fa-calculator"></i> <span data-key="status-initial">${translations[lang]['status-initial']}</span>`;
+                }
+            }
+        }
+
+        // Initialize calculator when page loads
+        // Global calculator instance
+        let calculator;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            calculator = new AllInGoldCalculatorV4();
+        });
+    </script>
+</body>
+</html>
