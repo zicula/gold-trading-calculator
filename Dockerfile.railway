@@ -1,7 +1,4 @@
-# Alternative Railway Deployment Configuration
-# Use this if nixpacks.toml approach fails
-
-# Dockerfile.railway
+# Railway Deployment Dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -13,13 +10,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Copy and set permissions for start script
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Set environment variables
 ENV FLASK_ENV=production
 ENV MT5_MODE=mock
-ENV PORT=8080
 
-# Expose port
-EXPOSE 8080
-
-# Start command
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--timeout", "120", "backend.app:app"]
+# Start using script that handles PORT environment variable
+CMD ["./start.sh"]
