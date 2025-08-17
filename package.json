@@ -1,24 +1,18 @@
 {
-  "name": "gold-trading-calculator",
+  "name": "gold-trading-calculator-frontend",
   "version": "5.0.0",
-  "description": "Comprehensive Money Management Calculator for Gold Trading with Risk Calculator",
-  "main": "index.html",
+  "description": "Frontend assets for Gold Trading Calculator",
+  "private": true,
   "scripts": {
-    "start": "python -m http.server 8000",
-    "serve": "npx serve .",
-    "dev": "live-server .",
-    "build": "echo 'No build process needed for static site'",
-    "deploy": "echo 'Ready for deployment to any web hosting service'"
+    "build": "echo 'Frontend assets ready'",
+    "dev": "live-server frontend/",
+    "serve": "npx serve frontend/"
   },
   "keywords": [
     "gold",
     "trading",
     "calculator",
-    "money-management",
-    "forex",
-    "risk-management",
-    "position-sizing",
-    "thai"
+    "frontend"
   ],
   "author": "Zic Trading",
   "license": "MIT",
@@ -27,21 +21,5 @@
   },
   "engines": {
     "node": ">=12.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zic-trading/gold-calculator.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zic-trading/gold-calculator/issues"
-  },
-  "homepage": "https://zic-trading.github.io/gold-calculator",
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "dependencies": {
-    "express": "^5.1.0"
   }
 }
