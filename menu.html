@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Trading Calculator - by Zic Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --binance-yellow: #F0B90B;
+            --binance-dark: #0B0E11;
+            --binance-dark-2: #1E2329;
+            --binance-card: #1E2329;
+            --binance-white: #FFFFFF;
+            --binance-green: #0ECB81;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--binance-dark);
+            color: var(--binance-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--binance-yellow);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #848E9C;
+            margin-bottom: 30px;
+        }
+
+        .calculators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .calculator-card {
+            background: var(--binance-card);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #2B3139;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--binance-yellow);
+            box-shadow: 0 10px 30px rgba(240, 185, 11, 0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--binance-yellow);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--binance-white);
+        }
+
+        .card-description {
+            color: #848E9C;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-features {
+            list-style: none;
+        }
+
+        .card-features li {
+            color: #848E9C;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .card-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--binance-green);
+            font-weight: bold;
+        }
+
+        .new-badge {
+            background: var(--binance-green);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #848E9C;
+        }
+
+        @media (max-width: 768px) {
+            .calculators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🟡 Gold Trading Calculator</div>
+        <div class="subtitle">by Zic Trading - เครื่องมือคำนวณเทรด Gold ครบชุด</div>
+    </div>
+
+    <div class="calculators-grid">
+        <!-- Risk Calculator (Original) -->
+        <a href="frontend/components/risk_calculator.html" class="calculator-card">
+            <div class="card-icon">⚖️</div>
+            <div class="card-title">Risk Calculator</div>
+            <div class="card-description">คำนวณ Lot Size จาก % Risk - เครื่องมือเดิมที่คุณเคยใช้</div>
+            <ul class="card-features">
+                <li>คำนวณ Lot จาก % Risk</li>
+                <li>รองรับ XAUUSD / Gold</li>
+                <li>UI แบบ Binance Style</li>
+                <li>รองรับมือถือ</li>
+            </ul>
+        </a>
+
+        <!-- Multi-Account Calculator (New) -->
+        <a href="multi_account_calculator.html" class="calculator-card">
+            <div class="card-icon">💼</div>
+            <div class="card-title">
+                Multi-Account Calculator
+                <span class="new-badge">NEW</span>
+            </div>
+            <div class="card-description">คำนวณหลาย Account พร้อมกัน พร้อมฟีเจอร์ MT5 Integration</div>
+            <ul class="card-features">
+                <li>จัดการหลาย Account</li>
+                <li>MT5 Integration</li>
+                <li>Real-time Balance</li>
+                <li>Advanced Risk Management</li>
+            </ul>
+        </a>
+
+        <!-- All-in-One Calculator -->
+        <a href="all_in_calculator_v4.html" class="calculator-card">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">All-in-One Calculator v4</div>
+            <div class="card-description">เครื่องมือคำนวณครบครัน สำหรับนักเทรดมืออาชีพ</div>
+            <ul class="card-features">
+                <li>คำนวณ Lot Size</li>
+                <li>Risk Management</li>
+                <li>Position Sizing</li>
+                <li>Profit/Loss Calculator</li>
+            </ul>
+        </a>
+
+        <!-- Risk Calculator MT5 -->
+        <a href="risk_calculator_mt5.html" class="calculator-card">
+            <div class="card-icon">🔗</div>
+            <div class="card-title">Risk Calculator MT5</div>
+            <div class="card-description">Risk Calculator พร้อม MT5 Integration</div>
+            <ul class="card-features">
+                <li>เชื่อมต่อ MT5 ตรงๆ</li>
+                <li>Real-time Account Info</li>
+                <li>Auto Calculate</li>
+                <li>Live Trading Data</li>
+            </ul>
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Zic Trading - Professional Gold Trading Tools</p>
+        <p>GitHub: <a href="https://github.com/zicula/gold-trading-calculator" style="color: var(--binance-yellow);">zicula/gold-trading-calculator</a></p>
+    </div>
+
+    <script>
+        // Add smooth scrolling and hover effects
+        document.querySelectorAll('.calculator-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Add loading effect
+                this.style.opacity = '0.7';
+                setTimeout(() => {
+                    this.style.opacity = '1';
+                }, 300);
+            });
+        });
+
+        // Add typing animation to title
+        const title = document.querySelector('.logo');
+        const originalText = title.textContent;
+        title.textContent = '';
+        
+        let i = 0;
+        function typeWriter() {
+            if (i < originalText.length) {
+                title.textContent += originalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        
+        setTimeout(typeWriter, 500);
+    </script>
+</body>
+</html>
