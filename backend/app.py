@@ -5,7 +5,7 @@ Support for multiple MT5 accounts per user with JWT authentication
 """
 
 import os
-import jwt as PyJWT
+import jwt  # PyJWT library provides 'jwt' module
 import bcrypt
 import sqlite3
 from datetime import datetime, timedelta
@@ -177,16 +177,16 @@ def generate_jwt_token(user_id, account_id=None):
         'exp': datetime.utcnow() + timedelta(hours=Config.SESSION_TIMEOUT),
         'iat': datetime.utcnow()
     }
-    return PyJWT.encode(payload, Config.JWT_SECRET_KEY, algorithm='HS256')
+    return jwt.encode(payload, Config.JWT_SECRET_KEY, algorithm='HS256')
 
 def verify_jwt_token(token):
     """Verify and decode JWT token"""
     try:
-        payload = PyJWT.decode(token, Config.JWT_SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, Config.JWT_SECRET_KEY, algorithms=['HS256'])
         return payload
-    except PyJWT.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError:
         return None
-    except PyJWT.InvalidTokenError:
+    except jwt.InvalidTokenError:
         return None
 
 # Authentication decorators

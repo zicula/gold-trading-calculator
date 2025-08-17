@@ -1,0 +1,11 @@
+# Railway.app specific requirements
+# Simplified requirements for Railway deployment
+
+flask==2.3.3
+flask-cors==4.0.0
+PyJWT==2.8.0
+bcrypt==4.0.1
+cryptography==41.0.4
+werkzeug==2.3.7
+python-dotenv==1.0.0
+gunicorn==21.2.0

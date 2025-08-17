@@ -4,8 +4,8 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python backend/app.py",
-    "healthcheckPath": "/api/status",
+    "startCommand": "python test_imports.py",
+    "healthcheckPath": "/test",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE"
   }
