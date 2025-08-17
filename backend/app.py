@@ -307,6 +307,22 @@ class MT5Manager:
 # Initialize MT5 manager
 mt5_manager = MT5Manager()
 
+# Static file routes for Railway deployment
+@app.route('/')
+def index():
+    """Serve the main index.html"""
+    from flask import send_from_directory
+    return send_from_directory('../', 'index.html')
+
+@app.route('/<path:filename>')
+def static_files(filename):
+    """Serve static files"""
+    from flask import send_from_directory
+    try:
+        return send_from_directory('../', filename)
+    except FileNotFoundError:
+        return {"error": "File not found"}, 404
+
 # API Routes
 
 @app.route('/api/register', methods=['POST'])

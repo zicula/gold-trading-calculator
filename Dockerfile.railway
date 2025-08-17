@@ -28,16 +28,16 @@ ENV MT5_MODE=mock
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
-# Create start script for debug
+# Create start script for production
 RUN echo '#!/bin/bash\n\
 export PORT=${PORT:-8080}\n\
-echo "=== Railway Debug Info ==="\n\
+echo "=== Gold Trading Calculator Production ==="\n\
 echo "Python version: $(python --version)"\n\
 echo "PORT: $PORT"\n\
 echo "PYTHONPATH: $PYTHONPATH"\n\
-echo "Starting debug server..."\n\
-exec python test_imports.py\n\
-' > /app/debug.sh && chmod +x /app/debug.sh
+echo "Starting Gold Trading Calculator..."\n\
+exec python backend/app.py\n\
+' > /app/start.sh && chmod +x /app/start.sh
 
-# Use debug script
-CMD ["/app/debug.sh"]
+# Use production script
+CMD ["/app/start.sh"]

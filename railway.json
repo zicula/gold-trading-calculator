@@ -5,8 +5,8 @@
     "dockerfilePath": "Dockerfile.railway"
   },
   "deploy": {
-    "startCommand": "python test_imports.py",
-    "healthcheckPath": "/test",
+    "startCommand": "python backend/app.py",
+    "healthcheckPath": "/api/status",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE"
   }
