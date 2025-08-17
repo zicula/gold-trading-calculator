@@ -1,4 +1,4 @@
-# Railway Deployment Dockerfile - Simplified
+# Railway Deployment Dockerfile - Debug Version
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -6,11 +6,18 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install dependencies
+# Upgrade pip first
+RUN pip install --upgrade pip
+
+# Copy requirements and install dependencies with verbose output
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --verbose -r requirements.txt
+
+# Verify PyJWT installation explicitly
+RUN python -c "import jwt; print('✅ PyJWT installed successfully'); print('JWT module path:', jwt.__file__)"
 
 # Copy application code
 COPY . .
@@ -19,13 +26,18 @@ COPY . .
 ENV FLASK_ENV=production
 ENV MT5_MODE=mock
 ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
 
-# Create a simple start script inline
+# Create start script for debug
 RUN echo '#!/bin/bash\n\
 export PORT=${PORT:-8080}\n\
-echo "Starting server on port $PORT"\n\
-exec gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --access-logfile - backend.app:app\n\
-' > /app/run.sh && chmod +x /app/run.sh
+echo "=== Railway Debug Info ==="\n\
+echo "Python version: $(python --version)"\n\
+echo "PORT: $PORT"\n\
+echo "PYTHONPATH: $PYTHONPATH"\n\
+echo "Starting debug server..."\n\
+exec python test_imports.py\n\
+' > /app/debug.sh && chmod +x /app/debug.sh
 
-# Use the inline script
-CMD ["/app/run.sh"]
+# Use debug script
+CMD ["/app/debug.sh"]
